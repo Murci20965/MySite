@@ -29,7 +29,7 @@ export default function Hero() {
         <div className="radiate-star" style={{ top: '10%', left: '50%', animationDelay: '3.5s' }} />
       </div>
 
-      <div className="absolute right-0 top-0 bottom-0 w-full lg:w-1/2 z-10 flex items-center justify-end pr-0 sm:pr-4 lg:pr-8 xl:pr-12">
+      <div className="absolute right-0 top-0 bottom-0 w-full lg:w-1/2 z-10 flex items-start justify-end pr-0 sm:pr-4 lg:pr-8 xl:pr-12 pt-8 lg:pt-16">
         <img
           src="/moon.jpg"
           alt=""
@@ -42,17 +42,17 @@ export default function Hero() {
       </div>
 
       <div className="relative z-20 w-full">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-20 py-32 sm:py-36 lg:py-40">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-20 py-20 sm:py-24 lg:py-28">
           <div className="flex justify-start lg:justify-start">
             <div className="w-full lg:w-1/2 lg:pr-12 xl:pr-16">
-              <div className="flex items-center gap-3 mb-10 sm:mb-12">
+              <div className="flex items-center gap-3 mb-6 sm:mb-8">
                 <span className="w-2.5 h-2.5 rounded-full bg-white flex-shrink-0"></span>
                 <span className="text-xs sm:text-sm text-white/70 uppercase tracking-[0.35em] font-light">
                   Data Scientist & AI Engineer
                 </span>
               </div>
 
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-light mb-12 sm:mb-16 leading-[1.05]">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-light mb-8 sm:mb-10 leading-[1.05]">
                 <div className="flex items-center gap-4 sm:gap-5">
                   <span className="text-white whitespace-nowrap">Nhlanhla</span>
                   <span className="text-white/60 whitespace-nowrap">Mokoena</span>
@@ -67,7 +67,7 @@ export default function Hero() {
                 </div>
               </h1>
 
-              <p className="text-base sm:text-lg lg:text-xl text-white/60 mb-14 sm:mb-16 max-w-xl leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-white/60 mb-8 sm:mb-10 max-w-xl leading-relaxed">
                 I am a skilled Data Scientist specializing in Machine Learning and AI Engineering,
                 focused on building robust, scalable solutions that drive business intelligence and
                 innovation. Let's create the future with data.
