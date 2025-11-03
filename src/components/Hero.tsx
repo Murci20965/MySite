@@ -42,7 +42,7 @@ export default function Hero() {
       </div>
 
       <div className="relative z-20 w-full">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-20 py-20 sm:py-24 lg:py-28">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-20 py-12 sm:py-16 lg:py-20">
           <div className="flex justify-start lg:justify-start">
             <div className="w-full lg:w-1/2 lg:pr-12 xl:pr-16">
               <div className="flex items-center gap-3 mb-6 sm:mb-8">
