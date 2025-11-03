@@ -45,7 +45,7 @@ export default function Hero() {
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-20 py-12 sm:py-16 lg:py-20">
           <div className="flex justify-start lg:justify-start">
             <div className="w-full lg:w-1/2 lg:pr-12 xl:pr-16">
-              <div className="flex items-center gap-3 mb-6 sm:mb-8">
+              <div className="flex items-center gap-3 mb-3 sm:mb-4">
                 <span className="w-2.5 h-2.5 rounded-full bg-white flex-shrink-0"></span>
                 <span className="text-xs sm:text-sm text-white/70 uppercase tracking-[0.35em] font-light">
                   Data Scientist & AI Engineer
