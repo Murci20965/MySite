@@ -1,6 +1,7 @@
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import About from './components/About';
+import SocialIcons from './components/SocialIcons';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
 import Stats from './components/Stats';
@@ -20,6 +21,7 @@ function App() {
       <Navigation />
       <Hero />
       <About />
+      <SocialIcons />
       <Projects />
       <Skills />
       <Stats />

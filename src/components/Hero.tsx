@@ -67,7 +67,7 @@ export default function Hero() {
                 </div>
               </h1>
 
-              <p className="text-base sm:text-lg lg:text-xl text-white/60 mb-6 sm:mb-8 max-w-xl lg:max-w-2xl leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-white/60 mb-6 sm:mb-8 max-w-xl lg:max-w-3xl leading-relaxed">
                 I am a skilled Data Scientist specializing in Machine Learning and AI Engineering, focused on building robust, scalable solutions that drive business intelligence and innovation. Let's create the future with data.
               </p>
 
