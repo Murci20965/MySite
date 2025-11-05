@@ -2,7 +2,7 @@ import { Github, Linkedin, Twitter } from 'lucide-react';
 
 export default function SocialIcons() {
   return (
-    <section className="py-4 lg:py-6 bg-black">
+    <section className="py-1 lg:py-2 bg-black">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-center gap-8">
           <a
