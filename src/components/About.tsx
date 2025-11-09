@@ -4,7 +4,8 @@ import { Github, Linkedin, Twitter } from 'lucide-react';
 export default function About() {
   return (
     <section id="about" className="relative pt-32 pb-24 lg:pt-40 lg:pb-32 bg-black overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900/30 to-black"></div>
+      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(/aboutPic.png)' }}></div>
+      <div className="absolute inset-0 bg-black/70"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
