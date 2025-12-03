@@ -12,8 +12,8 @@ export default function Hero() {
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-black to-gray-900/50 pt-20 -mb-32">
-      <div className="absolute inset-0 bg-gradient-to-b from-black to-gray-900/50">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-20 -mb-32">
+      <div className="absolute inset-0 bg-black">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
       </div>

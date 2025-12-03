@@ -47,7 +47,7 @@ export default function Experience() {
   }, []);
 
   return (
-    <section id="experience" className="py-24 bg-gradient-to-b from-gray-800/70 to-black">
+    <section id="experience" className="py-24 bg-black">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <AnimatedSection animation="fade-in">
           <div className="mb-16">
