@@ -8,17 +8,7 @@ export default function About() {
       <div className="absolute inset-0 bg-black/70"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <AnimatedSection animation="fade-in">
-            <div className="relative">
-            <img
-              src="/aboutImage.png"
-              alt="Nhlanhla Mokoena"
-              className="w-full max-w-md mx-auto lg:max-w-full h-auto object-cover rounded-2xl"
-            />
-            </div>
-          </AnimatedSection>
-
+        <div className="grid lg:grid-cols-1 gap-12 lg:gap-16 items-center">
           <AnimatedSection animation="fade-in" delay>
             <div className="space-y-6">
             <div className="space-y-2">
