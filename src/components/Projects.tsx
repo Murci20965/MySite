@@ -174,10 +174,10 @@ export default function Projects() {
           {filteredProjects.map((project, index) => {
             const CategoryIcon = categoryIcons[project.category as keyof typeof categoryIcons] || Brain;
             return (
-              <div
-                key={index}
-                className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden hover:bg-white/10 transition-all duration-300 hover:scale-[1.02]"
-              >
+              <AnimatedSection key={index} animation={animation}>
+                <div
+                  className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden hover:bg-white/10 transition-all duration-300 hover:scale-[1.02]"
+                >
                 <div className="relative h-56 overflow-hidden">
                   <img
                     src={project.image}
@@ -249,7 +249,8 @@ export default function Projects() {
                     </a>
                   </div>
                 </div>
-              </div>
+                </div>
+              </AnimatedSection>
             );
           })}
         </div>
