@@ -52,13 +52,13 @@ export default function Hero() {
                 </span>
               </div>
 
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-light mb-8 sm:mb-10 leading-[1.05]">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-light mb-8 sm:mb-10 leading-[1.05] neon-glow">
                 <div className="flex items-center gap-4 sm:gap-5">
                   <span className="text-white whitespace-nowrap">Nhlanhla</span>
                   <span className="text-white/60 whitespace-nowrap">Mokoena</span>
                   <button
                     onClick={() => setIsVideoModalOpen(true)}
-                    className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 group flex-shrink-0 relative"
+                    className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 group flex-shrink-0 relative glow"
                     aria-label="Play video"
                   >
                     <Play className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white/60 group-hover:text-white ml-0.5 relative z-10" fill="currentColor" />
@@ -74,13 +74,13 @@ export default function Hero() {
               <div className="flex flex-wrap gap-4">
                 <button
                   onClick={() => scrollToSection('projects')}
-                  className="px-9 py-4 bg-white text-black font-medium rounded-full hover:bg-white/90 transition-all duration-300 hover:scale-105"
+                  className="px-9 py-4 bg-white text-black font-medium rounded-full hover:bg-white/90 transition-all duration-300 hover:scale-105 shimmer"
                 >
                   View Projects
                 </button>
                 <button
                   onClick={() => scrollToSection('contact')}
-                  className="px-9 py-4 bg-black text-white border border-white/30 font-medium rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-105"
+                  className="px-9 py-4 bg-black text-white border border-white/30 font-medium rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:glow"
                 >
                   Get in Touch
                 </button>

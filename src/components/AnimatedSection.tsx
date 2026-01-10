@@ -4,7 +4,7 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation';
 interface AnimatedSectionProps {
   children: ReactNode;
   className?: string;
-  animation?: 'fade-in' | 'slide-up' | 'scale-in';
+  animation?: 'fade-in' | 'slide-up' | 'scale-in' | 'slide-in-left' | 'slide-in-right' | 'float';
   delay?: boolean;
 }
 
