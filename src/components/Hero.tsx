@@ -1,5 +1,6 @@
 import { Play } from 'lucide-react';
 import { useState } from 'react';
+import RotatingMoon from './RotatingMoon';
 
 export default function Hero() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -30,15 +31,9 @@ export default function Hero() {
       </div>
 
       <div className="absolute right-0 top-0 bottom-0 w-full lg:w-1/2 z-10 flex items-start justify-end pr-0 sm:pr-4 lg:pr-8 xl:pr-12 pt-8 lg:pt-16">
-        <img
-          src="/moon.jpg"
-          alt=""
-          className="w-full max-w-[350px] sm:max-w-[450px] md:max-w-[550px] lg:max-w-[650px] xl:max-w-[750px] h-auto object-contain opacity-40"
-          style={{
-            maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)',
-            WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)'
-          }}
-        />
+        <div className="w-full max-w-[350px] sm:max-w-[450px] md:max-w-[550px] lg:max-w-[650px] xl:max-w-[750px] h-auto flex items-center justify-center">
+          <RotatingMoon />
+        </div>
       </div>
 
       <div className="relative z-20 w-full">
