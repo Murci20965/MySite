@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 export default function RotatingMoon() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rotationRef = useRef(0);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -10,6 +11,12 @@ export default function RotatingMoon() {
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+
+    const img = new Image();
+    img.src = '/earth.png';
+    img.onload = () => {
+      imageRef.current = img;
+    };
 
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth * window.devicePixelRatio;
@@ -20,77 +27,51 @@ export default function RotatingMoon() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const drawMoon = () => {
+    const drawEarth = () => {
       const width = canvas.offsetWidth;
       const height = canvas.offsetHeight;
 
       ctx.clearRect(0, 0, width, height);
 
-      const centerX = width * 0.65;
-      const centerY = height * 0.5;
-      const radius = Math.min(width, height) * 0.25;
+      if (imageRef.current) {
+        const centerX = width * 0.65;
+        const centerY = height * 0.5;
+        const radius = Math.min(width, height) * 0.25;
 
-      ctx.save();
-      ctx.translate(centerX, centerY);
-      ctx.rotate(rotationRef.current);
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(rotationRef.current);
 
-      const gradient = ctx.createRadialGradient(
-        -radius * 0.3,
-        -radius * 0.3,
-        0,
-        0,
-        0,
-        radius
-      );
-      gradient.addColorStop(0, '#f0e6d2');
-      gradient.addColorStop(0.7, '#d4c5a9');
-      gradient.addColorStop(1, '#8b7355');
-
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(0, 0, radius, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-      const craters = [
-        { x: -radius * 0.3, y: -radius * 0.2, r: radius * 0.08 },
-        { x: radius * 0.2, y: -radius * 0.4, r: radius * 0.06 },
-        { x: radius * 0.3, y: radius * 0.15, r: radius * 0.07 },
-        { x: -radius * 0.4, y: radius * 0.3, r: radius * 0.05 },
-        { x: -radius * 0.1, y: radius * 0.25, r: radius * 0.04 },
-      ];
-
-      craters.forEach((crater) => {
         ctx.beginPath();
-        ctx.arc(crater.x, crater.y, crater.r, 0, Math.PI * 2);
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.clip();
+
+        ctx.drawImage(
+          imageRef.current,
+          -radius,
+          -radius,
+          radius * 2,
+          radius * 2
+        );
+
+        ctx.restore();
+
+        const glowGradient = ctx.createRadialGradient(centerX, centerY, radius, centerX, centerY, radius * 1.3);
+        glowGradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
+        glowGradient.addColorStop(0.7, 'rgba(100, 200, 255, 0.15)');
+        glowGradient.addColorStop(1, 'rgba(100, 150, 255, 0.25)');
+
+        ctx.fillStyle = glowGradient;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius * 1.3, 0, Math.PI * 2);
         ctx.fill();
-      });
+      }
 
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-      ctx.lineWidth = 1;
-      craters.forEach((crater) => {
-        ctx.beginPath();
-        ctx.arc(crater.x, crater.y, crater.r, 0, Math.PI * 2);
-        ctx.stroke();
-      });
-
-      const glowGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radius * 1.2);
-      glowGradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
-      glowGradient.addColorStop(0.8, 'rgba(255, 255, 255, 0.1)');
-      glowGradient.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
-
-      ctx.fillStyle = glowGradient;
-      ctx.beginPath();
-      ctx.arc(0, 0, radius * 1.2, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.restore();
-
-      rotationRef.current += 0.0005;
-      requestAnimationFrame(drawMoon);
+      rotationRef.current += 0.0003;
+      requestAnimationFrame(drawEarth);
     };
 
-    drawMoon();
+    drawEarth();
 
     return () => window.removeEventListener('resize', resizeCanvas);
   }, []);
