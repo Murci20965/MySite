@@ -1,6 +1,4 @@
 import { MapPin, ArrowRight, Briefcase, Code } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import AnimatedSection from './AnimatedSection';
 
 interface ExperienceData {
@@ -14,37 +12,52 @@ interface ExperienceData {
   achievements: string[];
   technologies: string[];
   metrics: Array<{ label: string; value: string }>;
-  order: number;
 }
 
+const experiences: ExperienceData[] = [
+  {
+    id: '1',
+    company: 'Tech Innovations Inc.',
+    role: 'Senior ML Engineer',
+    location: 'San Francisco, CA',
+    duration: '2022 - Present',
+    type: 'Full-time',
+    description: 'Leading machine learning infrastructure and deploying production-grade AI systems for enterprise clients.',
+    achievements: [
+      'Reduced model inference latency by 60% through optimization',
+      'Built automated ML pipeline handling 10M+ records daily',
+      'Led team of 5 engineers on deep learning projects'
+    ],
+    technologies: ['Python', 'TensorFlow', 'Kubernetes', 'AWS SageMaker', 'PostgreSQL'],
+    metrics: [
+      { label: 'Models Deployed', value: '15+' },
+      { label: 'Latency Reduction', value: '60%' },
+      { label: 'Team Size', value: '5' }
+    ]
+  },
+  {
+    id: '2',
+    company: 'Data Analytics Pro',
+    role: 'Data Scientist',
+    location: 'New York, NY',
+    duration: '2020 - 2022',
+    type: 'Full-time',
+    description: 'Developed predictive analytics solutions and statistical models for financial services.',
+    achievements: [
+      'Created fraud detection model with 98.5% accuracy',
+      'Automated reporting saving 40+ hours monthly',
+      'Mentored 3 junior data scientists'
+    ],
+    technologies: ['Python', 'R', 'SQL', 'Scikit-learn', 'Tableau'],
+    metrics: [
+      { label: 'Model Accuracy', value: '98.5%' },
+      { label: 'Time Saved', value: '40h/mo' },
+      { label: 'Team Mentored', value: '3' }
+    ]
+  }
+];
+
 export default function Experience() {
-  const [experiences, setExperiences] = useState<ExperienceData[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchExperiences = async () => {
-      try {
-        const supabase = createClient(
-          import.meta.env.VITE_SUPABASE_URL,
-          import.meta.env.VITE_SUPABASE_ANON_KEY
-        );
-
-        const { data, error } = await supabase
-          .from('experiences')
-          .select('*')
-          .order('order', { ascending: true });
-
-        if (error) throw error;
-        setExperiences(data || []);
-      } catch (err) {
-        console.error('Failed to fetch experiences:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchExperiences();
-  }, []);
 
   return (
     <section id="experience" className="py-24 bg-black">
@@ -64,16 +77,7 @@ export default function Experience() {
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-white/30 via-white/10 to-transparent"></div>
 
           <div className="space-y-12 pl-12">
-            {loading ? (
-              <div className="text-center py-12">
-                <p className="text-gray-400">Loading experiences...</p>
-              </div>
-            ) : experiences.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-400">No experiences found</p>
-              </div>
-            ) : (
-              experiences.map((exp, index) => (
+            {experiences.map((exp, index) => (
               <AnimatedSection key={exp.id} animation="fade-in" delay={index > 0}>
                 <div className="relative group">
                   <div className="absolute -left-16 top-6 w-8 h-8 bg-black border-2 border-white/30 rounded-full flex items-center justify-center">
@@ -149,8 +153,7 @@ export default function Experience() {
                   </div>
                 </div>
               </AnimatedSection>
-              ))
-            )}
+            ))}
           </div>
         </div>
 
