@@ -1,6 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
+
+// Shake an invalid field (transitions.dev 12) with an auto-reverting red border.
+function shakeInvalid(el: HTMLElement) {
+  el.classList.add('is-error');
+  el.classList.remove('is-shaking');
+  void el.offsetWidth;
+  el.classList.add('is-shaking');
+  window.setTimeout(() => el.classList.remove('is-shaking'), 300);
+  const holder = el as HTMLElement & { _revert?: number };
+  if (holder._revert) window.clearTimeout(holder._revert);
+  holder._revert = window.setTimeout(() => el.classList.remove('is-error'), 3300);
+}
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -13,6 +25,30 @@ export default function Contact() {
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const checkRef = useRef<HTMLSpanElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Play the success-check animation once the confirmation mounts.
+  useEffect(() => {
+    if (!submitted) return;
+    const el = checkRef.current;
+    if (!el) return;
+    void el.offsetWidth;
+    el.setAttribute('data-state', 'in');
+  }, [submitted]);
+
+  // Shake invalid fields instead of the native bubble. `invalid` doesn't
+  // bubble, so listen in the capture phase on the form.
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+    const onInvalid = (e: Event) => {
+      e.preventDefault();
+      if (e.target instanceof HTMLElement) shakeInvalid(e.target);
+    };
+    form.addEventListener('invalid', onInvalid, true);
+    return () => form.removeEventListener('invalid', onInvalid, true);
+  }, [submitted]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +58,12 @@ export default function Contact() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
+    const el = e.target as HTMLElement & { _revert?: number };
+    el.classList.remove('is-error');
+    if (el._revert) {
+      window.clearTimeout(el._revert);
+      el._revert = undefined;
+    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -53,7 +95,7 @@ export default function Contact() {
   const timelines = ['1-2 weeks', '2-4 weeks', '1-2 months', '2-3 months', '3-6 months', '6+ months'];
 
   const fieldClass =
-    'w-full rounded-lg border border-white/15 bg-white/[0.03] px-4 py-3 font-sans text-sm text-white placeholder-white/30 transition-colors focus:border-white/40 focus:outline-none';
+    't-input w-full rounded-lg border border-white/15 bg-white/[0.03] px-4 py-3 font-sans text-sm text-white placeholder-white/30 transition-colors focus:border-white/40 focus:outline-none';
   const labelClass = 'mb-2 block font-mono text-[11px] uppercase tracking-[0.15em] text-white/40';
 
   return (
@@ -80,15 +122,30 @@ export default function Contact() {
           <div>
             {submitted ? (
               <div className="rounded-2xl border border-white/15 p-10 text-center">
-                <div className="mb-2 font-display text-2xl font-medium text-white">
-                  Message on its way
-                </div>
-                <p className="font-sans text-white/60">
+                <span
+                  ref={checkRef}
+                  className="t-success-check mb-4 inline-block"
+                  data-state="out"
+                  aria-hidden="true"
+                >
+                  <svg viewBox="0 0 48 48" fill="none" width="60" height="60">
+                    <circle cx="24" cy="24" r="21" stroke="rgba(255,255,255,0.18)" strokeWidth="2" />
+                    <path
+                      d="M14 24.5 l6.5 6.5 L34 16"
+                      stroke="#a3e635"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+                <div className="font-display text-2xl font-medium text-white">Message on its way</div>
+                <p className="mt-2 font-sans text-white/60">
                   Thanks for reaching out &mdash; I&rsquo;ll get back to you within 24 hours.
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div>
                     <label htmlFor="name" className={labelClass}>Full name</label>

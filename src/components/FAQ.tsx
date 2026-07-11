@@ -70,13 +70,13 @@ export default function FAQ() {
                 >
                   <span className="font-display text-lg font-medium text-white">{faq.question}</span>
                   <ChevronDown
-                    className={`h-5 w-5 flex-shrink-0 text-white/50 transition-transform duration-300 ${
+                    className={`h-5 w-5 flex-shrink-0 text-white/50 transition-transform duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
                       isOpen ? 'rotate-180' : ''
                     }`}
                   />
                 </button>
                 <div
-                  className={`grid transition-all duration-300 ease-out ${
+                  className={`grid transition-all duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
                     isOpen ? 'grid-rows-[1fr] pb-6' : 'grid-rows-[0fr]'
                   }`}
                 >
