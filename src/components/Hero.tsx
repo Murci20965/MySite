@@ -45,42 +45,41 @@ export default function Hero() {
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-20 py-12 sm:py-16 lg:py-20">
           <div className="flex justify-start lg:justify-start">
             <div className="w-full lg:w-1/2 lg:pr-12 xl:pr-16">
-              <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                <span className="w-2.5 h-2.5 rounded-full bg-white flex-shrink-0"></span>
-                <span className="text-xs sm:text-sm text-white/70 uppercase tracking-[0.35em] font-light">
-                  Data Scientist & AI Engineer
+              <div className="flex items-center gap-3 mb-5 sm:mb-6">
+                <span className="w-2 h-2 rounded-full bg-white/80 flex-shrink-0"></span>
+                <span className="font-mono text-[11px] sm:text-xs text-white/60 uppercase tracking-[0.28em]">
+                  Data Scientist &amp; AI Engineer
                 </span>
               </div>
 
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-light mb-8 sm:mb-10 leading-[1.05] neon-glow">
+              <h1 className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-8xl xl:text-9xl font-semibold mb-8 sm:mb-10 leading-[0.95] tracking-[-0.01em]">
                 <div className="flex items-center gap-4 sm:gap-5">
                   <span className="text-white whitespace-nowrap">Nhlanhla</span>
-                  <span className="text-white/60 whitespace-nowrap">Mokoena</span>
+                  <span className="text-white/50 whitespace-nowrap">Mokoena</span>
                   <button
                     onClick={() => setIsVideoModalOpen(true)}
-                    className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 group flex-shrink-0 relative glow"
-                    aria-label="Play video"
+                    className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-white/5 backdrop-blur-sm border border-white/15 hover:bg-white/15 hover:border-white/30 transition-colors duration-300 group flex-shrink-0"
+                    aria-label="Play intro video"
                   >
-                    <Play className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white/60 group-hover:text-white ml-0.5 relative z-10" fill="currentColor" />
-                    <div className="absolute inset-0 rounded-full water-ripple" />
+                    <Play className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white/60 group-hover:text-white ml-0.5" fill="currentColor" />
                   </button>
                 </div>
               </h1>
 
-              <p className="text-base sm:text-lg lg:text-xl text-white/60 mb-6 sm:mb-8 max-w-2xl leading-relaxed">
+              <p className="font-sans text-base sm:text-lg lg:text-xl text-white/55 mb-8 sm:mb-10 max-w-xl leading-relaxed">
                 I am a skilled Data Scientist specializing in Machine Learning and AI Engineering, focused on building robust, scalable solutions that drive business intelligence and innovation. Let's create the future with data.
               </p>
 
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => scrollToSection('projects')}
-                  className="px-9 py-4 bg-white text-black font-medium rounded-full hover:bg-white/90 transition-all duration-300 hover:scale-105 shimmer"
+                  className="font-sans px-8 py-3.5 bg-white text-black text-sm font-medium rounded-full hover:bg-white/85 transition-colors duration-300"
                 >
                   View Projects
                 </button>
                 <button
                   onClick={() => scrollToSection('contact')}
-                  className="px-9 py-4 bg-black text-white border border-white/30 font-medium rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:glow"
+                  className="font-sans px-8 py-3.5 text-white text-sm font-medium border border-white/25 rounded-full hover:bg-white/10 hover:border-white/40 transition-colors duration-300"
                 >
                   Get in Touch
                 </button>
