@@ -32,7 +32,7 @@ export default function Hero() {
       <div className="relative z-20 w-full">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-20 py-12 sm:py-16 lg:py-20">
           <div className="flex justify-start lg:justify-start">
-            <div className="w-full lg:w-1/2 lg:pr-12 xl:pr-16">
+            <div className="w-full lg:w-[62%] lg:pr-12 xl:pr-16">
               <div className="flex items-center gap-3 mb-5 sm:mb-6">
                 <span className="w-2 h-2 rounded-full bg-white/80 flex-shrink-0"></span>
                 <span className="font-mono text-[11px] sm:text-xs text-white/60 uppercase tracking-[0.28em]">
@@ -47,8 +47,8 @@ export default function Hero() {
                     M
                     <button
                       onClick={() => setIsVideoModalOpen(true)}
-                      className="inline-flex items-center justify-center rounded-full bg-white/5 border border-white/25 hover:bg-white/15 hover:border-white/50 transition-colors duration-300 align-middle"
-                      style={{ width: '0.5em', height: '0.5em', marginLeft: '0.03em', marginRight: '0.03em', transform: 'translateY(0.08em)' }}
+                      className="inline-flex items-center justify-center rounded-full bg-white/5 border border-white/25 hover:bg-white/15 hover:border-white/50 transition-colors duration-300 align-baseline"
+                      style={{ width: '0.5em', height: '0.5em', marginLeft: '0.03em', marginRight: '0.03em', transform: 'translateY(-0.06em)' }}
                       aria-label="Play intro video"
                     >
                       <Play
@@ -62,7 +62,7 @@ export default function Hero() {
                 </div>
               </h1>
 
-              <p className="font-sans text-base sm:text-lg lg:text-xl text-white/55 max-w-xl leading-relaxed">
+              <p className="font-sans text-base sm:text-lg text-white/55 max-w-2xl leading-relaxed lg:line-clamp-3">
                 I am a skilled Data Scientist specializing in Machine Learning and AI Engineering, focused on building robust, scalable solutions that drive business intelligence and innovation. Let's create the future with data.
               </p>
             </div>
