@@ -50,8 +50,8 @@ export default function Navigation() {
               className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-300 cursor-pointer"
               aria-label="Go to hero section"
             >
-              <Brain className="w-8 h-8 text-white" />
-              <span className="text-2xl font-light text-white">Murci</span>
+              <Brain className="w-7 h-7 text-white" />
+              <span className="font-display text-2xl font-medium text-white">Murci</span>
             </button>
 
             <div className="hidden lg:flex items-center gap-8">
@@ -59,14 +59,14 @@ export default function Navigation() {
                 <button
                   key={link.name}
                   onClick={() => scrollToSection(link.href)}
-                  className="text-sm text-gray-300 hover:text-lime-400 transition-colors font-light"
+                  className="font-sans text-sm text-white/70 hover:text-white transition-colors"
                 >
                   {link.name}
                 </button>
               ))}
               <button
                 onClick={handleResumeDownload}
-                className="px-6 py-2.5 bg-lime-400 hover:bg-lime-500 text-black font-medium rounded-full transition-all duration-300 hover:scale-105 text-sm shadow-lg shadow-lime-400/50"
+                className="font-sans px-6 py-2.5 bg-lime-400 hover:bg-lime-500 text-black font-medium rounded-full transition-colors text-sm"
               >
                 Resume
               </button>
@@ -93,14 +93,14 @@ export default function Navigation() {
             <button
               key={link.name}
               onClick={() => scrollToSection(link.href)}
-              className="text-4xl font-light text-white hover:text-lime-400 transition-colors"
+              className="font-display text-4xl font-medium text-white hover:text-white/70 transition-colors"
             >
               {link.name}
             </button>
           ))}
           <button
             onClick={handleResumeDownload}
-            className="px-10 py-4 bg-lime-400 hover:bg-lime-500 text-black font-medium rounded-full transition-all duration-300 hover:scale-105 text-2xl shadow-lg shadow-lime-400/50"
+            className="font-sans px-10 py-4 bg-lime-400 hover:bg-lime-500 text-black font-medium rounded-full transition-colors text-2xl"
           >
             Resume
           </button>
