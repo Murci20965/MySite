@@ -1,4 +1,3 @@
-import { MapPin, ArrowRight, Briefcase, Code } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 
 interface ExperienceData {
@@ -22,18 +21,19 @@ const experiences: ExperienceData[] = [
     location: 'San Francisco, CA',
     duration: '2022 - Present',
     type: 'Full-time',
-    description: 'Leading machine learning infrastructure and deploying production-grade AI systems for enterprise clients.',
+    description:
+      'Leading machine learning infrastructure and deploying production-grade AI systems for enterprise clients.',
     achievements: [
       'Reduced model inference latency by 60% through optimization',
       'Built automated ML pipeline handling 10M+ records daily',
-      'Led team of 5 engineers on deep learning projects'
+      'Led team of 5 engineers on deep learning projects',
     ],
     technologies: ['Python', 'TensorFlow', 'Kubernetes', 'AWS SageMaker', 'PostgreSQL'],
     metrics: [
       { label: 'Models Deployed', value: '15+' },
       { label: 'Latency Reduction', value: '60%' },
-      { label: 'Team Size', value: '5' }
-    ]
+      { label: 'Team Size', value: '5' },
+    ],
   },
   {
     id: '2',
@@ -42,141 +42,116 @@ const experiences: ExperienceData[] = [
     location: 'New York, NY',
     duration: '2020 - 2022',
     type: 'Full-time',
-    description: 'Developed predictive analytics solutions and statistical models for financial services.',
+    description:
+      'Developed predictive analytics solutions and statistical models for financial services.',
     achievements: [
       'Created fraud detection model with 98.5% accuracy',
       'Automated reporting saving 40+ hours monthly',
-      'Mentored 3 junior data scientists'
+      'Mentored 3 junior data scientists',
     ],
     technologies: ['Python', 'R', 'SQL', 'Scikit-learn', 'Tableau'],
     metrics: [
       { label: 'Model Accuracy', value: '98.5%' },
       { label: 'Time Saved', value: '40h/mo' },
-      { label: 'Team Mentored', value: '3' }
-    ]
-  }
+      { label: 'Team Mentored', value: '3' },
+    ],
+  },
 ];
 
 export default function Experience() {
-
   return (
-    <section id="experience" className="py-24 bg-black">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section id="experience" className="relative bg-black py-24 lg:py-32">
+      <div className="mx-auto max-w-5xl px-6 lg:px-8">
         <AnimatedSection animation="fade-in">
-          <div className="mb-16">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white mb-4">
-              Professional Experience
-            </h2>
-            <p className="text-gray-400 text-lg">
-              Journey through impactful roles driving innovation in machine learning and data science
-            </p>
+          <div className="mb-8 flex items-center gap-4">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
+              Experience
+            </span>
+            <span className="h-px flex-1 bg-white/15" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">02</span>
           </div>
+
+          <h2 className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl">
+            Professional experience
+          </h2>
+          <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70 lg:text-xl">
+            A journey through impactful roles driving innovation in machine learning and data science.
+          </p>
         </AnimatedSection>
 
-        <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-white/30 via-white/10 to-transparent"></div>
+        <div className="mt-16 border-t border-white/10">
+          {experiences.map((exp, index) => (
+            <AnimatedSection key={exp.id} animation="fade-in" delay={index > 0}>
+              <article className="grid gap-6 border-b border-white/10 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
+                <div>
+                  <div className="font-mono text-sm text-white/80">{exp.duration}</div>
+                  <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+                    {exp.type}
+                  </div>
+                  <div className="mt-5 font-sans text-white/90">{exp.company}</div>
+                  <div className="font-sans text-sm text-white/50">{exp.location}</div>
+                </div>
 
-          <div className="space-y-12 pl-12">
-            {experiences.map((exp, index) => (
-              <AnimatedSection key={exp.id} animation="fade-in" delay={index > 0}>
-                <div className="relative group">
-                  <div className="absolute -left-16 top-6 w-8 h-8 bg-black border-2 border-white/30 rounded-full flex items-center justify-center">
-                    <div className="w-3 h-3 bg-white rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                <div>
+                  <h3 className="mb-3 font-display text-2xl font-medium text-white sm:text-3xl">
+                    {exp.role}
+                  </h3>
+                  <p className="mb-8 max-w-2xl font-sans leading-relaxed text-white/60">
+                    {exp.description}
+                  </p>
+
+                  <div className="mb-8 flex flex-wrap gap-x-10 gap-y-4">
+                    {exp.metrics.map((metric, i) => (
+                      <div key={i}>
+                        <div className="font-mono text-2xl text-white">{metric.value}</div>
+                        <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
+                          {metric.label}
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
-                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group hover:shadow-lg hover:shadow-white/5">
-                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-6">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="p-2 bg-white/10 rounded-lg">
-                            <Briefcase className="w-5 h-5 text-white" />
-                          </div>
-                          <span className="text-xs font-medium text-white/60 bg-white/5 px-3 py-1 rounded-full">
-                            {exp.type}
-                          </span>
-                        </div>
-                        <h3 className="text-2xl sm:text-3xl text-white font-light mb-2">
-                          {exp.role}
-                        </h3>
-                        <p className="text-lg text-gray-300 mb-3">{exp.company}</p>
-                        <div className="flex items-center gap-2 text-gray-400">
-                          <MapPin className="w-4 h-4" />
-                          <span className="text-sm">{exp.location}</span>
-                        </div>
-                      </div>
-                      <div className="lg:text-right">
-                        <div className="text-sm text-gray-400 mb-1">Duration</div>
-                        <div className="text-lg text-white font-light">{exp.duration}</div>
-                      </div>
-                    </div>
+                  <ul className="mb-8 space-y-2.5">
+                    {exp.achievements.map((achievement, i) => (
+                      <li key={i} className="flex gap-3 font-sans text-sm text-white/70">
+                        <span className="select-none text-white/30">&mdash;</span>
+                        <span>{achievement}</span>
+                      </li>
+                    ))}
+                  </ul>
 
-                    <p className="text-gray-300 mb-6 leading-relaxed">
-                      {exp.description}
-                    </p>
-
-                    <div className="grid sm:grid-cols-3 gap-4 mb-8">
-                      {exp.metrics.map((metric, i) => (
-                        <div key={i} className="bg-white/5 rounded-xl p-4 border border-white/5">
-                          <div className="text-2xl font-light text-white mb-1">
-                            {metric.value}
-                          </div>
-                          <div className="text-xs text-gray-400">{metric.label}</div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mb-6">
-                      <p className="text-sm text-gray-400 mb-3 font-medium">Key Achievements</p>
-                      <ul className="space-y-2">
-                        {exp.achievements.map((achievement, i) => (
-                          <li key={i} className="flex items-start gap-3 text-gray-300 text-sm">
-                            <ArrowRight className="w-4 h-4 text-white/40 flex-shrink-0 mt-1" />
-                            <span>{achievement}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div>
-                      <p className="text-sm text-gray-400 mb-3 font-medium">Technologies & Skills</p>
-                      <div className="flex flex-wrap gap-2">
-                        {exp.technologies.map((tech, i) => (
-                          <span
-                            key={i}
-                            className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-gray-300 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                  <div className="flex flex-wrap gap-2">
+                    {exp.technologies.map((tech, i) => (
+                      <span
+                        key={i}
+                        className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] tracking-wide text-white/50"
+                      >
+                        {tech}
+                      </span>
+                    ))}
                   </div>
                 </div>
-              </AnimatedSection>
-            ))}
-          </div>
+              </article>
+            </AnimatedSection>
+          ))}
         </div>
 
         <AnimatedSection animation="fade-in">
-          <div className="mt-20 bg-gradient-to-r from-white/5 to-transparent border border-white/10 rounded-3xl p-8">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-white/10 rounded-xl">
-                  <Code className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl text-white font-light mb-1">
-                    Open to Opportunities
-                  </h3>
-                  <p className="text-gray-400 text-sm">
-                    Actively seeking roles in ML engineering, data science, and AI research
-                  </p>
-                </div>
+          <div className="mt-16 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+            <div>
+              <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+                Availability
               </div>
-              <button className="px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white text-sm font-light transition-all duration-300 whitespace-nowrap">
-                Get In Touch
-              </button>
+              <p className="max-w-md font-sans text-lg text-white/80">
+                Open to roles in ML engineering, data science, and AI research.
+              </p>
             </div>
+            <a
+              href="#contact"
+              className="whitespace-nowrap rounded-full border border-white/25 px-6 py-3 font-sans text-sm font-medium text-white transition-colors hover:border-white/40 hover:bg-white/10"
+            >
+              Get in touch
+            </a>
           </div>
         </AnimatedSection>
       </div>
