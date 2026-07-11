@@ -23,7 +23,7 @@ export default function Stats() {
   ];
 
   return (
-    <section id="experience" className="py-24 bg-zinc-950">
+    <section id="stats" className="py-24 bg-zinc-950">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="text-4xl sm:text-5xl font-light text-white mb-4">

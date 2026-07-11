@@ -10,6 +10,10 @@ export default function FutureticParticles() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Respect the user's motion preference — skip the animation entirely.
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -32,6 +36,8 @@ export default function FutureticParticles() {
         opacity: Math.random() * 0.5 + 0.2,
       });
     }
+
+    let rafId = 0;
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -67,10 +73,10 @@ export default function FutureticParticles() {
       });
 
       ctx.globalAlpha = 1;
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     };
 
-    animate();
+    rafId = requestAnimationFrame(animate);
 
     const handleResize = () => {
       canvas.width = window.innerWidth;
@@ -78,7 +84,10 @@ export default function FutureticParticles() {
     };
 
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (

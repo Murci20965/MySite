@@ -38,7 +38,7 @@ export default function FAQ() {
   ];
 
   return (
-    <section id="skills" className="py-24 bg-black">
+    <section id="faq" className="py-24 bg-black">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="text-4xl sm:text-5xl font-light text-white mb-4">
