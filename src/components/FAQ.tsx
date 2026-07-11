@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import AnimatedSection from './AnimatedSection';
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs = [
     {
@@ -38,45 +39,54 @@ export default function FAQ() {
   ];
 
   return (
-    <section id="faq" className="py-24 bg-black">
-      <div className="max-w-4xl mx-auto px-6 lg:px-8">
-        <div className="mb-16 text-center">
-          <h2 className="text-4xl sm:text-5xl font-light text-white mb-4">
-            Questions & Answers
-          </h2>
-          <p className="text-gray-400 text-lg">
-            Everything you need to know about my expertise and approach
-          </p>
-        </div>
+    <section id="faq" className="relative bg-black py-24 lg:py-32">
+      <div className="mx-auto max-w-3xl px-6 lg:px-8">
+        <AnimatedSection animation="fade-in">
+          <div className="mb-8 flex items-center gap-4">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
+              FAQ
+            </span>
+            <span className="h-px flex-1 bg-white/15" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">09</span>
+          </div>
 
-        <div className="space-y-4">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-colors"
-            >
-              <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full px-8 py-6 flex items-center justify-between text-left"
-              >
-                <span className="text-lg text-white font-light pr-8">{faq.question}</span>
-                <ChevronDown
-                  className={`w-5 h-5 text-white transition-transform duration-300 flex-shrink-0 ${
-                    openIndex === index ? 'rotate-180' : ''
+          <h2 className="mb-6 font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl">
+            Common questions
+          </h2>
+          <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
+            How I work, and what to expect from a project.
+          </p>
+        </AnimatedSection>
+
+        <div className="mt-12 border-t border-white/10">
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+            return (
+              <div key={faq.question} className="border-b border-white/10">
+                <button
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                  aria-expanded={isOpen}
+                  className="flex w-full items-center justify-between gap-6 py-6 text-left"
+                >
+                  <span className="font-display text-lg font-medium text-white">{faq.question}</span>
+                  <ChevronDown
+                    className={`h-5 w-5 flex-shrink-0 text-white/50 transition-transform duration-300 ${
+                      isOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`grid transition-all duration-300 ease-out ${
+                    isOpen ? 'grid-rows-[1fr] pb-6' : 'grid-rows-[0fr]'
                   }`}
-                />
-              </button>
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  openIndex === index ? 'max-h-96' : 'max-h-0'
-                }`}
-              >
-                <div className="px-8 pb-6">
-                  <p className="text-gray-400 leading-relaxed">{faq.answer}</p>
+                >
+                  <div className="overflow-hidden">
+                    <p className="max-w-2xl font-sans leading-relaxed text-white/60">{faq.answer}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
