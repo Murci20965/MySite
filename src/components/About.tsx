@@ -3,7 +3,7 @@ import { Github, Linkedin, Twitter } from 'lucide-react';
 
 export default function About() {
   return (
-    <section id="about" className="relative pt-32 pb-24 lg:pt-40 lg:pb-32 bg-black overflow-hidden">
+    <section id="about" className="relative pt-32 pb-24 lg:pt-40 lg:pb-32 overflow-hidden">
       <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
         <AnimatedSection animation="fade-in" delay>
           <div className="flex items-center gap-4 mb-8">

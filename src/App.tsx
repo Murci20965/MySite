@@ -37,8 +37,21 @@ function App() {
         <SimpleCursor />
         <Navigation />
       <div className="relative">
-        <Hero />
-        <About />
+        <div className="relative bg-black overflow-hidden">
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-full lg:w-1/2 z-0 flex items-start justify-end pr-0 sm:pr-4 lg:pr-8 xl:pr-12 pt-24 lg:pt-28">
+            <img
+              src="/moon.jpg"
+              alt=""
+              className="w-full max-w-[350px] sm:max-w-[450px] md:max-w-[550px] lg:max-w-[650px] xl:max-w-[750px] h-auto object-contain opacity-40"
+              style={{
+                maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)',
+                WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)',
+              }}
+            />
+          </div>
+          <Hero />
+          <About />
+        </div>
         <div className="relative" style={{
           transform: `translateY(${Math.max(0, scrollY - 1200) * 0.5}px)`,
           transition: 'transform 0.1s linear'
