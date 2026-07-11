@@ -1,59 +1,25 @@
-import { Rocket, Target, Star } from 'lucide-react';
-
 export default function Stats() {
   const stats = [
-    {
-      icon: Rocket,
-      value: '15+',
-      label: 'Successful Deployments',
-      description: 'Production ML models',
-    },
-    {
-      icon: Target,
-      value: '96%',
-      label: 'Model Accuracy Achieved',
-      description: 'Average performance',
-    },
-    {
-      icon: Star,
-      value: '4.9',
-      label: 'Employer Rating',
-      description: 'Client satisfaction',
-    },
+    { value: '15+', label: 'Successful deployments', description: 'Production ML models' },
+    { value: '96%', label: 'Model accuracy achieved', description: 'Average performance' },
+    { value: '4.9', label: 'Employer rating', description: 'Client satisfaction' },
   ];
 
   return (
-    <section id="stats" className="py-24 bg-zinc-950">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="mb-16 text-center">
-          <h2 className="text-4xl sm:text-5xl font-light text-white mb-4">
-            Data-Driven Results
-          </h2>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Proven success in delivering high-impact solutions across various industries,
-            consistently exceeding expectations
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <div
-                key={index}
-                className="bg-black border border-white/10 rounded-3xl p-8 text-center hover:border-white/20 transition-all duration-300 hover:scale-105"
-              >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-2xl mb-6">
-                  <Icon className="w-8 h-8 text-white" />
-                </div>
-                <div className="text-5xl sm:text-6xl font-light text-white mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-xl text-white mb-2">{stat.label}</div>
-                <div className="text-sm text-gray-400">{stat.description}</div>
+    <section id="stats" className="relative bg-black py-16 lg:py-20">
+      <div className="mx-auto max-w-5xl px-6 lg:px-8">
+        <div className="grid gap-10 border-y border-white/10 py-12 sm:grid-cols-3">
+          {stats.map((stat) => (
+            <div key={stat.label}>
+              <div className="font-display text-5xl font-medium text-white sm:text-6xl">
+                {stat.value}
               </div>
-            );
-          })}
+              <div className="mt-3 font-sans text-white/80">{stat.label}</div>
+              <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
+                {stat.description}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
