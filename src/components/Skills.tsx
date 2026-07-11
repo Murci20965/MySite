@@ -36,7 +36,7 @@ export default function Skills() {
   ];
 
   return (
-    <section id="skills" className="relative bg-zinc-950 py-24 lg:py-32">
+    <section id="skills" className="relative bg-black py-24 lg:py-32">
       <div className="mx-auto max-w-5xl px-6 lg:px-8">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
