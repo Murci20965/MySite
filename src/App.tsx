@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -18,17 +17,6 @@ import FutureticParticles from './components/FutureticParticles';
 import GlowingOrbs from './components/GlowingOrbs';
 
 function App() {
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
       <FutureticParticles />
@@ -52,10 +40,7 @@ function App() {
           <Hero />
           <About />
         </div>
-        <div className="relative" style={{
-          transform: `translateY(${Math.max(0, scrollY - 1200) * 0.5}px)`,
-          transition: 'transform 0.1s linear'
-        }}>
+        <div className="relative">
           <Experience />
           <Projects />
           <Skills />
