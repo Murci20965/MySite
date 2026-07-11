@@ -409,3 +409,82 @@
     transition: none !important;
   }
 }
+
+:root {
+  /* card tilt (19) — tuned smooth: gentle angle + long, floaty follow */
+  --tilt-perspective: 1200px;
+  --tilt-return: 1400ms;
+  --tilt-return-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tilt-follow: 600ms;
+  --tilt-follow-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tilt-glare-opacity: 0.26;
+  --tilt-glare-fade: 400ms;
+  --tilt-glare-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* tabs sliding (16), adapted to a sliding underline */
+  --tabs-dur: 320ms;
+  --tabs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Card hover tilt (transitions.dev 19) */
+.t-tilt {
+  touch-action: none;
+}
+.t-tilt-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  transform:
+    perspective(var(--tilt-perspective))
+    rotateX(var(--tilt-rx, 0deg))
+    rotateY(var(--tilt-ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform var(--tilt-return) var(--tilt-return-ease);
+  will-change: transform;
+}
+.t-tilt-card.is-tilting {
+  transition: transform var(--tilt-follow) var(--tilt-follow-ease);
+}
+.t-tilt-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(circle 95px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
+      rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.06) 52%, rgba(255, 255, 255, 0) 84%),
+    radial-gradient(circle 200px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
+      rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04) 58%, rgba(255, 255, 255, 0) 78%),
+    radial-gradient(circle 360px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
+      rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 88%);
+  transition: opacity var(--tilt-glare-fade) var(--tilt-glare-ease);
+}
+.t-tilt.is-hover .t-tilt-glare {
+  opacity: var(--tilt-glare-opacity);
+}
+
+/* Sliding underline (transitions.dev 16, adapted to editorial text tabs) */
+.t-underline {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 2px;
+  width: 0;
+  background: #fff;
+  transform: translate(0, 0);
+  transition:
+    transform var(--tabs-dur) var(--tabs-ease),
+    width var(--tabs-dur) var(--tabs-ease);
+  will-change: transform, width;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-tilt-card {
+    transform: none !important;
+    transition: none !important;
+  }
+  .t-underline {
+    transition: none !important;
+  }
+}
