@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
+import TiltCard from './TiltCard';
 
 export default function Blog() {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const underlineRef = useRef<HTMLSpanElement>(null);
 
   const blogPosts = [
     {
@@ -81,6 +84,41 @@ export default function Blog() {
       ? blogPosts
       : blogPosts.filter((p) => p.category === selectedCategory);
 
+  const positionUnderline = useCallback((animate: boolean) => {
+    const container = tabsRef.current;
+    const underline = underlineRef.current;
+    if (!container || !underline) return;
+    const active = container.querySelector<HTMLElement>('[data-active="true"]');
+    if (!active) return;
+    const apply = () => {
+      underline.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop + active.offsetHeight}px)`;
+      underline.style.width = `${active.offsetWidth}px`;
+    };
+    if (animate) {
+      apply();
+    } else {
+      const prev = underline.style.transition;
+      underline.style.transition = 'none';
+      apply();
+      void underline.offsetWidth;
+      underline.style.transition = prev;
+    }
+  }, []);
+
+  useEffect(() => {
+    positionUnderline(false);
+    const onResize = () => positionUnderline(false);
+    window.addEventListener('resize', onResize);
+    if (document.fonts) {
+      document.fonts.ready.then(() => positionUnderline(false));
+    }
+    return () => window.removeEventListener('resize', onResize);
+  }, [positionUnderline]);
+
+  useEffect(() => {
+    positionUnderline(true);
+  }, [selectedCategory, positionUnderline]);
+
   return (
     <section id="blog" className="relative bg-black py-24 lg:py-32">
       <div className="mx-auto max-w-5xl px-6 lg:px-8">
@@ -100,21 +138,20 @@ export default function Blog() {
             Thoughts, tutorials, and lessons from building machine learning in production.
           </p>
 
-          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3">
+          <div ref={tabsRef} className="relative mt-10 flex flex-wrap gap-x-6 gap-y-3 pb-2">
             {categories.map((category) => (
               <button
                 key={category}
+                data-active={selectedCategory === category}
                 onClick={() => setSelectedCategory(category)}
                 className={`font-mono text-[11px] uppercase tracking-[0.18em] transition-colors ${
                   selectedCategory === category ? 'text-white' : 'text-white/40 hover:text-white/70'
                 }`}
               >
                 {category}
-                {selectedCategory === category && (
-                  <span className="ml-2 inline-block h-px w-5 bg-white align-middle" />
-                )}
               </button>
             ))}
+            <span ref={underlineRef} className="t-underline" aria-hidden="true" />
           </div>
         </AnimatedSection>
 
@@ -122,17 +159,17 @@ export default function Blog() {
           {filteredPosts.map((post, index) => (
             <AnimatedSection key={post.title} animation="fade-in" delay={index % 2 === 1}>
               <article className="group flex cursor-pointer flex-col">
-                <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/10">
+                <TiltCard className="aspect-[16/10] border border-white/10">
                   <img
                     src={post.image}
                     alt={post.title}
                     loading="lazy"
-                    className="h-full w-full object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+                    className="h-full w-full object-cover"
                   />
-                  <span className="absolute left-3 top-3 rounded-full bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/80 backdrop-blur-sm">
+                  <span className="absolute left-3 top-3 z-10 rounded-full bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/80 backdrop-blur-sm">
                     {post.category}
                   </span>
-                </div>
+                </TiltCard>
 
                 <div className="mt-5">
                   <div className="mb-3 font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
