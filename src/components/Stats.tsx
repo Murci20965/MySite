@@ -1,3 +1,5 @@
+import PopNumber from './PopNumber';
+
 export default function Stats() {
   const stats = [
     { value: '15+', label: 'Successful deployments', description: 'Production ML models' },
@@ -12,7 +14,7 @@ export default function Stats() {
           {stats.map((stat) => (
             <div key={stat.label}>
               <div className="font-display text-5xl font-medium text-white sm:text-6xl">
-                {stat.value}
+                <PopNumber value={stat.value} />
               </div>
               <div className="mt-3 font-sans text-white/80">{stat.label}</div>
               <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">

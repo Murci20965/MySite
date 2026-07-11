@@ -1,5 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
+import PopNumber from './PopNumber';
 
 export default function OpenSource() {
   const contributions = [
@@ -99,7 +100,9 @@ export default function OpenSource() {
           <div className="mt-12 grid grid-cols-2 gap-6 border-y border-white/10 py-8 sm:grid-cols-4">
             {stats.map((stat) => (
               <div key={stat.label}>
-                <div className="font-mono text-3xl text-white">{stat.value}</div>
+                <div className="font-mono text-3xl text-white">
+                  <PopNumber value={stat.value} />
+                </div>
                 <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
                   {stat.label}
                 </div>
