@@ -55,36 +55,44 @@ export default function Hero() {
               <h1 className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-8xl xl:text-9xl font-semibold mb-8 sm:mb-10 leading-[0.95] tracking-[-0.01em]">
                 <div className="flex items-center gap-4 sm:gap-5">
                   <span className="text-white whitespace-nowrap">Nhlanhla</span>
-                  <span className="text-white/50 whitespace-nowrap">Mokoena</span>
-                  <button
-                    onClick={() => setIsVideoModalOpen(true)}
-                    className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-white/5 backdrop-blur-sm border border-white/15 hover:bg-white/15 hover:border-white/30 transition-colors duration-300 group flex-shrink-0"
-                    aria-label="Play intro video"
-                  >
-                    <Play className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white/60 group-hover:text-white ml-0.5" fill="currentColor" />
-                  </button>
+                  <span className="text-white/50 whitespace-nowrap inline-flex items-center">
+                    M
+                    <button
+                      onClick={() => setIsVideoModalOpen(true)}
+                      className="inline-flex items-center justify-center rounded-full bg-white/5 border border-white/25 hover:bg-white/15 hover:border-white/50 transition-colors duration-300 align-middle"
+                      style={{ width: '0.66em', height: '0.66em', marginLeft: '0.01em', marginRight: '0.01em' }}
+                      aria-label="Play intro video"
+                    >
+                      <Play
+                        style={{ width: '0.34em', height: '0.34em', marginLeft: '0.03em' }}
+                        className="text-lime-400"
+                        fill="currentColor"
+                      />
+                    </button>
+                    koena
+                  </span>
                 </div>
               </h1>
 
-              <p className="font-sans text-base sm:text-lg lg:text-xl text-white/55 mb-8 sm:mb-10 max-w-xl leading-relaxed">
+              <p className="font-sans text-base sm:text-lg lg:text-xl text-white/55 max-w-xl leading-relaxed">
                 I am a skilled Data Scientist specializing in Machine Learning and AI Engineering, focused on building robust, scalable solutions that drive business intelligence and innovation. Let's create the future with data.
               </p>
-
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={() => scrollToSection('projects')}
-                  className="font-sans px-8 py-3.5 bg-white text-black text-sm font-medium rounded-full hover:bg-white/85 transition-colors duration-300"
-                >
-                  View Projects
-                </button>
-                <button
-                  onClick={() => scrollToSection('contact')}
-                  className="font-sans px-8 py-3.5 text-white text-sm font-medium border border-white/25 rounded-full hover:bg-white/10 hover:border-white/40 transition-colors duration-300"
-                >
-                  Get in Touch
-                </button>
-              </div>
             </div>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3 mt-12 sm:mt-16">
+            <button
+              onClick={() => scrollToSection('projects')}
+              className="font-sans px-8 py-3.5 bg-white text-black text-sm font-medium rounded-full hover:bg-white/85 transition-colors duration-300"
+            >
+              View Projects
+            </button>
+            <button
+              onClick={() => scrollToSection('contact')}
+              className="font-sans px-8 py-3.5 text-white text-sm font-medium border border-white/25 rounded-full hover:bg-white/10 hover:border-white/40 transition-colors duration-300"
+            >
+              Get in Touch
+            </button>
           </div>
         </div>
       </div>
