@@ -4,6 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Off-black instead of pure #000 — softer, more premium, one place to tune.
+        black: '#0a0a0a',
         sand: '#F0E7D6',
         ink: '#17130E',
         marigold: '#E0952A',

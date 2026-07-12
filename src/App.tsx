@@ -21,6 +21,7 @@ function App() {
     <div className="min-h-screen bg-black overflow-x-hidden">
       <FutureticParticles />
       <GlowingOrbs />
+      <div className="grain-overlay" aria-hidden="true" />
       <div className="relative z-10">
         <SimpleCursor />
         <Navigation />
