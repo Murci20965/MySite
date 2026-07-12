@@ -21,3 +21,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Large source GLB (optimized version is public/earth.opt.glb)
+earth.source.glb
