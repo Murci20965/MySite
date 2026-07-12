@@ -224,7 +224,7 @@ export default function Blog() {
               />
               <button
                 type="submit"
-                className="whitespace-nowrap rounded-full bg-white px-6 py-2.5 font-sans text-sm font-medium text-black transition-colors hover:bg-white/85"
+                className="whitespace-nowrap rounded-full bg-white px-6 py-2.5 font-sans text-sm font-medium text-black transition duration-300 hover:bg-white/85 active:scale-[0.98]"
               >
                 Subscribe
               </button>

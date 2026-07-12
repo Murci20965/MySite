@@ -198,7 +198,7 @@ export default function Contact() {
                   <textarea id="message" name="message" required rows={6} value={formData.message} onChange={handleChange} className={`${fieldClass} resize-none`} placeholder="Tell me about your project, goals, and any specific requirements." />
                 </div>
 
-                <button type="submit" className="rounded-full bg-white px-8 py-3.5 font-sans text-sm font-medium text-black transition-colors hover:bg-white/85">
+                <button type="submit" className="rounded-full bg-white px-8 py-3.5 font-sans text-sm font-medium text-black transition duration-300 hover:bg-white/85 active:scale-[0.98]">
                   Send message
                 </button>
               </form>

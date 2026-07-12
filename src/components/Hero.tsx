@@ -43,7 +43,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 -mb-32">
+    <section id="hero" className="relative min-h-[100dvh] flex items-center justify-center pt-20 -mb-32">
       <div className="absolute inset-0">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
@@ -105,13 +105,13 @@ export default function Hero() {
           <div className="t-stagger-line t-stagger-line--4 flex flex-wrap justify-center gap-3 mt-6 sm:mt-8">
             <button
               onClick={() => scrollToSection('projects')}
-              className="font-sans px-8 py-3.5 bg-white text-black text-sm font-medium rounded-full hover:bg-white/85 transition-colors duration-300"
+              className="font-sans px-8 py-3.5 bg-white text-black text-sm font-medium rounded-full hover:bg-white/85 active:scale-[0.98] transition duration-300"
             >
               View Projects
             </button>
             <button
               onClick={() => scrollToSection('contact')}
-              className="font-sans px-8 py-3.5 text-white text-sm font-medium border border-white/25 rounded-full hover:bg-white/10 hover:border-white/40 transition-colors duration-300"
+              className="font-sans px-8 py-3.5 text-white text-sm font-medium border border-white/25 rounded-full hover:bg-white/10 hover:border-white/40 active:scale-[0.98] transition duration-300"
             >
               Get in Touch
             </button>
