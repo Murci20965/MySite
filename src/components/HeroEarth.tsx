@@ -119,19 +119,31 @@ export default function HeroEarth() {
     return () => mq.removeEventListener('change', handler);
   }, []);
 
-  // R3F's ResizeObserver measurement can be lost if the canvas mounts while
-  // the page isn't displayed (seen live: a 300x150 default canvas = invisible
-  // Earth). A window resize event forces a re-measure; nudge after mount and
-  // whenever the page becomes visible again.
+  // A canvas that mounts while the page has no viewport (hidden tab/pane:
+  // innerWidth === 0) locks to the 300x150 default and never re-measures —
+  // a loaded but invisible Earth. Gate the mount on a real viewport, then
+  // nudge a re-measure once we're in.
+  const [sized, setSized] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth > 0 && window.innerHeight > 0
+  );
+
   useEffect(() => {
-    const nudge = () => window.dispatchEvent(new Event('resize'));
-    const t = window.setTimeout(nudge, 350);
-    document.addEventListener('visibilitychange', nudge);
-    return () => {
-      window.clearTimeout(t);
-      document.removeEventListener('visibilitychange', nudge);
+    if (sized) {
+      const t = window.setTimeout(() => window.dispatchEvent(new Event('resize')), 300);
+      return () => window.clearTimeout(t);
+    }
+    const check = () => {
+      if (window.innerWidth > 0 && window.innerHeight > 0) setSized(true);
     };
-  }, []);
+    const poll = window.setInterval(check, 400);
+    window.addEventListener('resize', check);
+    document.addEventListener('visibilitychange', check);
+    return () => {
+      window.clearInterval(poll);
+      window.removeEventListener('resize', check);
+      document.removeEventListener('visibilitychange', check);
+    };
+  }, [sized]);
 
   useEffect(() => {
     earthJourney.active = true;
@@ -187,7 +199,7 @@ export default function HeroEarth() {
       className="pointer-events-none fixed left-0 top-0 z-0 h-[100dvh] w-screen"
       style={{ opacity: 1 }}
     >
-      {!journeyDone && (
+      {sized && !journeyDone && (
         <Canvas
           gl={{ alpha: true, antialias: !small }}
           dpr={small ? [1, 1.25] : [1, 1.5]}

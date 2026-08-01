@@ -31,29 +31,32 @@ function App() {
         <SimpleCursor />
         <ScrollProgress />
         <Navigation />
-      <HeroBackdrop />
-      <div className="relative">
-        <div className="relative bg-black overflow-hidden">
-          <Hero />
-          <About />
-        </div>
+        <HeroBackdrop />
         <div className="relative">
-          <Marquee />
-          <Experience />
-          <Projects />
-          <ExpandMedia />
-          <Skills />
-          <Stats />
-          <Blog />
-          <OpenSource />
-          <Education />
-          <Testimonials />
-          <FAQ />
-          <Contact />
+          {/* No background here: the fixed Earth canvas paints beneath this
+              wrapper, so an opaque bg would hide it. The page black comes
+              from the root element. */}
+          <div className="relative overflow-hidden">
+            <Hero />
+            <About />
+          </div>
+          <div className="relative">
+            <Marquee />
+            <Experience />
+            <Projects />
+            <ExpandMedia />
+            <Skills />
+            <Stats />
+            <Blog />
+            <OpenSource />
+            <Education />
+            <Testimonials />
+            <FAQ />
+            <Contact />
+          </div>
         </div>
-      </div>
-      <Footer />
-      <ChatWidget />
+        <Footer />
+        <ChatWidget />
       </div>
     </div>
   );
