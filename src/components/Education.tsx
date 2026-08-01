@@ -1,7 +1,13 @@
+import { useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
 
 export default function Education() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const scrollByCard = (dir: 1 | -1) => {
+    trackRef.current?.scrollBy({ left: dir * 320, behavior: 'smooth' });
+  };
   const education: Array<{
     degree: string;
     specialization: string;
@@ -151,32 +157,50 @@ export default function Education() {
 
         <AnimatedSection animation="fade-in">
           <div className="mt-20">
-            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
-              Certifications &amp; courses
+            <div className="mb-6 flex items-center justify-between">
+              <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
+                Certifications &amp; courses
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => scrollByCard(-1)}
+                  aria-label="Previous certifications"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition-colors hover:border-white/40 hover:text-white"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => scrollByCard(1)}
+                  aria-label="Next certifications"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition-colors hover:border-white/40 hover:text-white"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
             </div>
-            <div className="border-t border-white/10">
+            <div
+              ref={trackRef}
+              className="t-carousel flex gap-5 overflow-x-auto border-t border-white/10 pb-4 pt-8"
+            >
               {courses.map((course) => (
                 <div
                   key={course.title}
-                  className="grid gap-3 border-b border-white/10 py-6 sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] sm:items-baseline sm:gap-8"
+                  className="flex w-[17rem] shrink-0 snap-start flex-col rounded-2xl border border-white/10 bg-[#0e0e0e] p-6 sm:w-[19rem]"
                 >
-                  <div>
-                    <div className="font-display text-lg text-white">{course.title}</div>
-                    {course.provider && (
-                      <div className="mt-1 font-sans text-sm text-white/50">{course.provider}</div>
-                    )}
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {course.skills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] tracking-wide text-white/50"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
+                  <div className="font-display text-lg leading-snug text-white">{course.title}</div>
+                  {course.provider && (
+                    <div className="mt-1 font-sans text-sm text-white/50">{course.provider}</div>
+                  )}
+                  <div className="mt-auto flex flex-wrap gap-2 pt-5">
+                    {course.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] tracking-wide text-white/50"
+                      >
+                        {skill}
+                      </span>
+                    ))}
                   </div>
-                  <div className="font-mono text-sm text-white/40 sm:text-right">{course.completed}</div>
                 </div>
               ))}
             </div>
