@@ -31,11 +31,9 @@ function App() {
         <SimpleCursor />
         <ScrollProgress />
         <Navigation />
+      <HeroBackdrop />
       <div className="relative">
         <div className="relative bg-black overflow-hidden">
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-full lg:w-1/2 z-0">
-            <HeroBackdrop />
-          </div>
           <Hero />
           <About />
         </div>

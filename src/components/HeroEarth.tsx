@@ -119,6 +119,20 @@ export default function HeroEarth() {
     return () => mq.removeEventListener('change', handler);
   }, []);
 
+  // R3F's ResizeObserver measurement can be lost if the canvas mounts while
+  // the page isn't displayed (seen live: a 300x150 default canvas = invisible
+  // Earth). A window resize event forces a re-measure; nudge after mount and
+  // whenever the page becomes visible again.
+  useEffect(() => {
+    const nudge = () => window.dispatchEvent(new Event('resize'));
+    const t = window.setTimeout(nudge, 350);
+    document.addEventListener('visibilitychange', nudge);
+    return () => {
+      window.clearTimeout(t);
+      document.removeEventListener('visibilitychange', nudge);
+    };
+  }, []);
+
   useEffect(() => {
     earthJourney.active = true;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -136,6 +150,10 @@ export default function HeroEarth() {
 
       // fade the canvas just before it hands over to the DOM orb
       el.style.opacity = p < 0.94 ? '1' : String(Math.max(0, (1 - p) / 0.06));
+      // While the Earth is the hero/About backdrop it sits under all content;
+      // for the dock flight it lifts above the opaque section backgrounds
+      // (which would otherwise paint over the fixed canvas and hide it).
+      el.style.zIndex = p > 0.72 ? '30' : '0';
 
       if (p >= 1.02 && !doneRef.current) {
         doneRef.current = true;
@@ -161,7 +179,14 @@ export default function HeroEarth() {
   }, []);
 
   return (
-    <div ref={containerRef} className="pointer-events-none fixed inset-0">
+    // Explicit viewport sizing: R3F measures this box for the canvas, and a
+    // fixed element with only inset can measure 0 in some layouts (seen live
+    // as a 300x150 default canvas — an invisible Earth).
+    <div
+      ref={containerRef}
+      className="pointer-events-none fixed left-0 top-0 z-0 h-[100dvh] w-screen"
+      style={{ opacity: 1 }}
+    >
       {!journeyDone && (
         <Canvas
           gl={{ alpha: true, antialias: !small }}

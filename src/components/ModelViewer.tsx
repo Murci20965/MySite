@@ -1,4 +1,4 @@
-import { Component, Suspense } from 'react';
+import { Component, Suspense, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Bounds, Center, OrbitControls, useGLTF } from '@react-three/drei';
@@ -41,6 +41,18 @@ type Props = {
  * Bounds+Center frame any model regardless of its authored scale.
  */
 export default function ModelViewer({ path }: Props) {
+  // Same measurement-loss guard as HeroEarth: if the canvas mounts while the
+  // page isn't displayed, R3F can miss its size — nudge a re-measure.
+  useEffect(() => {
+    const nudge = () => window.dispatchEvent(new Event('resize'));
+    const t = window.setTimeout(nudge, 350);
+    document.addEventListener('visibilitychange', nudge);
+    return () => {
+      window.clearTimeout(t);
+      document.removeEventListener('visibilitychange', nudge);
+    };
+  }, []);
+
   return (
     <div className="relative h-full w-full bg-[#0b0b0b]">
       <ViewerBoundary>
