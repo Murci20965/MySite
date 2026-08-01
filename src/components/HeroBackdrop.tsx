@@ -23,6 +23,9 @@ export default function HeroBackdrop() {
   const [isDesktop, setIsDesktop] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches
   );
+  // The Earth chunk is ~877KB of three.js — hold it back until the browser is
+  // idle so the hero text always paints first. The moon poster covers the gap.
+  const [idle, setIdle] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 1024px)');
@@ -31,8 +34,22 @@ export default function HeroBackdrop() {
     return () => mq.removeEventListener('change', handler);
   }, []);
 
+  useEffect(() => {
+    if (!isDesktop) return;
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (w.requestIdleCallback) {
+      const id = w.requestIdleCallback(() => setIdle(true), { timeout: 2500 });
+      return () => w.cancelIdleCallback?.(id);
+    }
+    const t = window.setTimeout(() => setIdle(true), 1200);
+    return () => window.clearTimeout(t);
+  }, [isDesktop]);
+
   // Mobile / low-end: the lightweight moon image (no WebGL, no 3D bundle).
-  if (!isDesktop) return <Moon />;
+  if (!isDesktop || !idle) return <Moon />;
 
   // Desktop: the 3D Earth, with the moon as the loading poster.
   return (
