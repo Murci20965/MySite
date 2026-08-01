@@ -5,14 +5,14 @@ export default function Footer() {
     { name: 'About', href: '#about' },
     { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' },
-    { name: 'Reviews', href: '#reviews' },
+    { name: 'Principles', href: '#reviews' },
     { name: 'Contact', href: '#contact' },
   ];
 
   const socialLinks = [
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Github, href: '#', label: 'GitHub' },
-    { icon: Mail, href: '#contact', label: 'Email' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/nhlanhla-mokoena-32b22b174/', label: 'LinkedIn' },
+    { icon: Github, href: 'https://github.com/Murci20965', label: 'GitHub' },
+    { icon: Mail, href: 'mailto:nhlanhla18mokoena@gmail.com', label: 'Email' },
   ];
 
   const scrollToSection = (href: string) => {
@@ -31,7 +31,8 @@ export default function Footer() {
               Nhlanhla Mokoena
             </div>
             <p className="mt-4 max-w-md font-sans leading-relaxed text-white/50">
-              Data Scientist and AI Engineer building robust, scalable machine-learning systems.
+              AI engineer building production AI systems — and working toward XR education that
+              lets anyone, anywhere, practise real skills.
             </p>
           </div>
 
@@ -79,14 +80,9 @@ export default function Footer() {
           <p className="font-mono text-xs tracking-wide text-white/40">
             &copy; {new Date().getFullYear()} Nhlanhla Mokoena
           </p>
-          <div className="flex gap-6">
-            <button className="font-sans text-xs text-white/40 transition-colors hover:text-white/70">
-              Privacy
-            </button>
-            <button className="font-sans text-xs text-white/40 transition-colors hover:text-white/70">
-              Terms
-            </button>
-          </div>
+          <p className="font-mono text-xs tracking-wide text-white/40">
+            Johannesburg, South Africa
+          </p>
         </div>
       </div>
     </footer>
