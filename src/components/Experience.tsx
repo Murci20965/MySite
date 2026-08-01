@@ -159,6 +159,44 @@ export default function Experience() {
         </div>
 
         <AnimatedSection animation="fade-in">
+          <div className="mt-20">
+            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
+              How a project runs
+            </div>
+            <div className="grid gap-5 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                {
+                  step: '01',
+                  title: 'Understand',
+                  text: 'Map the problem, the users and the constraints. Measure — never guess.',
+                },
+                {
+                  step: '02',
+                  title: 'Design',
+                  text: 'Architecture, contracts and data flow written down, aligned before code.',
+                },
+                {
+                  step: '03',
+                  title: 'Build',
+                  text: 'Atomic increments with docs in the same change. Secure by default.',
+                },
+                {
+                  step: '04',
+                  title: 'Verify & ship',
+                  text: 'Tested, honestly reported, deployed through CI — then measured again.',
+                },
+              ].map((s) => (
+                <div key={s.step} className="rounded-2xl border border-white/10 p-6">
+                  <div className="font-mono text-[11px] text-lime-400/80">{s.step}</div>
+                  <h3 className="mt-3 font-display text-lg font-medium text-white">{s.title}</h3>
+                  <p className="mt-2 font-sans text-sm leading-relaxed text-white/55">{s.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </AnimatedSection>
+
+        <AnimatedSection animation="fade-in">
           <div className="mt-16 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
             <div>
               <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
