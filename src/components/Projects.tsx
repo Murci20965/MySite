@@ -1,10 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import { Github, ArrowUpRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
+import RevealHeading from './RevealHeading';
 import TiltCard from './TiltCard';
+
+const ModelViewer = lazy(() => import('./ModelViewer'));
+
+// Placeholder until a pipeline-generated GLB lands in public/models/ —
+// swapping the real model in is this one path change.
+const PIPELINE_MODEL = '/earth.opt.glb';
 
 export default function Projects() {
   const [selectedFilter, setSelectedFilter] = useState('All');
+  // Which card is showing its live 3D viewer — one at a time, WebGL contexts
+  // are scarce on low-end devices.
+  const [active3D, setActive3D] = useState<string | null>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const underlineRef = useRef<HTMLSpanElement>(null);
 
@@ -14,6 +24,7 @@ export default function Projects() {
     {
       title: 'Avatar-3D Pipeline',
       category: '3D & XR',
+      model: PIPELINE_MODEL,
       description:
         'A "Director & Marionette" engine that translates natural language into 14 deterministic 3D skeletal animation states — Groq Llama-3.3-70b under strict Pydantic JSON validation, rendered in Next.js 16 / React Three Fiber with 0.5s animation crossfading.',
       image: '/projects/avatar-pipeline.png',
@@ -26,6 +37,7 @@ export default function Projects() {
     {
       title: 'Orbit-3D Asset Pipeline',
       category: '3D & XR',
+      model: PIPELINE_MODEL,
       description:
         'Multimodal text/image-to-3D generation pipeline producing optimised, web-ready 3D models — a Dockerised headless Blender engine centres, scales and formats AI-generated meshes for WebGL, with asyncio orchestration keeping latency low.',
       image: '/projects/orbit-3d-pipeline.png',
@@ -132,12 +144,13 @@ export default function Projects() {
               Projects
             </span>
             <span className="h-px flex-1 bg-white/15" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">03</span>
+            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">03</span>
           </div>
 
-          <h2 className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl">
-            Selected work
-          </h2>
+          <RevealHeading
+            text="Selected work"
+            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
+          />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
             Real systems, really shipped — from text-to-3D pipelines to end-to-end MLOps. Code is public; two are live.
           </p>
@@ -163,17 +176,45 @@ export default function Projects() {
           {filteredProjects.map((project, index) => (
             <AnimatedSection key={project.title} animation="fade-in" delay={index % 2 === 1}>
               <article className="group flex flex-col">
-                <TiltCard className="aspect-[16/10] border border-white/10">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    loading="lazy"
-                    className="h-full w-full object-cover"
-                  />
-                  <span className="absolute left-3 top-3 z-10 rounded-full bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/80 backdrop-blur-sm">
-                    {project.category}
-                  </span>
-                </TiltCard>
+                <div className="relative">
+                  {'model' in project && project.model && active3D === project.title ? (
+                    <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/10">
+                      <Suspense
+                        fallback={
+                          <div className="flex h-full w-full items-center justify-center bg-[#0b0b0b]">
+                            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/50">
+                              Loading model&hellip;
+                            </span>
+                          </div>
+                        }
+                      >
+                        <ModelViewer path={project.model} />
+                      </Suspense>
+                    </div>
+                  ) : (
+                    <TiltCard className="aspect-[16/10] border border-white/10">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                      />
+                      <span className="absolute left-3 top-3 z-10 rounded-full bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/80 backdrop-blur-sm">
+                        {project.category}
+                      </span>
+                    </TiltCard>
+                  )}
+                  {'model' in project && project.model && (
+                    <button
+                      onClick={() =>
+                        setActive3D(active3D === project.title ? null : project.title)
+                      }
+                      className="absolute right-3 top-3 z-10 rounded-full border border-lime-400/40 bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-lime-400 backdrop-blur-sm transition-colors hover:bg-black/90 hover:border-lime-400/70"
+                    >
+                      {active3D === project.title ? 'View image' : 'View in 3D'}
+                    </button>
+                  )}
+                </div>
 
                 <div className="mt-5">
                   <div className="mb-3 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
