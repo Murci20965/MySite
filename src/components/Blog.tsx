@@ -10,74 +10,52 @@ export default function Blog() {
 
   const blogPosts = [
     {
-      title: 'Building Scalable Machine Learning Pipelines: Lessons from Production',
+      title: 'One LLM, Fourteen Animations: Structured Outputs as an API Contract',
       excerpt:
-        'A deep dive into the challenges and solutions I encountered while building and deploying ML pipelines that handle millions of predictions daily.',
-      date: 'October 5, 2024',
-      readTime: '8 min read',
+        'How the Avatar-3D Pipeline turns a probabilistic language model into a deterministic animation director — strict Pydantic schemas, structured tool calling, and why LLM output should be treated as untrusted user input.',
+      date: 'August 2026',
+      readTime: '6 min read',
+      category: 'AI Engineering',
+      tags: ['LLM Agents', 'Pydantic', 'FastAPI'],
+      image: '/projects/avatar-pipeline.png',
+      link: 'https://github.com/Murci20965/MySite/blob/main/content/blog/one-llm-fourteen-animations.md',
+    },
+    {
+      title: 'Taming AI-Generated 3D: A Headless Blender Pipeline for the Web',
+      excerpt:
+        'Text-to-3D output arrives off-centre, mis-scaled and heavy. Inside Orbit-3D: a Dockerised headless Blender engine that normalises every generated mesh into a web-ready asset, and asyncio orchestration that keeps the wait bearable.',
+      date: 'August 2026',
+      readTime: '6 min read',
+      category: '3D & XR',
+      tags: ['Text-to-3D', 'Blender', 'WebGL'],
+      image: '/projects/orbit-3d-pipeline.png',
+      link: 'https://github.com/Murci20965/MySite/blob/main/content/blog/taming-ai-generated-3d.md',
+    },
+    {
+      title: 'R² Isn’t the Finish Line: Shipping an XGBoost Model with CI/CD',
+      excerpt:
+        'My price model scores R² 0.9037 — and that’s the least interesting part. On the gap between a good metric and a dependable system: API contracts, Docker reproducibility, and CI that catches the embarrassing failure first.',
+      date: 'August 2026',
+      readTime: '5 min read',
       category: 'MLOps',
-      tags: ['Machine Learning', 'DevOps', 'Python'],
-      image:
-        'https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800',
+      tags: ['XGBoost', 'CI/CD', 'Docker'],
+      image: '/projects/real_estate_price_predictor.png',
+      link: 'https://github.com/Murci20965/MySite/blob/main/content/blog/r2-is-not-the-finish-line.md',
     },
     {
-      title: 'The Art of Feature Engineering: Turning Raw Data into Gold',
+      title: 'Transfer Learning on a Budget: Pneumonia Detection with ResNet50',
       excerpt:
-        'Explore advanced feature engineering techniques that dramatically improved model performance in my recent projects, with practical examples and code snippets.',
-      date: 'September 28, 2024',
-      readTime: '12 min read',
-      category: 'Data Science',
-      tags: ['Feature Engineering', 'Analytics', 'Best Practices'],
-      image:
-        'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800',
-    },
-    {
-      title: 'Real-Time AI: Building a Low-Latency Recommendation System',
-      excerpt:
-        'How I architected a recommendation system that serves personalized results in under 50ms, handling thousands of concurrent users without breaking a sweat.',
-      date: 'September 15, 2024',
-      readTime: '10 min read',
-      category: 'AI Engineering',
-      tags: ['Real-Time AI', 'Scalability', 'Architecture'],
-      image:
-        'https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800',
-    },
-    {
-      title: 'Understanding Transformer Models: A Practical Guide',
-      excerpt:
-        'Breaking down the complexities of transformer architectures with clear explanations and hands-on examples that you can implement today.',
-      date: 'August 30, 2024',
-      readTime: '15 min read',
-      category: 'Deep Learning',
-      tags: ['NLP', 'Transformers', 'PyTorch'],
-      image:
-        'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=800',
-    },
-    {
-      title: 'Data Quality: The Foundation of Successful ML Projects',
-      excerpt:
-        'Why data quality matters more than fancy algorithms, and practical strategies for ensuring your training data is reliable and representative.',
-      date: 'August 12, 2024',
-      readTime: '7 min read',
-      category: 'Data Science',
-      tags: ['Data Quality', 'Best Practices', 'SQL'],
-      image:
-        'https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=800',
-    },
-    {
-      title: 'From Jupyter Notebook to Production: A Survival Guide',
-      excerpt:
-        'The practical steps and tools I use to transform experimental notebooks into production-ready code that other engineers can work with.',
-      date: 'July 25, 2024',
-      readTime: '9 min read',
-      category: 'AI Engineering',
-      tags: ['Python', 'CI/CD', 'Testing'],
-      image:
-        'https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg?auto=compress&cs=tinysrgb&w=800',
+        'Why start from zero when ImageNet already taught the network to see? Fine-tuning ResNet50 for chest X-rays, and why I deliberately tuned for 0.96 recall — choosing which way to be wrong is a product decision.',
+      date: 'August 2026',
+      readTime: '6 min read',
+      category: 'Machine Learning',
+      tags: ['Transfer Learning', 'PyTorch', 'Medical Imaging'],
+      image: '/projects/medical_image_classifier.png',
+      link: 'https://github.com/Murci20965/MySite/blob/main/content/blog/transfer-learning-on-a-budget.md',
     },
   ];
 
-  const categories = ['All', 'MLOps', 'Data Science', 'AI Engineering', 'Deep Learning'];
+  const categories = ['All', 'AI Engineering', '3D & XR', 'MLOps', 'Machine Learning'];
 
   const filteredPosts =
     selectedCategory === 'All'
@@ -135,7 +113,7 @@ export default function Blog() {
             Notes on the work
           </h2>
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            Thoughts, tutorials, and lessons from building machine learning in production.
+            Field notes from my own projects — what actually broke, what actually worked, and why.
           </p>
 
           <div ref={tabsRef} className="relative mt-10 flex flex-wrap gap-x-6 gap-y-3 pb-2">
@@ -158,7 +136,12 @@ export default function Blog() {
         <div className="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2">
           {filteredPosts.map((post, index) => (
             <AnimatedSection key={post.title} animation="fade-in" delay={index % 2 === 1}>
-              <article className="group flex cursor-pointer flex-col">
+              <a
+                href={post.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex cursor-pointer flex-col"
+              >
                 <TiltCard className="aspect-[16/10] border border-white/10">
                   <img
                     src={post.image}
@@ -197,7 +180,7 @@ export default function Blog() {
                     Read more <ArrowUpRight className="h-4 w-4" />
                   </span>
                 </div>
-              </article>
+              </a>
             </AnimatedSection>
           ))}
         </div>
@@ -214,10 +197,15 @@ export default function Blog() {
             </div>
             <form
               className="flex w-full max-w-sm items-center gap-3"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={(e) => {
+                e.preventDefault();
+                const email = (e.currentTarget.elements.namedItem('subscriber') as HTMLInputElement)?.value ?? '';
+                window.location.href = `mailto:nhlanhla18mokoena@gmail.com?subject=${encodeURIComponent('Notify me about new articles')}&body=${encodeURIComponent(`Please add ${email} to your article updates.`)}`;
+              }}
             >
               <input
                 type="email"
+                name="subscriber"
                 required
                 placeholder="name@email.com"
                 className="min-w-0 flex-1 rounded-full border border-white/20 bg-white/5 px-5 py-2.5 font-sans text-sm text-white placeholder-white/40 transition-colors focus:border-white/50 focus:outline-none"
