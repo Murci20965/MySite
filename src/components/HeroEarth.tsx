@@ -14,6 +14,8 @@ import { earthJourney } from '../lib/earthJourney';
 const PHASE_HERO = { nx: 0.25, ny: 0.02, s: 1 };
 const PHASE_ABOUT = { nx: 0.3, ny: 0.0, s: 0.55 };
 const PHASE_DOCK = { nx: 0.45, ny: 0.46, s: 0.055 };
+// Narrow screens: tuck the globe higher and smaller so it never crowds the hero text.
+const PHASE_HERO_SM = { nx: 0.22, ny: 0.24, s: 0.62 };
 // Y rotation (radians) at which Africa faces the camera — tuned visually.
 const AFRICA_Y = 0.55;
 // Texture-seam longitude offset for placing surface markers — tuned with AFRICA_Y.
@@ -24,11 +26,12 @@ const JOBURG_LON = MathUtils.degToRad(28.05);
 const smooth = (t: number) => t * t * (3 - 2 * t);
 const seg = (p: number, a: number, b: number) => smooth(MathUtils.clamp((p - a) / (b - a), 0, 1));
 
-function EarthModel() {
+function EarthModel({ small }: { small: boolean }) {
   const group = useRef<Group>(null);
   const dot = useRef<Mesh>(null);
   const { scene } = useGLTF('/earth.opt.glb');
   const { viewport } = useThree();
+  const hero = small ? PHASE_HERO_SM : PHASE_HERO;
   const reduce =
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -58,9 +61,9 @@ function EarthModel() {
     // Position + scale: hero → about (0–0.45), hold (0.45–0.7), → dock (0.7–1).
     const t1 = seg(p, 0, 0.45);
     const t2 = seg(p, 0.7, 1);
-    const nx = MathUtils.lerp(MathUtils.lerp(PHASE_HERO.nx, PHASE_ABOUT.nx, t1), PHASE_DOCK.nx, t2);
-    const ny = MathUtils.lerp(MathUtils.lerp(PHASE_HERO.ny, PHASE_ABOUT.ny, t1), PHASE_DOCK.ny, t2);
-    const s = MathUtils.lerp(MathUtils.lerp(PHASE_HERO.s, PHASE_ABOUT.s, t1), PHASE_DOCK.s, t2);
+    const nx = MathUtils.lerp(MathUtils.lerp(hero.nx, PHASE_ABOUT.nx, t1), PHASE_DOCK.nx, t2);
+    const ny = MathUtils.lerp(MathUtils.lerp(hero.ny, PHASE_ABOUT.ny, t1), PHASE_DOCK.ny, t2);
+    const s = MathUtils.lerp(MathUtils.lerp(hero.s, PHASE_ABOUT.s, t1), PHASE_DOCK.s, t2);
 
     g.position.x = MathUtils.damp(g.position.x, nx * viewport.width, 6, delta);
     g.position.y = MathUtils.damp(g.position.y, ny * viewport.height, 6, delta);
@@ -103,6 +106,18 @@ export default function HeroEarth() {
   // scroll-up remounts it; useGLTF caches the model, so remounts are cheap).
   const [journeyDone, setJourneyDone] = useState(false);
   const doneRef = useRef(false);
+  // Phones get the real Earth too — just cheaper: lower dpr, no antialiasing,
+  // and a tucked-away hero pose.
+  const [small, setSmall] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const handler = () => setSmall(mq.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   useEffect(() => {
     earthJourney.active = true;
@@ -149,14 +164,14 @@ export default function HeroEarth() {
     <div ref={containerRef} className="pointer-events-none fixed inset-0">
       {!journeyDone && (
         <Canvas
-          gl={{ alpha: true, antialias: true }}
-          dpr={[1, 1.5]}
+          gl={{ alpha: true, antialias: !small }}
+          dpr={small ? [1, 1.25] : [1, 1.5]}
           camera={{ position: [0, 0, 8], fov: 42 }}
         >
           <ambientLight intensity={0.35} />
           <directionalLight position={[5, 2, 5]} intensity={2.6} />
           <Suspense fallback={null}>
-            <EarthModel />
+            <EarthModel small={small} />
           </Suspense>
         </Canvas>
       )}
