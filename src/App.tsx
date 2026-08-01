@@ -16,6 +16,7 @@ import SimpleCursor from './components/SimpleCursor';
 import ScrollProgress from './components/ScrollProgress';
 import ExpandMedia from './components/ExpandMedia';
 import Marquee from './components/Marquee';
+import ChatWidget from './components/ChatWidget';
 import FutureticParticles from './components/FutureticParticles';
 import GlowingOrbs from './components/GlowingOrbs';
 import HeroBackdrop from './components/HeroBackdrop';
@@ -54,6 +55,7 @@ function App() {
         </div>
       </div>
       <Footer />
+      <ChatWidget />
       </div>
     </div>
   );
