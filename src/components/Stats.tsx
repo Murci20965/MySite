@@ -2,9 +2,9 @@ import PopNumber from './PopNumber';
 
 export default function Stats() {
   const stats = [
-    { value: '15+', label: 'Successful deployments', description: 'Production ML models' },
-    { value: '96%', label: 'Model accuracy achieved', description: 'Average performance' },
-    { value: '4.9', label: 'Employer rating', description: 'Client satisfaction' },
+    { value: '525', label: 'GitHub contributions', description: 'Past 12 months' },
+    { value: '18', label: 'Public repositories', description: 'Open on GitHub' },
+    { value: '2', label: 'Live AI demos', description: 'Deployed on Vercel' },
   ];
 
   return (

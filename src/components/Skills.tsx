@@ -3,36 +3,36 @@ import AnimatedSection from './AnimatedSection';
 export default function Skills() {
   const skillCategories = [
     {
-      title: 'ML / DL Frameworks',
-      skills: ['TensorFlow', 'PyTorch', 'Scikit-learn', 'Keras', 'XGBoost'],
+      title: 'Agentic AI & GenAI',
+      skills: ['LangChain', 'LangGraph', 'RAG + Pinecone', 'Claude & OpenAI APIs', 'Structured tool use'],
     },
     {
-      title: 'Programming Languages',
-      skills: ['Python', 'R', 'SQL', 'JavaScript', 'Scala'],
+      title: 'ML & Deep Learning',
+      skills: ['PyTorch', 'Scikit-learn', 'XGBoost', 'Transfer learning', 'Pandas & NumPy'],
     },
     {
-      title: 'Cloud Platforms',
-      skills: ['AWS', 'Azure ML', 'GCP', 'Docker', 'Kubernetes'],
+      title: 'MLOps & Delivery',
+      skills: ['Docker', 'GitHub Actions CI/CD', 'HuggingFace Spaces', 'Render', 'Vercel'],
     },
     {
-      title: 'Data Engineering',
-      skills: ['Apache Spark', 'Apache Airflow', 'PostgreSQL', 'MongoDB', 'Redis'],
+      title: 'Backend & Data',
+      skills: ['Python', 'FastAPI', 'PostgreSQL', 'Redis', 'asyncio & ETL'],
     },
     {
-      title: 'Visualization & BI',
-      skills: ['Matplotlib', 'Seaborn', 'Plotly', 'Tableau', 'Power BI'],
+      title: 'Cloud & Web',
+      skills: ['AWS', 'Terraform', 'Next.js', 'React', 'TypeScript'],
     },
     {
-      title: 'MLOps & Deployment',
-      skills: ['MLflow', 'Kubeflow', 'FastAPI', 'TensorFlow Serving', 'ONNX'],
+      title: 'XR & 3D',
+      skills: ['React Three Fiber', 'WebXR', 'GLB pipelines', 'Headless Blender', 'Three.js'],
     },
   ];
 
   const certifications = [
-    { title: 'AWS Certified Machine Learning', issuer: 'Amazon Web Services', year: '2024' },
-    { title: 'TensorFlow Developer Certificate', issuer: 'Google', year: '2023' },
-    { title: 'Azure AI Engineer Associate', issuer: 'Microsoft', year: '2024' },
-    { title: 'Deep Learning Specialization', issuer: 'deeplearning.ai', year: '2023' },
+    { title: 'Introducing Generative AI with AWS', issuer: 'Udacity', year: 'GenAI' },
+    { title: 'Microsoft Certified: Azure Fundamentals', issuer: 'Microsoft', year: 'Cloud' },
+    { title: 'ALX/ExploreAI Certified Data Scientist', issuer: 'ALX / ExploreAI Academy', year: 'Data' },
+    { title: 'AI Career Essentials', issuer: 'ALX Africa', year: 'AI' },
   ];
 
   return (
@@ -51,7 +51,7 @@ export default function Skills() {
             Technical expertise
           </h2>
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            A toolkit spanning the entire machine-learning and AI development lifecycle.
+            From agentic orchestration to XR delivery — the stack I own end to end.
           </p>
         </AnimatedSection>
 
@@ -109,14 +109,14 @@ export default function Skills() {
                 Currently exploring
               </div>
               <p className="font-sans text-lg text-white/80">
-                Large Language Models, Reinforcement Learning, and Edge AI optimization.
+                WebXR interaction patterns, agentic AI systems, and local model serving.
               </p>
             </div>
             <div className="flex gap-10">
               {[
-                { v: '50+', l: 'Courses' },
-                { v: '15+', l: 'Certificates' },
-                { v: '1000+', l: 'Hours' },
+                { v: '11', l: 'Certifications' },
+                { v: '2', l: 'Academies' },
+                { v: '3', l: 'AI roles' },
               ].map((stat) => (
                 <div key={stat.l}>
                   <div className="font-mono text-2xl text-white">{stat.v}</div>

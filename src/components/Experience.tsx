@@ -16,44 +16,64 @@ interface ExperienceData {
 const experiences: ExperienceData[] = [
   {
     id: '1',
-    company: 'Tech Innovations Inc.',
-    role: 'Senior ML Engineer',
-    location: 'San Francisco, CA',
-    duration: '2022 - Present',
+    company: 'Nudle',
+    role: 'Junior AI Engineer',
+    location: 'Johannesburg, South Africa (Remote)',
+    duration: 'May 2026 - Present',
     type: 'Full-time',
     description:
-      'Leading machine learning infrastructure and deploying production-grade AI systems for enterprise clients.',
+      'Building the AI layer of an XR simulation-training platform — turning text and images into interactive 3D learning experiences.',
     achievements: [
-      'Reduced model inference latency by 60% through optimization',
-      'Built automated ML pipeline handling 10M+ records daily',
-      'Led team of 5 engineers on deep learning projects',
+      'Cut 3D asset turnaround from days to hours with text/image-to-GLB generation pipelines delivered into XR via WebXR',
+      'Mapped natural-language instructions to avatar actions and animation logic with explainable AI-driven reasoning',
+      'Removed the need for engineering support in customising simulations — training scenarios, role-play dialogues and learning tasks generated from prompts',
+      'Reduced manual grading workload across learner scenarios through automated assessment and feedback tooling',
     ],
-    technologies: ['Python', 'TensorFlow', 'Kubernetes', 'AWS SageMaker', 'PostgreSQL'],
+    technologies: ['Python', 'FastAPI', 'Next.js', 'Docker', 'PostgreSQL'],
     metrics: [
-      { label: 'Models Deployed', value: '15+' },
-      { label: 'Latency Reduction', value: '60%' },
-      { label: 'Team Size', value: '5' },
+      { label: 'Asset Turnaround', value: 'Days→hrs' },
+      { label: 'Pipeline Output', value: '3D GLB' },
+      { label: 'Scenario Setup', value: 'Prompt' },
     ],
   },
   {
     id: '2',
-    company: 'Data Analytics Pro',
-    role: 'Data Scientist',
-    location: 'New York, NY',
-    duration: '2020 - 2022',
-    type: 'Full-time',
+    company: 'Alignerr',
+    role: 'AI Trainer',
+    location: 'Remote',
+    duration: 'Jan 2026 - Present',
+    type: 'Freelance',
     description:
-      'Developed predictive analytics solutions and statistical models for financial services.',
+      'Systematically evaluating production model behaviour on reasoning, programming and agent tasks against strict quality rubrics.',
     achievements: [
-      'Created fraud detection model with 98.5% accuracy',
-      'Automated reporting saving 40+ hours monthly',
-      'Mentored 3 junior data scientists',
+      'Improved production model reliability on reasoning, programming and agent-behaviour tasks',
+      'Reduced recurring failure modes in agentic and tool-use workflows through structured evaluation feedback used in training cycles',
     ],
-    technologies: ['Python', 'R', 'SQL', 'Scikit-learn', 'Tableau'],
+    technologies: ['Python', 'LLM Evaluation', 'Agentic Workflows', 'Tool Use'],
     metrics: [
-      { label: 'Model Accuracy', value: '98.5%' },
-      { label: 'Time Saved', value: '40h/mo' },
-      { label: 'Team Mentored', value: '3' },
+      { label: 'Focus', value: 'Agents' },
+      { label: 'Method', value: 'Rubrics' },
+      { label: 'Output', value: 'Evals' },
+    ],
+  },
+  {
+    id: '3',
+    company: 'Artintel',
+    role: 'Junior AI Software Developer',
+    location: 'Remote',
+    duration: 'Jan 2025 - Jul 2025',
+    type: 'Contract',
+    description:
+      'Backend systems for a no-code LLM fine-tuning platform, enabling non-technical users to fine-tune models without engineering support.',
+    achievements: [
+      'Built backend services powering no-code LLM fine-tuning for non-technical users',
+      'Consolidated training-data handling into a single ETL pipeline integrating external APIs and databases, cutting manual data-prep steps',
+    ],
+    technologies: ['Python', 'ETL Pipelines', 'API Integration', 'SQL'],
+    metrics: [
+      { label: 'Platform', value: 'No-code' },
+      { label: 'Data Flow', value: '1 ETL' },
+      { label: 'Users', value: 'Non-dev' },
     ],
   },
 ];
@@ -75,7 +95,7 @@ export default function Experience() {
             Professional experience
           </h2>
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70 lg:text-xl">
-            A journey through impactful roles driving innovation in machine learning and data science.
+            From ML foundations to production AI systems — and now the AI layer of XR education.
           </p>
         </AnimatedSection>
 
@@ -143,7 +163,7 @@ export default function Experience() {
                 Availability
               </div>
               <p className="max-w-md font-sans text-lg text-white/80">
-                Open to roles in ML engineering, data science, and AI research.
+                Open to conversations about AI engineering, agentic systems, and XR learning.
               </p>
             </div>
             <a
