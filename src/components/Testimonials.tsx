@@ -3,40 +3,40 @@ import AnimatedSection from './AnimatedSection';
 export default function Testimonials() {
   const testimonials = [
     {
-      name: 'Sarah Chen',
-      role: 'CTO, Fintech Startup',
-      avatar: 'SC',
-      text: "Nhlanhla's expertise in ML engineering transformed our fraud detection system. His models achieved 98% accuracy and reduced false positives by 60%. His code quality and documentation are exceptional.",
+      name: 'Measure, don’t guess',
+      role: 'How I debug',
+      avatar: '01',
+      text: 'If a claim matters, I verify it against the source before building on it. Assumptions are where systems quietly break — evidence first, then action.',
     },
     {
-      name: 'Michael Torres',
-      role: 'Data Science Manager, Global Corp',
-      avatar: 'MT',
-      text: 'Outstanding analytical skills and problem-solving abilities. Nhlanhla delivered a customer segmentation model that increased our marketing ROI by 45%. He consistently exceeds expectations.',
+      name: 'Docs are part of done',
+      role: 'How I ship',
+      avatar: '02',
+      text: 'Documentation ships in the same change as the code. Stale docs are a defect, not a chore — the next engineer should never have to reverse-engineer intent.',
     },
     {
-      name: 'Dr. Emily Watson',
-      role: 'Head of AI Research, HealthTech',
-      avatar: 'EW',
-      text: 'Working with Nhlanhla on our predictive diagnostics platform was remarkable. His deep learning models and deployment pipeline were production-ready and scalable. Highly recommend.',
+      name: 'Secure by default',
+      role: 'How I build',
+      avatar: '03',
+      text: 'Secrets out of code, least privilege, input validation from day one. Security is a property of the design, not a patch applied at the end.',
     },
     {
-      name: 'James Park',
-      role: 'VP Engineering, E-commerce Platform',
-      avatar: 'JP',
-      text: 'Nhlanhla built our recommendation engine from scratch. The system handles millions of users daily with impressive accuracy. His attention to performance optimization is unmatched.',
+      name: 'Honest reporting',
+      role: 'How I communicate',
+      avatar: '04',
+      text: 'If tests fail or a step was skipped, I say so plainly. An honest status report beats a green façade — every time, especially under deadline pressure.',
     },
     {
-      name: 'Lisa Anderson',
-      role: 'Product Director, SaaS Company',
-      avatar: 'LA',
-      text: 'A true professional who understands both the technical and business sides of AI. Nhlanhla delivered our churn prediction model on time and provided excellent post-launch support.',
+      name: 'Proven over clever',
+      role: 'How I choose tools',
+      avatar: '05',
+      text: 'For anything that must run in production, boring and well-supported beats bleeding-edge. I save the experiments for clearly-labelled experiments.',
     },
     {
-      name: 'David Kumar',
-      role: 'Lead Data Scientist, Analytics Firm',
-      avatar: 'DK',
-      text: 'Exceptional data scientist with strong engineering fundamentals. His work on our time series forecasting models was brilliant, and his collaborative approach made the project smooth.',
+      name: 'Learning in public',
+      role: 'How I grow',
+      avatar: '06',
+      text: 'Everything I build outside work is open on GitHub from the first commit. Showing the process — including the rough edges — is how skills compound.',
     },
   ];
 
@@ -46,17 +46,17 @@ export default function Testimonials() {
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
-              Testimonials
+              Principles
             </span>
             <span className="h-px flex-1 bg-white/15" />
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">08</span>
           </div>
 
           <h2 className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl">
-            What clients say
+            How I work
           </h2>
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            Trusted by teams shipping machine learning into production.
+            The standards behind everything I ship — the same ones you&rsquo;ll find in my commits.
           </p>
         </AnimatedSection>
 

@@ -9,32 +9,32 @@ export default function FAQ() {
     {
       question: 'What technologies do you specialize in?',
       answer:
-        'I specialize in Python, TensorFlow, PyTorch, scikit-learn, Pandas, and NumPy for machine learning. I also work with SQL, NoSQL databases, Docker, Kubernetes, and cloud platforms like AWS, Azure, and GCP for deployment.',
+        'My core stack is Python and FastAPI on the backend, with LangChain, LangGraph and RAG pipelines for agentic AI, and PyTorch, scikit-learn and XGBoost for machine learning. On the frontend I work with Next.js, React and TypeScript — including React Three Fiber and WebXR for interactive 3D. Everything ships containerised with Docker through GitHub Actions CI/CD.',
     },
     {
-      question: 'What is your experience with cloud platforms (AWS, Azure, GCP)?',
+      question: 'What kind of work are you doing right now?',
       answer:
-        'I have extensive experience deploying and managing ML models on all major cloud platforms. This includes using AWS SageMaker, Azure ML, and Google Cloud AI Platform, along with containerization using Docker and orchestration with Kubernetes.',
+        'I build the AI layer of an XR simulation-training platform at Nudle — pipelines that turn text and images into interactive 3D learning experiences — and I evaluate production model behaviour on reasoning, programming and agent tasks as a freelance AI trainer at Alignerr.',
     },
     {
-      question: 'How long does a typical ML model deployment take?',
+      question: 'What is your experience with cloud platforms?',
       answer:
-        'The timeline varies based on project complexity. A standard supervised learning model can take 2-4 weeks from data preparation to deployment. More complex deep learning projects or custom AI systems typically require 6-12 weeks for full implementation and testing.',
+        'Hands-on serverless deployment across HuggingFace Spaces, Render and Vercel — my live demos run there today. On AWS I have coursework covering IAM, networking, CloudFormation and cost management, plus hands-on Terraform provisioning, and I hold the Microsoft Azure Fundamentals certification. I favour portable, container-first setups over lock-in.',
     },
     {
-      question: 'Do you provide code revisions and documentation?',
+      question: 'How do you approach quality and documentation?',
       answer:
-        'Absolutely. All projects include comprehensive documentation covering model architecture, data pipelines, API endpoints, and deployment procedures. I also provide post-deployment support and am available for code reviews and optimizations.',
+        'Documentation ships in the same change as the code — stale docs are a defect. I make atomic, well-scoped commits, keep API contracts and data schemas written down, and treat error handling, logging and security as part of the build rather than an afterthought.',
     },
     {
-      question: 'What industries have you applied your models in?',
+      question: 'What domains have you applied AI in?',
       answer:
-        'I have worked across diverse industries including finance (fraud detection, risk assessment), healthcare (predictive diagnostics), e-commerce (recommendation systems), and marketing (customer segmentation, churn prediction).',
+        'XR education and simulation training at Nudle; LLM evaluation at Alignerr; a no-code LLM fine-tuning platform at Artintel; and in my own projects — real-estate price prediction, medical image classification, resume-to-job matching and personal finance.',
     },
     {
-      question: 'What is your preferred programming language?',
+      question: 'Where are you based, and how do you work?',
       answer:
-        'Python is my primary language for data science and ML work due to its robust ecosystem. I also use R for statistical analysis, SQL for data querying, and JavaScript/TypeScript for building ML-powered web applications and dashboards.',
+        'Johannesburg, South Africa — remote-friendly and used to collaborating across time zones. isiZulu is my first language, English is my working language, and I communicate progress honestly: if something failed or slipped, you hear it from me first.',
     },
   ];
 
