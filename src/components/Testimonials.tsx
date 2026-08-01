@@ -62,10 +62,14 @@ export default function Testimonials() {
           </p>
         </AnimatedSection>
 
-        <div className="mt-14 grid gap-x-12 gap-y-12 border-t border-white/10 pt-12 sm:grid-cols-2">
+        <div className="relative mt-14 border-t border-white/10 pt-12">
           {testimonials.map((testimonial, index) => (
-            <AnimatedSection key={testimonial.name} animation="fade-in" delay={index % 2 === 1}>
-              <figure className="flex h-full flex-col">
+            <div
+              key={testimonial.name}
+              className="sticky mb-10"
+              style={{ top: `calc(6rem + ${index} * 2.75rem)` }}
+            >
+              <figure className="t-stack-card mx-auto flex min-h-[15rem] max-w-3xl flex-col rounded-2xl border border-white/10 bg-[#0e0e0e] p-8 sm:p-10">
                 <blockquote className="flex-1 font-sans text-lg leading-relaxed text-white/80">
                   &ldquo;{testimonial.text}&rdquo;
                 </blockquote>
@@ -81,7 +85,7 @@ export default function Testimonials() {
                   </span>
                 </figcaption>
               </figure>
-            </AnimatedSection>
+            </div>
           ))}
         </div>
       </div>
