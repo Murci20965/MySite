@@ -5,77 +5,76 @@ import PopNumber from './PopNumber';
 export default function OpenSource() {
   const contributions = [
     {
-      repo: 'ml-pipeline-optimizer',
+      repo: 'avatar-pipeline',
       description:
-        'High-performance ML pipeline optimization toolkit with automated hyperparameter tuning and distributed training support.',
-      language: 'Python',
-      stars: 2400,
-      forks: 340,
-      commits: 156,
-      role: 'Core Maintainer',
-      lastUpdate: '2 days ago',
-      tags: ['Machine Learning', 'Optimization', 'Pipeline'],
-      link: '#',
-    },
-    {
-      repo: 'realtime-anomaly-detection',
-      description:
-        'Real-time anomaly detection library for streaming data with support for multiple algorithms and custom models.',
-      language: 'Python',
-      stars: 1800,
-      forks: 280,
-      commits: 98,
+        'AI-to-3D interaction engine mapping natural language to deterministic WebGL animations — Next.js 16, Dockerized FastAPI, and Groq-accelerated Llama-3.3.',
+      language: 'TypeScript / Python',
+      stars: 1,
+      forks: 0,
+      commits: 12,
       role: 'Creator',
-      lastUpdate: '1 week ago',
-      tags: ['Anomaly Detection', 'Streaming', 'Real-time'],
-      link: '#',
+      lastUpdate: 'Apr 2026',
+      tags: ['3D & XR', 'LLM Agents', 'React Three Fiber'],
+      link: 'https://github.com/Murci20965/avatar-pipeline',
     },
     {
-      repo: 'explainable-ai-toolkit',
+      repo: 'orbit-3d-pipeline',
       description:
-        'Comprehensive toolkit for model interpretability featuring SHAP, LIME, and custom visualization tools.',
+        'Automated pipeline for generating, optimizing and contextualizing AI-driven 3D assets for interactive learning — Tripo3D, Llama-4 Vision, headless Blender.',
       language: 'Python',
-      stars: 3200,
-      forks: 520,
-      commits: 72,
-      role: 'Contributor',
-      lastUpdate: '3 days ago',
-      tags: ['Explainable AI', 'Interpretability', 'Visualization'],
-      link: '#',
-    },
-    {
-      repo: 'data-quality-validator',
-      description:
-        'Automated data quality validation framework with schema enforcement and anomaly detection.',
-      language: 'Python',
-      stars: 1200,
-      forks: 180,
-      commits: 134,
+      stars: 1,
+      forks: 0,
+      commits: 18,
       role: 'Creator',
-      lastUpdate: '5 days ago',
-      tags: ['Data Quality', 'Validation', 'Pipeline'],
-      link: '#',
+      lastUpdate: 'Apr 2026',
+      tags: ['Text-to-3D', 'Multimodal', 'Blender'],
+      link: 'https://github.com/Murci20965/orbit-3d-pipeline',
     },
     {
-      repo: 'mlops-deployment-templates',
+      repo: 'smart-spend',
+      description: 'AI-powered personal finance management system.',
+      language: 'Python',
+      stars: 1,
+      forks: 1,
+      commits: 23,
+      role: 'Creator',
+      lastUpdate: 'Dec 2025',
+      tags: ['AI Apps', 'Personal Finance'],
+      link: 'https://github.com/Murci20965/smart-spend',
+    },
+    {
+      repo: 'resume-match-ai',
       description:
-        'Production-ready MLOps templates for AWS, Azure, and GCP with CI/CD pipelines and monitoring.',
-      language: 'Python / YAML',
-      stars: 1600,
-      forks: 420,
-      commits: 88,
-      role: 'Core Maintainer',
-      lastUpdate: '1 week ago',
-      tags: ['MLOps', 'DevOps', 'Cloud'],
-      link: '#',
+        'Automated tool that evaluates how well a jobseeker’s resume matches a job posting.',
+      language: 'Python',
+      stars: 1,
+      forks: 0,
+      commits: 16,
+      role: 'Creator',
+      lastUpdate: 'Oct 2025',
+      tags: ['LLM Apps', 'Careers'],
+      link: 'https://github.com/Murci20965/resume-match-ai',
+    },
+    {
+      repo: 'cat-dog-classifier',
+      description:
+        'End-to-end image classifier with FastAI, served via FastAPI and containerized with Docker — a full MLOps workflow from training to deployable app with a Gradio UI.',
+      language: 'Python',
+      stars: 1,
+      forks: 0,
+      commits: 18,
+      role: 'Creator',
+      lastUpdate: 'Aug 2025',
+      tags: ['MLOps', 'Computer Vision', 'FastAI'],
+      link: 'https://github.com/Murci20965/cat-dog-classifier',
     },
   ];
 
   const stats = [
-    { value: '892', label: 'Contributions' },
-    { value: '42', label: 'Repositories' },
-    { value: '156', label: 'Pull requests' },
-    { value: '234', label: 'Issues resolved' },
+    { value: '525', label: 'Contributions this year' },
+    { value: '18', label: 'Public repositories' },
+    { value: '28', label: 'Pull requests' },
+    { value: '306', label: 'Commits this year' },
   ];
 
   return (
@@ -94,7 +93,7 @@ export default function OpenSource() {
             Open-source work
           </h2>
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            Building and maintaining tools across the machine-learning and AI ecosystem.
+            Everything I build in the open — pipelines, apps and experiments, public from day one.
           </p>
 
           <div className="mt-12 grid grid-cols-2 gap-6 border-y border-white/10 py-8 sm:grid-cols-4">
@@ -148,6 +147,8 @@ export default function OpenSource() {
 
                   <a
                     href={contrib.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
                   >
                     View repository <ArrowUpRight className="h-4 w-4" />
@@ -161,7 +162,7 @@ export default function OpenSource() {
         <AnimatedSection animation="fade-in">
           <div className="mt-10">
             <a
-              href="https://github.com"
+              href="https://github.com/Murci20965"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 font-sans text-sm font-medium text-white/80 transition-colors hover:text-white"

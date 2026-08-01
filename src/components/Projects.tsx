@@ -8,112 +8,80 @@ export default function Projects() {
   const tabsRef = useRef<HTMLDivElement>(null);
   const underlineRef = useRef<HTMLSpanElement>(null);
 
-  const filters = ['All', 'NLP', 'Computer Vision', 'Time Series', 'Recommendation', 'Healthcare'];
+  const filters = ['All', '3D & XR', 'Machine Learning', 'AI Apps'];
 
   const projects = [
     {
-      title: 'Medical Image Diagnostic System',
-      category: 'Computer Vision',
+      title: 'Avatar-3D Pipeline',
+      category: '3D & XR',
       description:
-        'Deep learning model for automated detection of abnormalities in chest X-rays using CNNs. Deployed on AWS with real-time inference capabilities.',
-      image:
-        'https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg?auto=compress&cs=tinysrgb&w=800',
-      metrics: { accuracy: '97.2%', impact: '40% faster diagnosis', data: '150K images' },
-      tech: ['PyTorch', 'FastAPI', 'AWS SageMaker', 'Docker'],
-      github: '#',
-      demo: '#',
-      duration: '12 weeks',
+        'A "Director & Marionette" engine that translates natural language into 14 deterministic 3D skeletal animation states — Groq Llama-3.3-70b under strict Pydantic JSON validation, rendered in Next.js 16 / React Three Fiber with 0.5s animation crossfading.',
+      image: '/projects/avatar-pipeline.png',
+      metrics: { accuracy: '14 states', impact: '0.5s crossfade', data: 'Llama-3.3-70b' },
+      tech: ['FastAPI', 'Groq', 'Next.js 16', 'React Three Fiber', 'Docker'],
+      github: 'https://github.com/Murci20965/avatar-pipeline',
+      demo: 'https://avatar-pipeline.vercel.app',
+      duration: 'Live demo',
     },
     {
-      title: 'Customer Churn Prediction Engine',
-      category: 'Time Series',
+      title: 'Orbit-3D Asset Pipeline',
+      category: '3D & XR',
       description:
-        'ML pipeline predicting customer churn with 90%+ accuracy. Integrated with CRM systems for proactive retention campaigns.',
-      image:
-        'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800',
-      metrics: { accuracy: '92.5%', impact: '35% churn reduction', data: '2M records' },
-      tech: ['Scikit-learn', 'XGBoost', 'Apache Airflow', 'PostgreSQL'],
-      github: '#',
-      demo: '#',
-      duration: '8 weeks',
+        'Multimodal text/image-to-3D generation pipeline producing optimised, web-ready 3D models — a Dockerised headless Blender engine centres, scales and formats AI-generated meshes for WebGL, with asyncio orchestration keeping latency low.',
+      image: '/projects/orbit-3d-pipeline.png',
+      metrics: { accuracy: 'Text + image', impact: 'Web-ready GLB', data: 'Headless Blender' },
+      tech: ['Next.js 16', 'FastAPI', 'Tripo3D', 'Llama-4 Vision', 'Blender'],
+      github: 'https://github.com/Murci20965/orbit-3d-pipeline',
+      demo: 'https://orbit-3d-pipeline.vercel.app',
+      duration: 'Live demo',
     },
     {
-      title: 'Real-time Sentiment Analysis API',
-      category: 'NLP',
+      title: 'Real Estate Price Predictor',
+      category: 'Machine Learning',
       description:
-        'Production NLP system analyzing social media sentiment in real-time. Processes 10K+ tweets per minute with sub-second latency.',
-      image:
-        'https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg?auto=compress&cs=tinysrgb&w=800',
-      metrics: { accuracy: '89.3%', impact: '10K req/min', data: '50M tweets' },
-      tech: ['TensorFlow', 'BERT', 'Redis', 'Kubernetes'],
-      github: '#',
-      demo: '#',
-      duration: '10 weeks',
+        'End-to-end MLOps system predicting house prices with gradient boosting — from training and evaluation through a CI/CD pipeline with GitHub Actions and Docker to a deployable FastAPI service.',
+      image: '/projects/real_estate_price_predictor.png',
+      metrics: { accuracy: 'R² 0.9037', impact: 'RMSE 0.1341', data: 'CI/CD + Docker' },
+      tech: ['XGBoost', 'FastAPI', 'Docker', 'GitHub Actions'],
+      github: 'https://github.com/Murci20965/real_estate_price_predictor',
+      demo: '',
+      duration: 'MLOps',
     },
     {
-      title: 'E-commerce Recommendation System',
-      category: 'Recommendation',
+      title: 'Medical Image Classifier',
+      category: 'Machine Learning',
       description:
-        'Hybrid collaborative filtering system increasing sales conversion by 28%. Handles millions of users with personalized recommendations.',
-      image:
-        'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800',
-      metrics: { accuracy: '85.7%', impact: '+28% conversion', data: '5M users' },
-      tech: ['Python', 'Spark', 'Neo4j', 'AWS Lambda'],
-      github: '#',
-      demo: '#',
-      duration: '14 weeks',
+        'End-to-end pneumonia-detection system on chest X-rays using ResNet50 transfer learning — full pipeline from training and evaluation to a deployment-ready FastAPI service with an interactive Streamlit UI.',
+      image: '/projects/medical_image_classifier.png',
+      metrics: { accuracy: '82.85% acc', impact: '0.96 recall', data: 'ResNet50' },
+      tech: ['PyTorch', 'ResNet50', 'FastAPI', 'Streamlit', 'Docker'],
+      github: 'https://github.com/Murci20965/medical_image_classifier',
+      demo: '',
+      duration: 'MLOps',
     },
     {
-      title: 'Predictive Maintenance for IoT Devices',
-      category: 'Time Series',
+      title: 'Resume-Match AI',
+      category: 'AI Apps',
       description:
-        'LSTM-based system predicting equipment failures 7 days in advance. Reduced downtime by 60% for manufacturing clients.',
-      image:
-        'https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?auto=compress&cs=tinysrgb&w=800',
-      metrics: { accuracy: '94.1%', impact: '60% less downtime', data: '100K sensors' },
-      tech: ['PyTorch', 'LSTM', 'InfluxDB', 'Grafana'],
-      github: '#',
-      demo: '#',
-      duration: '16 weeks',
+        'Automated tool that evaluates how well a jobseeker’s resume matches a job posting — structured LLM analysis turned into actionable fit feedback.',
+      image: '/projects/resume-match-ai.png',
+      metrics: { accuracy: 'Fit scoring', impact: 'Instant feedback', data: 'LLM-powered' },
+      tech: ['Python', 'LLM APIs', 'FastAPI'],
+      github: 'https://github.com/Murci20965/resume-match-ai',
+      demo: '',
+      duration: 'AI tool',
     },
     {
-      title: 'Document Classification System',
-      category: 'NLP',
+      title: 'Smart-Spend',
+      category: 'AI Apps',
       description:
-        'Automated legal document classification using transformer models. Processing 1000+ documents daily with 96% accuracy.',
-      image:
-        'https://images.pexels.com/photos/5668858/pexels-photo-5668858.jpeg?auto=compress&cs=tinysrgb&w=800',
-      metrics: { accuracy: '96.4%', impact: '80% time saved', data: '500K docs' },
-      tech: ['HuggingFace', 'RoBERTa', 'MongoDB', 'FastAPI'],
-      github: '#',
-      demo: '#',
-      duration: '9 weeks',
-    },
-    {
-      title: 'Fraud Detection System',
-      category: 'Healthcare',
-      description:
-        'Real-time anomaly detection for financial transactions using ensemble methods. Prevented $2M+ in fraudulent activity.',
-      image:
-        'https://images.pexels.com/photos/4386431/pexels-photo-4386431.jpeg?auto=compress&cs=tinysrgb&w=800',
-      metrics: { accuracy: '98.6%', impact: '$2M+ saved', data: '20M transactions' },
-      tech: ['Scikit-learn', 'Isolation Forest', 'Kafka', 'Cassandra'],
-      github: '#',
-      demo: '#',
-      duration: '12 weeks',
-    },
-    {
-      title: 'Object Detection for Autonomous Systems',
-      category: 'Computer Vision',
-      description:
-        'YOLOv8-based real-time object detection achieving 60 FPS on edge devices. Deployed in autonomous vehicle testing environments.',
-      image:
-        'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800',
-      metrics: { accuracy: '91.8%', impact: '60 FPS detection', data: '300K images' },
-      tech: ['PyTorch', 'YOLOv8', 'ONNX', 'TensorRT'],
-      github: '#',
-      demo: '#',
-      duration: '14 weeks',
+        'AI-powered personal finance management system — automated transaction understanding and budgeting intelligence built as a full-stack TypeScript application.',
+      image: '/projects/smart-spend.png',
+      metrics: { accuracy: 'Auto-categorise', impact: 'Budget insight', data: 'Full-stack TS' },
+      tech: ['TypeScript', 'React', 'AI APIs'],
+      github: 'https://github.com/Murci20965/smart-spend',
+      demo: '',
+      duration: 'AI tool',
     },
   ];
 
@@ -171,7 +139,7 @@ export default function Projects() {
             Selected work
           </h2>
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            Production-grade machine-learning systems delivering measurable impact across domains.
+            Real systems, really shipped — from text-to-3D pipelines to end-to-end MLOps. Code is public; two are live.
           </p>
 
           <div ref={tabsRef} className="relative mt-10 flex flex-wrap gap-x-6 gap-y-3 pb-2">
@@ -220,9 +188,9 @@ export default function Projects() {
 
                   <div className="mb-6 flex flex-wrap gap-x-8 gap-y-3 border-y border-white/10 py-4">
                     {[
-                      { v: project.metrics.accuracy, l: 'Accuracy' },
+                      { v: project.metrics.accuracy, l: 'Key metric' },
                       { v: project.metrics.impact, l: 'Impact' },
-                      { v: project.metrics.data, l: 'Dataset' },
+                      { v: project.metrics.data, l: 'Built on' },
                     ].map((m, i) => (
                       <div key={i}>
                         <div className="font-mono text-base text-white">{m.v}</div>
@@ -247,16 +215,22 @@ export default function Projects() {
                   <div className="flex items-center gap-6">
                     <a
                       href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
                     >
                       <Github className="h-4 w-4" /> Code
                     </a>
-                    <a
-                      href={project.demo}
-                      className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
-                    >
-                      Demo <ArrowUpRight className="h-4 w-4" />
-                    </a>
+                    {project.demo && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
+                      >
+                        Live demo <ArrowUpRight className="h-4 w-4" />
+                      </a>
+                    )}
                   </div>
                 </div>
               </article>
