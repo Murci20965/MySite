@@ -14,6 +14,8 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import SimpleCursor from './components/SimpleCursor';
 import ScrollProgress from './components/ScrollProgress';
+import ExpandMedia from './components/ExpandMedia';
+import Marquee from './components/Marquee';
 import FutureticParticles from './components/FutureticParticles';
 import GlowingOrbs from './components/GlowingOrbs';
 import HeroBackdrop from './components/HeroBackdrop';
@@ -37,8 +39,10 @@ function App() {
           <About />
         </div>
         <div className="relative">
+          <Marquee />
           <Experience />
           <Projects />
+          <ExpandMedia />
           <Skills />
           <Stats />
           <Blog />
