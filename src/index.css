@@ -735,6 +735,91 @@
   will-change: transform;
 }
 
+/* Orbiting tech stack (Skills): spokes rotate around the ring's center while
+   each chip counter-rotates to stay upright. The global reduced-motion rule
+   freezes both at their start angles. */
+.t-orbit-spoke {
+  will-change: transform;
+}
+.t-orbit-cw {
+  animation: t-orbit-rot-cw var(--orbit-dur) linear infinite;
+}
+.t-orbit-ccw {
+  animation: t-orbit-rot-ccw var(--orbit-dur) linear infinite;
+}
+.t-orbit-counter-cw {
+  animation: t-orbit-counter-cw var(--orbit-dur) linear infinite;
+}
+.t-orbit-counter-ccw {
+  animation: t-orbit-counter-ccw var(--orbit-dur) linear infinite;
+}
+@keyframes t-orbit-rot-cw {
+  from { transform: rotate(var(--start-angle)); }
+  to { transform: rotate(calc(var(--start-angle) + 360deg)); }
+}
+@keyframes t-orbit-rot-ccw {
+  from { transform: rotate(var(--start-angle)); }
+  to { transform: rotate(calc(var(--start-angle) - 360deg)); }
+}
+@keyframes t-orbit-counter-cw {
+  from { transform: rotate(var(--counter-offset, 0deg)); }
+  to { transform: rotate(calc(var(--counter-offset, 0deg) - 360deg)); }
+}
+@keyframes t-orbit-counter-ccw {
+  from { transform: rotate(var(--counter-offset, 0deg)); }
+  to { transform: rotate(calc(var(--counter-offset, 0deg) + 360deg)); }
+}
+
+/* Stacked scroll cards (Principles): each sticky card scales back and dims
+   slightly as the next one slides over it. Scroll-driven where supported;
+   elsewhere the cards simply stack cleanly. */
+@supports (animation-timeline: view()) {
+  .t-stack-card {
+    animation: t-stack-back linear both;
+    animation-timeline: view();
+    animation-range: exit 0% exit 100%;
+    transform-origin: 50% 0%;
+    will-change: transform;
+  }
+}
+@keyframes t-stack-back {
+  to {
+    transform: scale(0.94);
+    filter: brightness(0.6);
+  }
+}
+
+/* Capability marquee: duplicated track slides half its width, loops seamlessly. */
+.t-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #fff 8%, #fff 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #fff 8%, #fff 92%, transparent);
+}
+.t-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: t-marquee var(--marquee-dur, 46s) linear infinite;
+  will-change: transform;
+}
+.t-marquee:hover .t-marquee-track {
+  animation-play-state: paused;
+}
+@keyframes t-marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Certifications carousel: horizontal scroll-snap with faded edges. */
+.t-carousel {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #fff 4%, #fff 96%, transparent);
+  mask-image: linear-gradient(to right, transparent, #fff 4%, #fff 96%, transparent);
+}
+.t-carousel::-webkit-scrollbar {
+  display: none;
+}
+
 /* Docked Earth orb: the DOM stand-in the 3D journey hands over to once the
    planet shrinks into the progress hairline. */
 .t-earth-orb {

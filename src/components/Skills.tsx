@@ -1,5 +1,6 @@
 import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
+import TechOrbit from './TechOrbit';
 
 export default function Skills() {
   const skillCategories = [
@@ -55,6 +56,12 @@ export default function Skills() {
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
             From agentic orchestration to XR delivery — the stack I own end to end.
           </p>
+        </AnimatedSection>
+
+        <AnimatedSection animation="fade-in">
+          <div className="mt-10">
+            <TechOrbit />
+          </div>
         </AnimatedSection>
 
         <div className="mt-16 grid gap-x-10 gap-y-12 border-t border-white/10 pt-12 sm:grid-cols-2 lg:grid-cols-3">
