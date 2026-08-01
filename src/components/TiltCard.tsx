@@ -76,6 +76,7 @@ export default function TiltCard({ children, className = '' }: Props) {
       <div ref={cardRef} className={`t-tilt-card ${className}`}>
         {children}
         <div className="t-tilt-glare" />
+        <div className="t-tilt-spot" />
       </div>
     </div>
   );

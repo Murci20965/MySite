@@ -1,6 +1,7 @@
 import { ArrowUpRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import PopNumber from './PopNumber';
+import RevealHeading from './RevealHeading';
 
 export default function OpenSource() {
   const contributions = [
@@ -86,12 +87,13 @@ export default function OpenSource() {
               Open source
             </span>
             <span className="h-px flex-1 bg-white/15" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">06</span>
+            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">06</span>
           </div>
 
-          <h2 className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl">
-            Open-source work
-          </h2>
+          <RevealHeading
+            text="Open-source work"
+            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
+          />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
             Everything I build in the open — pipelines, apps and experiments, public from day one.
           </p>

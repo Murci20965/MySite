@@ -1,4 +1,5 @@
 import AnimatedSection from './AnimatedSection';
+import RevealHeading from './RevealHeading';
 
 interface ExperienceData {
   id: string;
@@ -88,12 +89,13 @@ export default function Experience() {
               Experience
             </span>
             <span className="h-px flex-1 bg-white/15" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">02</span>
+            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">02</span>
           </div>
 
-          <h2 className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl">
-            Professional experience
-          </h2>
+          <RevealHeading
+            text="Professional experience"
+            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
+          />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70 lg:text-xl">
             From ML foundations to production AI systems — and now the AI layer of XR education.
           </p>

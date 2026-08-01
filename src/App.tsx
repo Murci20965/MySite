@@ -13,6 +13,7 @@ import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import SimpleCursor from './components/SimpleCursor';
+import ScrollProgress from './components/ScrollProgress';
 import FutureticParticles from './components/FutureticParticles';
 import GlowingOrbs from './components/GlowingOrbs';
 import HeroBackdrop from './components/HeroBackdrop';
@@ -25,6 +26,7 @@ function App() {
       <div className="grain-overlay" aria-hidden="true" />
       <div className="relative z-10">
         <SimpleCursor />
+        <ScrollProgress />
         <Navigation />
       <div className="relative">
         <div className="relative bg-black overflow-hidden">

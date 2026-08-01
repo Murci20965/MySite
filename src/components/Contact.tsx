@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
+import RevealHeading from './RevealHeading';
 
 // Shake an invalid field (transitions.dev 12) with an auto-reverting red border.
 function shakeInvalid(el: HTMLElement) {
@@ -92,12 +93,13 @@ export default function Contact() {
               Contact
             </span>
             <span className="h-px flex-1 bg-white/15" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">10</span>
+            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">10</span>
           </div>
 
-          <h2 className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl">
-            Let&rsquo;s work together
-          </h2>
+          <RevealHeading
+            text="Let’s work together"
+            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
+          />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
             A role, a collaboration, or a question about my work — my inbox is open, and I typically reply within 24 hours.
           </p>

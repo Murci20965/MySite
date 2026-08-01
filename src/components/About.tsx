@@ -1,4 +1,5 @@
 import AnimatedSection from './AnimatedSection';
+import RevealHeading from './RevealHeading';
 import { Github, Linkedin, Twitter } from 'lucide-react';
 
 export default function About() {
@@ -11,12 +12,13 @@ export default function About() {
               Profile
             </span>
             <span className="h-px flex-1 bg-white/15" />
-            <span className="font-mono text-[11px] tracking-[0.28em] uppercase text-white/30">01</span>
+            <span className="t-drift font-mono text-[11px] tracking-[0.28em] uppercase text-white/30">01</span>
           </div>
 
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-medium text-white leading-[1.05] tracking-[-0.01em] mb-10 max-w-3xl">
-            Who am I?
-          </h2>
+          <RevealHeading
+            text="Who am I?"
+            className="font-display text-4xl sm:text-5xl lg:text-6xl font-medium text-white leading-[1.05] tracking-[-0.01em] mb-10 max-w-3xl"
+          />
 
           <p className="font-sans text-xl lg:text-2xl text-white/80 leading-relaxed max-w-3xl mb-10">
             I'm an AI engineer who owns systems end to end — from{' '}

@@ -468,6 +468,32 @@
   opacity: var(--tilt-glare-opacity);
 }
 
+/* Spotlight border (21st.dev pattern): a 1px ring lit lime where the cursor
+   is, carved out with a mask so only the border glows. Reuses the glare's
+   cursor vars — no extra JS. */
+.t-tilt-spot {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  padding: 1px;
+  background: radial-gradient(
+    240px circle at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
+    rgba(163, 230, 53, 0.55),
+    rgba(163, 230, 53, 0.08) 55%,
+    transparent 78%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--tilt-glare-fade) var(--tilt-glare-ease);
+}
+.t-tilt.is-hover .t-tilt-spot {
+  opacity: 1;
+}
+
 /* Sliding underline (transitions.dev 16, adapted to editorial text tabs) */
 .t-underline {
   position: absolute;
@@ -673,4 +699,85 @@
   pointer-events: none;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- Scroll choreography ---- */
+
+:root {
+  /* reading progress hairline */
+  --progress-h: 2px;
+  /* section-numeral drift range */
+  --drift-y: 28px;
+  /* per-character heading reveal */
+  --chars-dur: 500ms;
+  --chars-stagger: 18ms;
+  --chars-rise: 0.35em;
+  --chars-blur: 6px;
+  --chars-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Reading-progress hairline: transform-driven so it never triggers layout. */
+.t-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--progress-h);
+  z-index: 70;
+  pointer-events: none;
+}
+.t-progress-bar {
+  height: 100%;
+  width: 100%;
+  background: #a3e635;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  will-change: transform;
+}
+
+/* Section-numeral drift: CSS scroll-driven animation — zero JS, and browsers
+   without animation-timeline simply render the numeral static. */
+@supports (animation-timeline: view()) {
+  .t-drift {
+    animation: t-drift-y linear both;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+    will-change: transform;
+  }
+}
+@keyframes t-drift-y {
+  from { transform: translateY(var(--drift-y)); }
+  to { transform: translateY(calc(var(--drift-y) * -1)); }
+}
+
+/* Per-character heading reveal: chars rise out of a blur once the heading
+   scrolls into view. Words are nowrap-wrapped so lines never break mid-word. */
+.t-chars .t-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(var(--chars-rise));
+  filter: blur(var(--chars-blur));
+  transition:
+    opacity var(--chars-dur) var(--chars-ease),
+    transform var(--chars-dur) var(--chars-ease),
+    filter var(--chars-dur) var(--chars-ease);
+  transition-delay: calc(var(--chars-stagger) * var(--char-i, 0));
+  will-change: transform, filter;
+}
+.t-chars.is-shown .t-char {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-drift {
+    animation: none !important;
+  }
+  .t-chars .t-char {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
 }
