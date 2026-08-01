@@ -1,92 +1,86 @@
 import AnimatedSection from './AnimatedSection';
 
 export default function Education() {
-  const education = [
+  const education: Array<{
+    degree: string;
+    specialization: string;
+    institution: string;
+    year: string;
+    gpa?: string;
+    thesis?: string;
+    achievements: string[];
+  }> = [
     {
-      degree: 'Master of Science in Computer Science',
-      specialization: 'Machine Learning & Artificial Intelligence',
-      institution: 'Stanford University',
-      year: '2020 – 2022',
-      gpa: '3.9 / 4.0',
-      thesis: 'Optimizing Neural Architecture Search for Resource-Constrained Edge Devices',
+      degree: 'Data Science Programme',
+      specialization: 'Machine learning, statistics & data engineering',
+      institution: 'ALX / ExploreAI Academy',
+      year: 'Certified',
       achievements: [
-        "Dean's List — all semesters",
-        'Outstanding Graduate Research Award',
-        'Published 3 papers in top-tier conferences',
+        'ALX/ExploreAI Certified Data Scientist',
+        'AWS cloud coursework — IAM, networking, CloudFormation, cost management',
+        'Portfolio of end-to-end ML projects across regression, classification and recommenders',
       ],
     },
     {
-      degree: 'Bachelor of Science in Mathematics',
-      specialization: 'Statistics & Data Science',
-      institution: 'MIT',
-      year: '2016 – 2020',
-      gpa: '3.8 / 4.0',
-      thesis: 'Statistical Methods for High-Dimensional Data Analysis',
-      achievements: [
-        'Summa Cum Laude',
-        'Mathematics Department Award',
-        'Undergraduate Research Fellowship',
-      ],
+      degree: 'System Development Programme',
+      specialization: 'Software development foundations',
+      institution: 'DynamicDNA ICT Academy',
+      year: 'Completed',
+      achievements: ['Full-time software development training — systems, databases and programming fundamentals'],
     },
   ];
 
   const courses = [
     {
-      title: 'Deep Learning Specialization',
-      provider: 'deeplearning.ai',
-      instructor: 'Andrew Ng',
-      completed: '2023',
-      skills: ['Neural Networks', 'CNN', 'RNN', 'Transformers'],
+      title: 'Introducing Generative AI with AWS',
+      provider: 'Udacity',
+      completed: '',
+      skills: ['Generative AI', 'AWS'],
     },
     {
-      title: 'Machine Learning Engineering for Production',
-      provider: 'deeplearning.ai',
-      instructor: 'Andrew Ng',
-      completed: '2023',
-      skills: ['MLOps', 'Model Deployment', 'Data Pipeline', 'Monitoring'],
+      title: 'Microsoft Certified: Azure Fundamentals',
+      provider: 'Microsoft',
+      completed: '',
+      skills: ['Azure', 'Cloud fundamentals'],
     },
     {
-      title: 'Advanced NLP with Transformers',
-      provider: 'Hugging Face',
-      instructor: 'Thomas Wolf',
-      completed: '2024',
-      skills: ['BERT', 'GPT', 'T5', 'Fine-tuning'],
+      title: 'Credit Risk Modelling in Python',
+      provider: '365 Data Science',
+      completed: '',
+      skills: ['Python', 'Risk modelling'],
     },
     {
-      title: 'AWS Certified Machine Learning — Specialty',
-      provider: 'Amazon Web Services',
-      instructor: 'AWS Training',
-      completed: '2024',
-      skills: ['SageMaker', 'AWS ML Services', 'Cloud Deployment'],
+      title: 'Working with the OpenAI API',
+      provider: '',
+      completed: '',
+      skills: ['OpenAI API', 'LLM integration'],
     },
     {
-      title: 'TensorFlow Developer Certificate',
-      provider: 'Google',
-      instructor: 'TensorFlow Team',
-      completed: '2023',
-      skills: ['TensorFlow', 'Keras', 'Model Building', 'Deployment'],
+      title: 'Prompt Engineering with the OpenAI API',
+      provider: '',
+      completed: '',
+      skills: ['Prompt engineering', 'Structured outputs'],
     },
     {
-      title: 'Reinforcement Learning Specialization',
-      provider: 'Coursera',
-      instructor: 'Martha White & Adam White',
-      completed: '2023',
-      skills: ['Q-Learning', 'Policy Gradient', 'Actor-Critic', 'DQN'],
+      title: 'Working with Hugging Face',
+      provider: '',
+      completed: '',
+      skills: ['Transformers', 'Model Hub'],
     },
   ];
 
   const currentLearning = [
     {
-      topic: 'Large Language Models',
-      focus: 'Fine-tuning and prompt engineering for enterprise applications',
+      topic: 'XR & WebXR',
+      focus: 'Interactive 3D learning experiences with React Three Fiber and WebXR',
     },
     {
-      topic: 'Edge AI & Model Optimization',
-      focus: 'Deploying ML models on edge devices with resource constraints',
+      topic: 'Agentic AI Systems',
+      focus: 'Multi-agent orchestration, tool use and evaluation for production reliability',
     },
     {
-      topic: 'Federated Learning',
-      focus: 'Privacy-preserving machine learning techniques',
+      topic: 'Local Model Serving',
+      focus: 'Self-hosted LLMs and image models for cost-free, offline-tolerant inference',
     },
   ];
 
@@ -120,20 +114,24 @@ export default function Education() {
                 <article className="grid gap-4 border-b border-white/10 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
                   <div>
                     <div className="font-mono text-sm text-white/80">{edu.year}</div>
-                    <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
-                      GPA {edu.gpa}
-                    </div>
+                    {edu.gpa && (
+                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+                        GPA {edu.gpa}
+                      </div>
+                    )}
                     <div className="mt-4 font-sans text-white/90">{edu.institution}</div>
                   </div>
                   <div>
                     <h3 className="mb-1 font-display text-2xl font-medium text-white">{edu.degree}</h3>
                     <p className="mb-4 font-sans text-white/60">{edu.specialization}</p>
-                    <p className="mb-5 font-sans text-sm leading-relaxed text-white/60">
-                      <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
-                        Thesis&nbsp;
-                      </span>
-                      {edu.thesis}
-                    </p>
+                    {edu.thesis && (
+                      <p className="mb-5 font-sans text-sm leading-relaxed text-white/60">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
+                          Thesis&nbsp;
+                        </span>
+                        {edu.thesis}
+                      </p>
+                    )}
                     <ul className="space-y-2">
                       {edu.achievements.map((achievement) => (
                         <li key={achievement} className="flex gap-3 font-sans text-sm text-white/70">
@@ -162,9 +160,9 @@ export default function Education() {
                 >
                   <div>
                     <div className="font-display text-lg text-white">{course.title}</div>
-                    <div className="mt-1 font-sans text-sm text-white/50">
-                      {course.provider} &middot; {course.instructor}
-                    </div>
+                    {course.provider && (
+                      <div className="mt-1 font-sans text-sm text-white/50">{course.provider}</div>
+                    )}
                     <div className="mt-3 flex flex-wrap gap-2">
                       {course.skills.map((skill) => (
                         <span
