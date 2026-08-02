@@ -25,7 +25,11 @@ export default function ExpandMedia() {
 
     const apply = (p: number) => {
       if (mediaRef.current) {
-        mediaRef.current.style.transform = `scale(${0.3 + p * 0.7})`;
+        // A letterbox opening vertically: full width throughout, so the
+        // section spans the page from the first frame and the reveal is the
+        // frame growing rather than a card zooming toward the viewer.
+        const inset = (1 - p) * 39;
+        mediaRef.current.style.clipPath = `inset(${inset}% 0% ${inset}% 0%)`;
       }
       if (dimRef.current) {
         dimRef.current.style.opacity = String(0.55 - p * 0.35);
@@ -85,8 +89,8 @@ export default function ExpandMedia() {
 
           <div
             ref={mediaRef}
-            className="relative h-[64vh] w-[94vw] max-w-6xl overflow-hidden rounded-2xl border border-white/10 will-change-transform"
-            style={{ transform: 'scale(0.3)' }}
+            className="absolute inset-0 h-full w-full will-change-[clip-path]"
+            style={{ clipPath: 'inset(39% 0% 39% 0%)' }}
           >
             <img
               src={MEDIA_SRC}

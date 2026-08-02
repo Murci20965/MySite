@@ -53,40 +53,56 @@ export default function Testimonials() {
             <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">08</span>
           </div>
 
-          <RevealHeading
-            text="How I work"
-            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
-          />
-          <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            The standards behind everything I ship, and the same ones you&rsquo;ll find in my commits.
-          </p>
         </AnimatedSection>
 
-        <div className="relative mt-14 border-t border-white/10 pt-12">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={testimonial.name}
-              className="sticky mb-10"
-              style={{ top: `calc(6rem + ${index} * 2.75rem)` }}
-            >
-              <figure className="t-stack-card mx-auto flex min-h-[15rem] max-w-3xl flex-col rounded-2xl border border-white/10 bg-[#0e0e0e] p-8 sm:p-10">
-                <blockquote className="flex-1 font-sans text-lg leading-relaxed text-white/80">
-                  &ldquo;{testimonial.text}&rdquo;
-                </blockquote>
-                <figcaption className="mt-6 flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 font-mono text-xs text-white/70">
+        {/* Sticky rail: the heading holds its place on the left while the
+            cards stack past it, so each principle gets the full column. */}
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-20">
+          <AnimatedSection animation="fade-in">
+            <div className="lg:sticky lg:top-32">
+              <RevealHeading
+                text="How I work"
+                className="mb-6 font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl"
+              />
+              <p className="max-w-md font-sans text-lg leading-relaxed text-white/70">
+                The standards behind everything I ship, and the same ones you&rsquo;ll find in my
+                commits.
+              </p>
+            </div>
+          </AnimatedSection>
+
+          <div className="relative">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={testimonial.name}
+                className="sticky mb-8"
+                style={{ top: `calc(7rem + ${index} * 2.25rem)` }}
+              >
+                <figure className="t-stack-card group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0e0e0e] p-8 transition-colors duration-500 hover:border-white/25 sm:p-10">
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -right-2 -top-6 font-display text-[7rem] leading-none text-white/[0.04]"
+                  >
                     {testimonial.avatar}
                   </span>
-                  <span>
-                    <span className="block font-sans text-sm text-white">{testimonial.name}</span>
-                    <span className="block font-mono text-[11px] uppercase tracking-[0.12em] text-white/40">
-                      {testimonial.role}
+                  <blockquote className="relative font-sans text-lg leading-relaxed text-white/80 sm:text-xl">
+                    &ldquo;{testimonial.text}&rdquo;
+                  </blockquote>
+                  <figcaption className="relative mt-8 flex items-center gap-3 border-t border-white/10 pt-6">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-lime-400/30 font-mono text-xs text-lime-400/80">
+                      {testimonial.avatar}
                     </span>
-                  </span>
-                </figcaption>
-              </figure>
-            </div>
-          ))}
+                    <span>
+                      <span className="block font-sans text-sm text-white">{testimonial.name}</span>
+                      <span className="block font-mono text-[11px] uppercase tracking-[0.12em] text-white/40">
+                        {testimonial.role}
+                      </span>
+                    </span>
+                  </figcaption>
+                </figure>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

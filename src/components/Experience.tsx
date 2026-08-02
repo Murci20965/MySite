@@ -158,38 +158,62 @@ export default function Experience() {
           ))}
         </div>
 
+        {/* What I can build: the answer to "what would I hire him to do?".
+            Principles covers HOW I work; this covers WHAT you get. */}
         <AnimatedSection animation="fade-in">
           <div className="mt-20">
             <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
-              How a project runs
+              What I can build
             </div>
             <div className="grid gap-5 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 {
                   step: '01',
-                  title: 'Understand',
-                  text: 'Map the problem, the users and the constraints. Measure — never guess.',
+                  title: 'Agentic AI systems',
+                  text: 'LLMs that take actions reliably: tool use, structured outputs under strict schemas, and evaluation loops that catch drift.',
+                  proof: 'Avatar-3D Pipeline',
+                  href: 'https://github.com/Murci20965/avatar-pipeline',
                 },
                 {
                   step: '02',
-                  title: 'Design',
-                  text: 'Architecture, contracts and data flow written down, aligned before code.',
+                  title: 'RAG & knowledge systems',
+                  text: 'Retrieval that grounds answers in your own data, with honest failure modes instead of confident invention.',
+                  proof: 'Applied at Nudle and Alignerr',
+                  href: '',
                 },
                 {
                   step: '03',
-                  title: 'Build',
-                  text: 'Atomic increments with docs in the same change. Secure by default.',
+                  title: 'XR & 3D pipelines',
+                  text: 'Text or images into web-ready 3D: generation, headless normalisation and delivery into the browser via WebXR.',
+                  proof: 'Orbit-3D Asset Pipeline',
+                  href: 'https://github.com/Murci20965/orbit-3d-pipeline',
                 },
                 {
                   step: '04',
-                  title: 'Verify & ship',
-                  text: 'Tested, honestly reported, deployed through CI — then measured again.',
+                  title: 'MLOps delivery',
+                  text: 'Models that survive contact with production: containerised services, CI/CD, and metrics measured on unseen data.',
+                  proof: 'Real Estate Predictor',
+                  href: 'https://github.com/Murci20965/real_estate_price_predictor',
                 },
               ].map((s) => (
-                <div key={s.step} className="rounded-2xl border border-white/10 p-6">
+                <div key={s.step} className="flex flex-col rounded-2xl border border-white/10 p-6">
                   <div className="font-mono text-[11px] text-lime-400/80">{s.step}</div>
                   <h3 className="mt-3 font-display text-lg font-medium text-white">{s.title}</h3>
                   <p className="mt-2 font-sans text-sm leading-relaxed text-white/55">{s.text}</p>
+                  <div className="mt-auto pt-5 font-mono text-[10px] uppercase tracking-[0.15em] text-white/35">
+                    {s.href ? (
+                      <a
+                        href={s.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="transition-colors hover:text-lime-400"
+                      >
+                        Proof: {s.proof}
+                      </a>
+                    ) : (
+                      <span>{s.proof}</span>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
