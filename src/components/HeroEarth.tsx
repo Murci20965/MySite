@@ -3,22 +3,14 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import { Box3, MathUtils, Vector3 } from 'three';
 import type { Group, Mesh } from 'three';
-import { earthJourney } from '../lib/earthJourney';
+import { earthJourney, STATIONS, STATIONS_SM } from '../lib/earthJourney';
+import type { EarthStation } from '../lib/earthJourney';
 
-/* ---- Journey tuning --------------------------------------------------------
- * The Earth travels as the visitor scrolls: large at the hero, smaller and
- * rotated toward Africa through About, a lime dot lands on Johannesburg,
- * then it docks under the progress hairline and hands over to a DOM orb.
- * Anchors are viewport-relative (x right+, y up+, each in [-0.5, 0.5]).
+/* The Earth crosses the whole page. Where it sits per section lives in
+ * lib/earthJourney (the station timeline); this component reads scroll once,
+ * interpolates between the surrounding stations, and damps toward the result.
+ * Texture-seam longitude offset for surface markers, tuned with AFRICA_Y.
  */
-const PHASE_HERO = { nx: 0.36, ny: 0.04, s: 0.9 };
-const PHASE_ABOUT = { nx: 0.38, ny: 0.0, s: 0.42 };
-const PHASE_DOCK = { nx: 0.45, ny: 0.46, s: 0.055 };
-// Narrow screens: tuck the globe higher and smaller so it never crowds the hero text.
-const PHASE_HERO_SM = { nx: 0.2, ny: 0.26, s: 0.4 };
-// Y rotation (radians) at which Africa faces the camera — tuned visually.
-const AFRICA_Y = 0.55;
-// Texture-seam longitude offset for placing surface markers — tuned with AFRICA_Y.
 const LON_OFFSET = 0;
 const JOBURG_LAT = MathUtils.degToRad(-26.2);
 const JOBURG_LON = MathUtils.degToRad(28.05);
@@ -26,12 +18,11 @@ const JOBURG_LON = MathUtils.degToRad(28.05);
 const smooth = (t: number) => t * t * (3 - 2 * t);
 const seg = (p: number, a: number, b: number) => smooth(MathUtils.clamp((p - a) / (b - a), 0, 1));
 
-function EarthModel({ small }: { small: boolean }) {
+function EarthModel({ baseScale }: { baseScale: number }) {
   const group = useRef<Group>(null);
   const dot = useRef<Mesh>(null);
   const { scene } = useGLTF('/earth.opt.glb');
   const { viewport } = useThree();
-  const hero = small ? PHASE_HERO_SM : PHASE_HERO;
   const reduce =
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -56,35 +47,30 @@ function EarthModel({ small }: { small: boolean }) {
   useFrame((_, delta) => {
     const g = group.current;
     if (!g) return;
-    const p = reduce ? 0 : earthJourney.p;
+    // The scroll reader keeps `pose` interpolated between stations; the frame
+    // loop only damps toward it, so motion stays smooth at any scroll speed.
+    const pose = reduce ? STATIONS[0] : earthJourney.pose;
 
-    // Position + scale: hero → about (0–0.45), hold (0.45–0.7), → dock (0.7–1).
-    const t1 = seg(p, 0, 0.45);
-    const t2 = seg(p, 0.7, 1);
-    const nx = MathUtils.lerp(MathUtils.lerp(hero.nx, PHASE_ABOUT.nx, t1), PHASE_DOCK.nx, t2);
-    const ny = MathUtils.lerp(MathUtils.lerp(hero.ny, PHASE_ABOUT.ny, t1), PHASE_DOCK.ny, t2);
-    const s = MathUtils.lerp(MathUtils.lerp(hero.s, PHASE_ABOUT.s, t1), PHASE_DOCK.s, t2);
+    g.position.x = MathUtils.damp(g.position.x, pose.nx * viewport.width, 5, delta);
+    g.position.y = MathUtils.damp(g.position.y, pose.ny * viewport.height, 5, delta);
+    g.scale.setScalar(MathUtils.damp(g.scale.x, pose.s * baseScale, 5, delta));
 
-    g.position.x = MathUtils.damp(g.position.x, nx * viewport.width, 6, delta);
-    g.position.y = MathUtils.damp(g.position.y, ny * viewport.height, 6, delta);
-    const sc = MathUtils.damp(g.scale.x, s, 6, delta);
-    g.scale.setScalar(sc);
-
-    // Rotation: free idle spin at the top, then settle facing Africa.
+    // Rotation: idle spin until a station asks for a specific facing.
     if (reduce) {
       // static under reduced motion
-    } else if (p < 0.12) {
+    } else if (pose.ry === null) {
       g.rotation.y += delta * 0.05;
     } else {
-      // damp toward the nearest equivalent of AFRICA_Y so it never spins backward
+      // damp toward the nearest equivalent angle so it never spins backward
       const twoPi = Math.PI * 2;
-      const target = AFRICA_Y + twoPi * Math.round((g.rotation.y - AFRICA_Y) / twoPi);
+      const target = pose.ry + twoPi * Math.round((g.rotation.y - pose.ry) / twoPi);
       g.rotation.y = MathUtils.damp(g.rotation.y, target, 3, delta);
     }
 
-    // Johannesburg dot pops in mid-About, rides the globe, fades at the dock.
+    // The Johannesburg dot is the About beat: it lands, rides, then leaves.
     if (dot.current) {
-      const pop = seg(p, 0.5, 0.62) * (1 - seg(p, 0.85, 0.95));
+      const intro = reduce ? 0 : earthJourney.intro;
+      const pop = seg(intro, 0.45, 0.62) * (1 - seg(intro, 0.9, 1));
       dot.current.scale.setScalar(Math.max(0.0001, pop));
     }
   });
@@ -148,29 +134,68 @@ export default function HeroEarth() {
   useEffect(() => {
     earthJourney.active = true;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const stations = small ? STATIONS_SM : STATIONS;
     let raf = 0;
+
+    // Each station's page offset, measured once per layout change rather than
+    // per scroll event, so scrolling never reads layout.
+    let anchors: Array<{ st: EarthStation; top: number }> = [];
+    const measure = () => {
+      anchors = stations
+        .map((st) => {
+          const el = document.getElementById(st.at);
+          return el ? { st, top: el.getBoundingClientRect().top + window.scrollY } : null;
+        })
+        .filter((a): a is { st: EarthStation; top: number } => a !== null);
+    };
 
     const update = () => {
       raf = 0;
-      const about = document.getElementById('about');
       const el = containerRef.current;
-      if (!about || !el) return;
-      const rect = about.getBoundingClientRect();
-      const end = rect.bottom + window.scrollY - window.innerHeight;
-      const p = end > 0 ? MathUtils.clamp(window.scrollY / end, 0, 1.05) : 0;
-      earthJourney.p = reduce ? 0 : p;
+      // Measured every frame we actually run (rAF-throttled): section offsets
+      // move as fonts land, images decode and sticky sections resize, and a
+      // cached list silently desyncs the whole timeline. One batched read.
+      measure();
+      if (!el || anchors.length === 0) return;
+      // Aim at the viewport's middle so a station takes effect as its section
+      // occupies the screen, not when its top edge grazes the fold.
+      const focus = window.scrollY + window.innerHeight * 0.5;
 
-      // fade the canvas just before it hands over to the DOM orb
-      el.style.opacity = p < 0.94 ? '1' : String(Math.max(0, (1 - p) / 0.06));
-      // While the Earth is the hero/About backdrop it sits under all content;
-      // for the dock flight it lifts above the opaque section backgrounds
-      // (which would otherwise paint over the fixed canvas and hide it).
-      el.style.zIndex = p > 0.72 ? '30' : '0';
+      let i = 0;
+      while (i < anchors.length - 1 && focus >= anchors[i + 1].top) i++;
+      const a = anchors[i];
+      const b = anchors[Math.min(i + 1, anchors.length - 1)];
+      const span = Math.max(1, b.top - a.top);
+      const raw = MathUtils.clamp((focus - a.top) / span, 0, 1);
+      const hold = a.st.hold ?? 0;
+      const t = reduce ? 0 : smooth(hold >= 1 ? 0 : MathUtils.clamp((raw - hold) / (1 - hold), 0, 1));
 
-      if (p >= 1.02 && !doneRef.current) {
+      const pose = earthJourney.pose;
+      pose.nx = MathUtils.lerp(a.st.nx, b.st.nx, t);
+      pose.ny = MathUtils.lerp(a.st.ny, b.st.ny, t);
+      pose.s = MathUtils.lerp(a.st.s, b.st.s, t);
+      pose.o = MathUtils.lerp(a.st.o, b.st.o, t);
+      pose.ry = a.st.ry === null && t < 0.5 ? null : (b.st.ry ?? a.st.ry);
+
+      // The About beat (the Johannesburg dot) runs on its own local progress.
+      const about = document.getElementById('about');
+      if (about) {
+        const end = about.getBoundingClientRect().bottom + window.scrollY - window.innerHeight;
+        earthJourney.intro = end > 0 ? MathUtils.clamp(window.scrollY / end, 0, 1) : 0;
+      }
+
+      el.style.opacity = String(reduce ? stations[0].o : pose.o);
+      // Opaque section backgrounds would paint over a fixed canvas, so the
+      // layer lifts above them exactly when a station wants to be seen past
+      // the hero, and drops back underneath for the hero/About stretch.
+      el.style.zIndex = i >= 2 && pose.o > 0.05 ? '30' : '0';
+
+      // Unmount the WebGL work only while fully hidden, with hysteresis.
+      const hidden = pose.o < 0.02;
+      if (hidden && !doneRef.current) {
         doneRef.current = true;
         setJourneyDone(true);
-      } else if (p <= 0.98 && doneRef.current) {
+      } else if (!hidden && doneRef.current) {
         doneRef.current = false;
         setJourneyDone(false);
       }
@@ -178,17 +203,24 @@ export default function HeroEarth() {
     const onScroll = () => {
       if (!raf) raf = window.requestAnimationFrame(update);
     };
+    const onResize = () => {
+      measure();
+      onScroll();
+    };
+    measure();
     update();
+    // Section offsets shift as fonts land and lazy content settles.
+    const settle = window.setTimeout(onResize, 1200);
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
     return () => {
       earthJourney.active = false;
-      earthJourney.p = 0;
+      window.clearTimeout(settle);
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener('resize', onResize);
       if (raf) window.cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [small]);
 
   return (
     // Explicit viewport sizing: R3F measures this box for the canvas, and a
@@ -208,7 +240,7 @@ export default function HeroEarth() {
           <ambientLight intensity={0.35} />
           <directionalLight position={[5, 2, 5]} intensity={2.6} />
           <Suspense fallback={null}>
-            <EarthModel small={small} />
+            <EarthModel baseScale={small ? 0.7 : 1} />
           </Suspense>
         </Canvas>
       )}

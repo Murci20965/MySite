@@ -79,7 +79,7 @@ export default function ExpandMedia() {
     <section id="vision" className="relative bg-black">
       <div ref={wrapRef} className="relative h-[240vh]">
         <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden">
-          <div className="pointer-events-none absolute top-24 z-20 flex items-center gap-4">
+          <div className="pointer-events-none absolute top-24 z-40 flex items-center gap-4">
             <span className="h-px w-10 bg-white/20" />
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
               Vision
@@ -101,7 +101,9 @@ export default function ExpandMedia() {
             <div ref={dimRef} className="absolute inset-0 bg-black" style={{ opacity: 0.55 }} />
           </div>
 
-          <div className="pointer-events-none absolute z-10 flex w-full flex-col items-center gap-2 text-center mix-blend-difference">
+          {/* z-40 keeps the title above the travelling Earth layer, which
+              lifts to z-30 when it returns as this section's horizon. */}
+          <div className="pointer-events-none absolute z-40 flex w-full flex-col items-center gap-2 text-center mix-blend-difference">
             <h2
               ref={leftRef}
               className="font-display text-5xl font-medium leading-none tracking-[-0.01em] text-white sm:text-6xl lg:text-7xl"
@@ -118,7 +120,7 @@ export default function ExpandMedia() {
 
           <div
             ref={copyRef}
-            className="pointer-events-none absolute bottom-10 z-20 max-w-2xl px-6 text-center"
+            className="pointer-events-none absolute bottom-10 z-40 max-w-2xl px-6 text-center"
             style={{ opacity: 0 }}
           >
             <p className="font-sans text-base leading-relaxed text-white/85 sm:text-lg">
