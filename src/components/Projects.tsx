@@ -1,5 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
-import { Github, ArrowUpRight } from 'lucide-react';
+import { Github, ArrowUpRight, Box } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
 import TiltCard from './TiltCard';
@@ -175,8 +175,13 @@ export default function Projects() {
 
         <div className="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2 xl:grid-cols-3">
           {filteredProjects.map((project, index) => (
-            <AnimatedSection key={project.title} animation="fade-in" delay={index % 2 === 1}>
-              <article className="group flex flex-col">
+            <AnimatedSection
+              key={project.title}
+              animation="fade-in"
+              delay={index % 2 === 1}
+              className="h-full"
+            >
+              <article className="group flex h-full flex-col">
                 <div className="relative">
                   {'model' in project && project.model && active3D === project.title ? (
                     <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/10">
@@ -200,30 +205,22 @@ export default function Projects() {
                       </span>
                     </TiltCard>
                   )}
-                  {'model' in project && project.model && (
-                    <button
-                      onClick={() =>
-                        setActive3D(active3D === project.title ? null : project.title)
-                      }
-                      className="absolute right-3 top-3 z-10 rounded-full border border-lime-400/40 bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-lime-400 backdrop-blur-sm transition-colors hover:bg-black/90 hover:border-lime-400/70"
-                    >
-                      {active3D === project.title ? 'View image' : 'View in 3D'}
-                    </button>
-                  )}
                 </div>
 
-                <div className="mt-5">
+                <div className="mt-5 flex flex-1 flex-col">
                   <div className="mb-3 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
                     <span>{String(index + 1).padStart(2, '0')}</span>
                     <span>{project.duration}</span>
                   </div>
 
                   <h3 className="mb-3 font-display text-2xl font-medium text-white">{project.title}</h3>
-                  <p className="mb-6 font-sans text-sm leading-relaxed text-white/60">
+                  {/* Clamped so every card's description occupies the same
+                      height and the rows below stay on a shared baseline. */}
+                  <p className="mb-6 line-clamp-4 font-sans text-sm leading-relaxed text-white/60">
                     {project.description}
                   </p>
 
-                  <div className="mb-6 flex flex-wrap gap-x-8 gap-y-3 border-y border-white/10 py-4">
+                  <div className="mt-auto flex flex-wrap gap-x-8 gap-y-3 border-y border-white/10 py-4">
                     {[
                       { v: project.metrics.accuracy, l: 'Key metric' },
                       { v: project.metrics.impact, l: 'Impact' },
@@ -267,6 +264,17 @@ export default function Projects() {
                       >
                         Live demo <ArrowUpRight className="h-4 w-4" />
                       </a>
+                    )}
+                    {'model' in project && project.model && (
+                      <button
+                        onClick={() =>
+                          setActive3D(active3D === project.title ? null : project.title)
+                        }
+                        className="inline-flex items-center gap-1.5 font-sans text-sm text-lime-400/80 transition-colors hover:text-lime-400"
+                      >
+                        <Box className="h-4 w-4" />
+                        {active3D === project.title ? 'View diagram' : 'View in 3D'}
+                      </button>
                     )}
                   </div>
                 </div>

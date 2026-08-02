@@ -1,6 +1,5 @@
 import { ArrowUpRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
-import PopNumber from './PopNumber';
 import RevealHeading from './RevealHeading';
 
 export default function OpenSource() {
@@ -71,13 +70,6 @@ export default function OpenSource() {
     },
   ];
 
-  const stats = [
-    { value: '525', label: 'Contributions this year' },
-    { value: '18', label: 'Public repositories' },
-    { value: '28', label: 'Pull requests' },
-    { value: '306', label: 'Commits this year' },
-  ];
-
   return (
     <section id="opensource" className="relative bg-black py-24 lg:py-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
@@ -98,18 +90,6 @@ export default function OpenSource() {
             Everything I build in the open: pipelines, apps and experiments, public from day one.
           </p>
 
-          <div className="mt-12 grid grid-cols-2 gap-6 border-y border-white/10 py-8 sm:grid-cols-4">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <div className="font-mono text-3xl text-white">
-                  <PopNumber value={stat.value} />
-                </div>
-                <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
         </AnimatedSection>
 
         <div className="border-b border-white/10">

@@ -30,13 +30,6 @@ export default function Skills() {
     },
   ];
 
-  const certifications = [
-    { title: 'Introducing Generative AI with AWS', issuer: 'Udacity', year: 'GenAI' },
-    { title: 'Microsoft Certified: Azure Fundamentals', issuer: 'Microsoft', year: 'Cloud' },
-    { title: 'ALX/ExploreAI Certified Data Scientist', issuer: 'ALX / ExploreAI Academy', year: 'Data' },
-    { title: 'AI Career Essentials', issuer: 'ALX Africa', year: 'AI' },
-  ];
-
   return (
     <section id="skills" className="relative bg-black py-24 lg:py-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
@@ -88,28 +81,6 @@ export default function Skills() {
             </AnimatedSection>
           ))}
         </div>
-
-        <AnimatedSection animation="fade-in">
-          <div className="mt-20">
-            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
-              Certifications
-            </div>
-            <div className="border-t border-white/10">
-              {certifications.map((cert) => (
-                <div
-                  key={cert.title}
-                  className="flex items-baseline justify-between gap-4 border-b border-white/10 py-4"
-                >
-                  <div>
-                    <div className="font-display text-lg text-white">{cert.title}</div>
-                    <div className="font-sans text-sm text-white/50">{cert.issuer}</div>
-                  </div>
-                  <div className="shrink-0 font-mono text-sm text-white/40">{cert.year}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </AnimatedSection>
 
         <AnimatedSection animation="fade-in">
           <div className="mt-16 flex flex-col gap-8 border-t border-white/10 pt-8 md:flex-row md:items-center md:justify-between">

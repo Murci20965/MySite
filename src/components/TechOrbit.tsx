@@ -14,7 +14,7 @@ interface OrbitIcon {
 
 const ORBITS: Array<{ size: string; duration: number; icons: OrbitIcon[] }> = [
   {
-    size: 'w-[19rem] h-[19rem] md:w-[27rem] md:h-[27rem]',
+    size: 'w-[26rem] h-[26rem] md:w-[38rem] md:h-[38rem]',
     duration: 26,
     icons: [
       { src: '/icons/python.svg', alt: 'Python', angle: -60 },
@@ -23,7 +23,7 @@ const ORBITS: Array<{ size: string; duration: number; icons: OrbitIcon[] }> = [
     ],
   },
   {
-    size: 'w-[25rem] h-[25rem] md:w-[35rem] md:h-[35rem]',
+    size: 'w-[35rem] h-[35rem] md:w-[50rem] md:h-[50rem]',
     duration: 34,
     icons: [
       { src: '/icons/pytorch.svg', alt: 'PyTorch', angle: 0 },
@@ -31,7 +31,7 @@ const ORBITS: Array<{ size: string; duration: number; icons: OrbitIcon[] }> = [
     ],
   },
   {
-    size: 'w-[31rem] h-[31rem] md:w-[43rem] md:h-[43rem]',
+    size: 'w-[44rem] h-[44rem] md:w-[62rem] md:h-[62rem]',
     duration: 42,
     icons: [
       { src: '/icons/react.svg', alt: 'React', angle: -60 },
@@ -53,7 +53,7 @@ function ParticleCore() {
     if (!ctx) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const DOTS = 320;
+    const DOTS = 620;
     const points: Array<{ theta: number; phi: number }> = [];
     // Fibonacci sphere: evenly distributed, no pole clumping.
     for (let i = 0; i < DOTS; i++) {
@@ -112,8 +112,11 @@ function ParticleCore() {
 
 export default function TechOrbit() {
   return (
-    <div className="relative flex h-[22rem] w-full justify-center overflow-hidden md:h-[30rem]" aria-hidden="true">
-      <div className="pointer-events-none absolute bottom-0 left-1/2 z-10 aspect-square w-64 -translate-x-1/2 translate-y-1/2 md:w-[26rem]">
+    <div
+      className="relative flex h-[34rem] w-full justify-center overflow-hidden md:h-[44rem]"
+      aria-hidden="true"
+    >
+      <div className="pointer-events-none absolute bottom-0 left-1/2 z-10 aspect-square w-80 -translate-x-1/2 translate-y-1/2 md:w-[38rem]">
         <ParticleCore />
       </div>
 

@@ -5,7 +5,7 @@ import PopNumber from './PopNumber';
  * and spanning the page — the anchor that follows the work.
  */
 const stats = [
-  { value: '525', label: 'Contributions', description: 'Past 12 months' },
+  { value: '14', label: 'Projects shipped', description: 'Past 2 years' },
   { value: '18', label: 'Public repositories', description: 'Open on GitHub' },
   { value: '3', label: 'AI roles', description: 'Nudle · Alignerr · Artintel' },
   { value: '2', label: 'Live AI demos', description: 'Deployed on Vercel' },
