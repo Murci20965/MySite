@@ -11,7 +11,7 @@ import { earthJourney } from '../lib/earthJourney';
  * then it docks under the progress hairline and hands over to a DOM orb.
  * Anchors are viewport-relative (x right+, y up+, each in [-0.5, 0.5]).
  */
-const PHASE_HERO = { nx: 0.34, ny: 0.05, s: 0.62 };
+const PHASE_HERO = { nx: 0.36, ny: 0.04, s: 0.9 };
 const PHASE_ABOUT = { nx: 0.38, ny: 0.0, s: 0.42 };
 const PHASE_DOCK = { nx: 0.45, ny: 0.46, s: 0.055 };
 // Narrow screens: tuck the globe higher and smaller so it never crowds the hero text.

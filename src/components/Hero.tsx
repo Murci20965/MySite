@@ -63,19 +63,19 @@ export default function Hero() {
       <div className="relative z-20 w-full">
         <div
           ref={stageRef}
-          className="t-stagger mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24 py-12 sm:py-16 lg:py-20"
+          className="t-stagger mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24 py-10"
         >
           <div className="flex justify-start lg:justify-start">
-            <div className="w-full lg:w-[62%] lg:pr-12 xl:pr-16">
-              <div className="t-stagger-line t-stagger-line--1 flex items-center gap-3 mb-5 sm:mb-6">
+            <div className="w-full lg:w-[54%] lg:pr-12 xl:pr-16">
+              <div className="t-stagger-line t-stagger-line--1 flex items-center gap-3 mb-4 sm:mb-5">
                 <span className="w-2 h-2 rounded-full bg-white/80 flex-shrink-0"></span>
                 <span className="font-mono text-[11px] sm:text-xs text-white/60 uppercase tracking-[0.28em]">
                   AI Engineer &middot; Agentic AI, RAG &amp; MLOps
                 </span>
               </div>
 
-              <h1 className="t-stagger-line t-stagger-line--2 font-display text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-semibold mb-8 sm:mb-10 leading-[0.95] tracking-[-0.01em]">
-                <div className="flex items-center gap-4 sm:gap-5">
+              <h1 className="t-stagger-line t-stagger-line--2 font-display text-4xl sm:text-5xl md:text-6xl xl:text-[4.25rem] font-semibold mb-6 leading-[0.95] tracking-[-0.015em]">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 sm:gap-x-5">
                   <span className="text-white whitespace-nowrap">Nhlanhla</span>
                   <span className="text-white/50 whitespace-nowrap">
                     M
@@ -96,25 +96,26 @@ export default function Hero() {
                 </div>
               </h1>
 
-              <p className="t-stagger-line t-stagger-line--3 font-sans text-base sm:text-lg text-white/55 max-w-2xl leading-relaxed lg:line-clamp-3">
-                I build production AI systems: agentic workflows, RAG pipelines and end-to-end MLOps, shipped behind Python and FastAPI services. Right now I turn natural language into interactive 3D and XR learning experiences at Nudle.
+              <p className="t-stagger-line t-stagger-line--3 font-sans text-base text-white/55 max-w-lg leading-relaxed">
+                I build production AI systems: agentic workflows, RAG pipelines and end-to-end
+                MLOps. Right now I turn natural language into interactive 3D learning at Nudle.
               </p>
-            </div>
-          </div>
 
-          <div className="t-stagger-line t-stagger-line--4 flex flex-wrap justify-center gap-3 mt-6 sm:mt-8">
-            <button
-              onClick={() => scrollToSection('projects')}
-              className="font-sans px-8 py-3.5 bg-white text-black text-sm font-medium rounded-full hover:bg-white/85 active:scale-[0.98] transition duration-300"
-            >
-              View Projects
-            </button>
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="font-sans px-8 py-3.5 text-white text-sm font-medium border border-white/25 rounded-full hover:bg-white/10 hover:border-white/40 active:scale-[0.98] transition duration-300"
-            >
-              Get in Touch
-            </button>
+              <div className="t-stagger-line t-stagger-line--4 mt-9 flex flex-wrap gap-3">
+                <button
+                  onClick={() => scrollToSection('projects')}
+                  className="font-sans px-7 py-3 bg-white text-black text-sm font-medium rounded-full hover:bg-white/85 active:scale-[0.98] transition duration-300"
+                >
+                  View Projects
+                </button>
+                <button
+                  onClick={() => scrollToSection('contact')}
+                  className="font-sans px-7 py-3 text-white text-sm font-medium border border-white/25 rounded-full hover:bg-white/10 hover:border-white/40 active:scale-[0.98] transition duration-300"
+                >
+                  Get in Touch
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
