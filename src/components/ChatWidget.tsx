@@ -70,7 +70,7 @@ export default function ChatWidget() {
         body: JSON.stringify({ messages: history }),
       });
       if (res.status === 429) {
-        patchLast(() => 'Easy there — a few too many questions in a row. Try again in a couple of minutes, or just email nhlanhla18mokoena@gmail.com.');
+        patchLast(() => 'Easy there, that is a few too many questions in a row. Try again in a couple of minutes, or just email nhlanhla18mokoena@gmail.com.');
         return;
       }
       if (!res.ok || !res.body) {
@@ -143,7 +143,7 @@ export default function ChatWidget() {
             {messages.length === 0 && (
               <div className="space-y-2.5">
                 <p className="font-sans text-sm leading-relaxed text-white/60">
-                  I answer questions about Nhlanhla&rsquo;s work, skills and projects — grounded in
+                  I answer questions about Nhlanhla&rsquo;s work, skills and projects, grounded in
                   his real record, nothing invented.
                 </p>
                 {STARTERS.map((s) => (

@@ -27,7 +27,7 @@ export default function Projects() {
       category: '3D & XR',
       model: PIPELINE_MODEL,
       description:
-        'A "Director & Marionette" engine that translates natural language into 14 deterministic 3D skeletal animation states — Groq Llama-3.3-70b under strict Pydantic JSON validation, rendered in Next.js 16 / React Three Fiber with 0.5s animation crossfading.',
+        'A "Director & Marionette" engine that translates natural language into 14 deterministic 3D skeletal animation states, driven by Groq Llama-3.3-70b under strict Pydantic JSON validation and rendered in Next.js 16 / React Three Fiber with 0.5s animation crossfading.',
       diagram: 'avatar' as const,
       metrics: { accuracy: '14 states', impact: '0.5s crossfade', data: 'Llama-3.3-70b' },
       tech: ['FastAPI', 'Groq', 'Next.js 16', 'React Three Fiber', 'Docker'],
@@ -40,7 +40,7 @@ export default function Projects() {
       category: '3D & XR',
       model: PIPELINE_MODEL,
       description:
-        'Multimodal text/image-to-3D generation pipeline producing optimised, web-ready 3D models — a Dockerised headless Blender engine centres, scales and formats AI-generated meshes for WebGL, with asyncio orchestration keeping latency low.',
+        'Multimodal text/image-to-3D generation pipeline producing optimised, web-ready 3D models. A Dockerised headless Blender engine centres, scales and formats AI-generated meshes for WebGL, with asyncio orchestration keeping latency low.',
       diagram: 'orbit' as const,
       metrics: { accuracy: 'Text + image', impact: 'Web-ready GLB', data: 'Headless Blender' },
       tech: ['Next.js 16', 'FastAPI', 'Tripo3D', 'Llama-4 Vision', 'Blender'],
@@ -52,7 +52,7 @@ export default function Projects() {
       title: 'Real Estate Price Predictor',
       category: 'Machine Learning',
       description:
-        'End-to-end MLOps system predicting house prices with gradient boosting — from training and evaluation through a CI/CD pipeline with GitHub Actions and Docker to a deployable FastAPI service.',
+        'End-to-end MLOps system predicting house prices with gradient boosting, from training and evaluation through a CI/CD pipeline with GitHub Actions and Docker to a deployable FastAPI service.',
       diagram: 'regression' as const,
       metrics: { accuracy: 'R² 0.9037', impact: 'RMSE 0.1341', data: 'CI/CD + Docker' },
       tech: ['XGBoost', 'FastAPI', 'Docker', 'GitHub Actions'],
@@ -64,7 +64,7 @@ export default function Projects() {
       title: 'Medical Image Classifier',
       category: 'Machine Learning',
       description:
-        'End-to-end pneumonia-detection system on chest X-rays using ResNet50 transfer learning — full pipeline from training and evaluation to a deployment-ready FastAPI service with an interactive Streamlit UI.',
+        'End-to-end pneumonia-detection system on chest X-rays using ResNet50 transfer learning: a full pipeline from training and evaluation to a deployment-ready FastAPI service with an interactive Streamlit UI.',
       diagram: 'transfer' as const,
       metrics: { accuracy: '82.85% acc', impact: '0.96 recall', data: 'ResNet50' },
       tech: ['PyTorch', 'ResNet50', 'FastAPI', 'Streamlit', 'Docker'],
@@ -76,7 +76,7 @@ export default function Projects() {
       title: 'Resume-Match AI',
       category: 'AI Apps',
       description:
-        'Automated tool that evaluates how well a jobseeker’s resume matches a job posting — structured LLM analysis turned into actionable fit feedback.',
+        'Automated tool that evaluates how well a jobseeker’s resume matches a job posting, turning structured LLM analysis into actionable fit feedback.',
       diagram: 'match' as const,
       metrics: { accuracy: 'Fit scoring', impact: 'Instant feedback', data: 'LLM-powered' },
       tech: ['Python', 'LLM APIs', 'FastAPI'],
@@ -88,7 +88,7 @@ export default function Projects() {
       title: 'Smart-Spend',
       category: 'AI Apps',
       description:
-        'AI-powered personal finance management system — automated transaction understanding and budgeting intelligence built as a full-stack TypeScript application.',
+        'AI-powered personal finance management system with automated transaction understanding and budgeting intelligence, built as a full-stack TypeScript application.',
       diagram: 'spend' as const,
       metrics: { accuracy: 'Auto-categorise', impact: 'Budget insight', data: 'Full-stack TS' },
       tech: ['TypeScript', 'React', 'AI APIs'],
@@ -153,7 +153,7 @@ export default function Projects() {
             className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
           />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            Real systems, really shipped — from text-to-3D pipelines to end-to-end MLOps. Code is public; two are live.
+            Real systems, really shipped: from text-to-3D pipelines to end-to-end MLOps. Code is public; two are live.
           </p>
 
           <div ref={tabsRef} className="relative mt-10 flex flex-wrap gap-x-6 gap-y-3 pb-2">

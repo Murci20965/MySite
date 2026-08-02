@@ -70,7 +70,7 @@ export default function Hero() {
               <div className="t-stagger-line t-stagger-line--1 flex items-center gap-3 mb-5 sm:mb-6">
                 <span className="w-2 h-2 rounded-full bg-white/80 flex-shrink-0"></span>
                 <span className="font-mono text-[11px] sm:text-xs text-white/60 uppercase tracking-[0.28em]">
-                  AI Engineer — Agentic AI, RAG &amp; MLOps
+                  AI Engineer &middot; Agentic AI, RAG &amp; MLOps
                 </span>
               </div>
 
@@ -97,7 +97,7 @@ export default function Hero() {
               </h1>
 
               <p className="t-stagger-line t-stagger-line--3 font-sans text-base sm:text-lg text-white/55 max-w-2xl leading-relaxed lg:line-clamp-3">
-                I build production AI systems — agentic workflows, RAG pipelines and end-to-end MLOps — shipped behind Python and FastAPI services. Right now I turn natural language into interactive 3D and XR learning experiences at Nudle.
+                I build production AI systems: agentic workflows, RAG pipelines and end-to-end MLOps, shipped behind Python and FastAPI services. Right now I turn natural language into interactive 3D and XR learning experiences at Nudle.
               </p>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function Hero() {
                 <Play className="w-5 h-5 text-lime-400" fill="currentColor" />
               </span>
               <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-white/50">
-                Intro video — coming soon
+                Intro video coming soon
               </p>
               <p className="font-sans text-sm text-white/40 max-w-md">
                 A short introduction is on its way. Until then, the projects below speak for me.

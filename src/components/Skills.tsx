@@ -54,7 +54,7 @@ export default function Skills() {
             className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
           />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            From agentic orchestration to XR delivery — the stack I own end to end.
+            From agentic orchestration to XR delivery: the stack I own end to end.
           </p>
         </AnimatedSection>
 

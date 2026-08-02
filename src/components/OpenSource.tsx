@@ -8,7 +8,7 @@ export default function OpenSource() {
     {
       repo: 'avatar-pipeline',
       description:
-        'AI-to-3D interaction engine mapping natural language to deterministic WebGL animations — Next.js 16, Dockerized FastAPI, and Groq-accelerated Llama-3.3.',
+        'AI-to-3D interaction engine mapping natural language to deterministic WebGL animations, built with Next.js 16, Dockerized FastAPI and Groq-accelerated Llama-3.3.',
       language: 'TypeScript / Python',
       stars: 1,
       forks: 0,
@@ -21,7 +21,7 @@ export default function OpenSource() {
     {
       repo: 'orbit-3d-pipeline',
       description:
-        'Automated pipeline for generating, optimizing and contextualizing AI-driven 3D assets for interactive learning — Tripo3D, Llama-4 Vision, headless Blender.',
+        'Automated pipeline for generating, optimizing and contextualizing AI-driven 3D assets for interactive learning, using Tripo3D, Llama-4 Vision and headless Blender.',
       language: 'Python',
       stars: 1,
       forks: 0,
@@ -59,7 +59,7 @@ export default function OpenSource() {
     {
       repo: 'cat-dog-classifier',
       description:
-        'End-to-end image classifier with FastAI, served via FastAPI and containerized with Docker — a full MLOps workflow from training to deployable app with a Gradio UI.',
+        'End-to-end image classifier with FastAI, served via FastAPI and containerized with Docker: a full MLOps workflow from training to deployable app with a Gradio UI.',
       language: 'Python',
       stars: 1,
       forks: 0,
@@ -95,7 +95,7 @@ export default function OpenSource() {
             className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
           />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            Everything I build in the open — pipelines, apps and experiments, public from day one.
+            Everything I build in the open: pipelines, apps and experiments, public from day one.
           </p>
 
           <div className="mt-12 grid grid-cols-2 gap-6 border-y border-white/10 py-8 sm:grid-cols-4">

@@ -50,7 +50,7 @@ export default function Contact() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const subject = encodeURIComponent(`Portfolio contact from ${formData.name}`);
-    const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name} (${formData.email})`);
+    const body = encodeURIComponent(`${formData.message}\n\nFrom ${formData.name} (${formData.email})`);
     window.location.href = `mailto:nhlanhla18mokoena@gmail.com?subject=${subject}&body=${body}`;
     setSubmitted(true);
   };
@@ -101,7 +101,7 @@ export default function Contact() {
             className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
           />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            A role, a collaboration, or a question about my work — my inbox is open, and I typically reply within 24 hours.
+            A role, a collaboration, or a question about my work: my inbox is open, and I typically reply within 24 hours.
           </p>
         </AnimatedSection>
 

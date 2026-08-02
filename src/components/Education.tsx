@@ -24,7 +24,7 @@ export default function Education() {
       year: 'Certified',
       achievements: [
         'ALX/ExploreAI Certified Data Scientist',
-        'AWS cloud coursework — IAM, networking, CloudFormation, cost management',
+        'AWS cloud coursework: IAM, networking, CloudFormation, cost management',
         'Portfolio of end-to-end ML projects across regression, classification and recommenders',
       ],
     },
@@ -33,7 +33,7 @@ export default function Education() {
       specialization: 'Software development foundations',
       institution: 'DynamicDNA ICT Academy',
       year: 'Completed',
-      achievements: ['Full-time software development training — systems, databases and programming fundamentals'],
+      achievements: ['Full-time software development training: systems, databases and programming fundamentals'],
     },
   ];
 

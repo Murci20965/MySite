@@ -10,32 +10,32 @@ export default function FAQ() {
     {
       question: 'What technologies do you specialize in?',
       answer:
-        'My core stack is Python and FastAPI on the backend, with LangChain, LangGraph and RAG pipelines for agentic AI, and PyTorch, scikit-learn and XGBoost for machine learning. On the frontend I work with Next.js, React and TypeScript — including React Three Fiber and WebXR for interactive 3D. Everything ships containerised with Docker through GitHub Actions CI/CD.',
+        'My core stack is Python and FastAPI on the backend, with LangChain, LangGraph and RAG pipelines for agentic AI, and PyTorch, scikit-learn and XGBoost for machine learning. On the frontend I work with Next.js, React and TypeScript, including React Three Fiber and WebXR for interactive 3D. Everything ships containerised with Docker through GitHub Actions CI/CD.',
     },
     {
       question: 'What kind of work are you doing right now?',
       answer:
-        'I build the AI layer of an XR simulation-training platform at Nudle — pipelines that turn text and images into interactive 3D learning experiences — and I evaluate production model behaviour on reasoning, programming and agent tasks as a freelance AI trainer at Alignerr.',
+        'I build the AI layer of an XR simulation-training platform at Nudle, creating pipelines that turn text and images into interactive 3D learning experiences. I also evaluate production model behaviour on reasoning, programming and agent tasks as a freelance AI trainer at Alignerr.',
     },
     {
       question: 'What is your experience with cloud platforms?',
       answer:
-        'Hands-on serverless deployment across HuggingFace Spaces, Render and Vercel — my live demos run there today. On AWS I have coursework covering IAM, networking, CloudFormation and cost management, plus hands-on Terraform provisioning, and I hold the Microsoft Azure Fundamentals certification. I favour portable, container-first setups over lock-in.',
+        'Hands-on serverless deployment across HuggingFace Spaces, Render and Vercel, where my live demos run today. On AWS I have coursework covering IAM, networking, CloudFormation and cost management, plus hands-on Terraform provisioning, and I hold the Microsoft Azure Fundamentals certification. I favour portable, container-first setups over lock-in.',
     },
     {
       question: 'How do you approach quality and documentation?',
       answer:
-        'Documentation ships in the same change as the code — stale docs are a defect. I make atomic, well-scoped commits, keep API contracts and data schemas written down, and treat error handling, logging and security as part of the build rather than an afterthought.',
+        'Documentation ships in the same change as the code, because stale docs are a defect. I make atomic, well-scoped commits, keep API contracts and data schemas written down, and treat error handling, logging and security as part of the build rather than an afterthought.',
     },
     {
       question: 'What domains have you applied AI in?',
       answer:
-        'XR education and simulation training at Nudle; LLM evaluation at Alignerr; a no-code LLM fine-tuning platform at Artintel; and in my own projects — real-estate price prediction, medical image classification, resume-to-job matching and personal finance.',
+        'XR education and simulation training at Nudle; LLM evaluation at Alignerr; a no-code LLM fine-tuning platform at Artintel; and in my own projects: real-estate price prediction, medical image classification, resume-to-job matching and personal finance.',
     },
     {
       question: 'Where are you based, and how do you work?',
       answer:
-        'Johannesburg, South Africa — remote-friendly and used to collaborating across time zones. isiZulu is my first language, English is my working language, and I communicate progress honestly: if something failed or slipped, you hear it from me first.',
+        'Johannesburg, South Africa. I work remotely and am used to collaborating across time zones. isiZulu is my first language, English is my working language, and I communicate progress honestly: if something failed or slipped, you hear it from me first.',
     },
   ];
 

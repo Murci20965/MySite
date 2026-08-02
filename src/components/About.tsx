@@ -21,9 +21,9 @@ export default function About() {
           />
 
           <p className="font-sans text-xl lg:text-2xl text-white/80 leading-relaxed max-w-3xl mb-10">
-            I'm an AI engineer who owns systems end to end — from{' '}
+            I'm an AI engineer who owns systems end to end: from{' '}
             <span className="text-white">data pipeline</span> through{' '}
-            <span className="text-white">model training and inference</span> to deployment — and I
+            <span className="text-white">model training and inference</span> to deployment. I also
             believe learning real skills shouldn't depend on where you were born.
           </p>
 
@@ -31,13 +31,13 @@ export default function About() {
             <p className="text-base lg:text-lg leading-relaxed">
               I work with <span className="text-white/90">LLM APIs and agentic workflows</span>,{' '}
               <span className="text-white/90">RAG pipelines</span>, and{' '}
-              <span className="text-white/90">structured tool use</span> — shipped behind production
+              <span className="text-white/90">structured tool use</span>, shipped behind production
               Python and FastAPI services, containerised with Docker and delivered through CI/CD. At
               Nudle I'm applying that stack to XR simulation and assessment platforms.
             </p>
             <p className="text-base lg:text-lg leading-relaxed">
               What drives me: traditional education gates real skills behind resources and rigid
-              methods. I'm building toward seamless XR learning — where anyone, from any background,
+              methods. I'm building toward seamless XR learning, where anyone, from any background,
               can practise real skills interactively. From Johannesburg, working with teams anywhere.
             </p>
           </div>

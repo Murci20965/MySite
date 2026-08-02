@@ -13,7 +13,7 @@ export default function Blog() {
     {
       title: 'One LLM, Fourteen Animations: Structured Outputs as an API Contract',
       excerpt:
-        'How the Avatar-3D Pipeline turns a probabilistic language model into a deterministic animation director — strict Pydantic schemas, structured tool calling, and why LLM output should be treated as untrusted user input.',
+        'How the Avatar-3D Pipeline turns a probabilistic language model into a deterministic animation director: strict Pydantic schemas, structured tool calling, and why LLM output should be treated as untrusted user input.',
       date: 'August 2026',
       readTime: '6 min read',
       category: 'AI Engineering',
@@ -33,7 +33,7 @@ export default function Blog() {
     {
       title: 'R² Isn’t the Finish Line: Shipping an XGBoost Model with CI/CD',
       excerpt:
-        'My price model scores R² 0.9037 — and that’s the least interesting part. On the gap between a good metric and a dependable system: API contracts, Docker reproducibility, and CI that catches the embarrassing failure first.',
+        'My price model scores R² 0.9037, and that’s the least interesting part. On the gap between a good metric and a dependable system: API contracts, Docker reproducibility, and CI that catches the embarrassing failure first.',
       date: 'August 2026',
       readTime: '5 min read',
       category: 'MLOps',
@@ -43,7 +43,7 @@ export default function Blog() {
     {
       title: 'Transfer Learning on a Budget: Pneumonia Detection with ResNet50',
       excerpt:
-        'Why start from zero when ImageNet already taught the network to see? Fine-tuning ResNet50 for chest X-rays, and why I deliberately tuned for 0.96 recall — choosing which way to be wrong is a product decision.',
+        'Why start from zero when ImageNet already taught the network to see? Fine-tuning ResNet50 for chest X-rays, and why I deliberately tuned for 0.96 recall: choosing which way to be wrong is a product decision.',
       date: 'August 2026',
       readTime: '6 min read',
       category: 'Machine Learning',
@@ -111,7 +111,7 @@ export default function Blog() {
             className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
           />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            Field notes from my own projects — what actually broke, what actually worked, and why.
+            Field notes from my own projects: what actually broke, what actually worked, and why.
           </p>
 
           <div ref={tabsRef} className="relative mt-10 flex flex-wrap gap-x-6 gap-y-3 pb-2">
@@ -141,7 +141,7 @@ export default function Blog() {
                 className="group flex cursor-pointer flex-col"
               >
                 <TiltCard className="aspect-[16/10] border border-white/10">
-                  {/* Typographic cover — no stock imagery, no repeated art. */}
+                  {/* Typographic cover: no stock imagery, no repeated art. */}
                   <div className="flex h-full w-full flex-col justify-between bg-[#0e0e0e] p-6">
                     <span className="h-px w-10 bg-lime-400/50" />
                     <span className="self-end font-display text-7xl leading-none text-white/[0.07]">

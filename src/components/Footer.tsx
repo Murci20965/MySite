@@ -31,7 +31,7 @@ export default function Footer() {
               Nhlanhla Mokoena
             </div>
             <p className="mt-4 max-w-md font-sans leading-relaxed text-white/50">
-              AI engineer building production AI systems — and working toward XR education that
+              AI engineer building production AI systems, and working toward XR education that
               lets anyone, anywhere, practise real skills.
             </p>
           </div>

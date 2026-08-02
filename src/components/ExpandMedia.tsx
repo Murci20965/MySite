@@ -119,7 +119,7 @@ export default function ExpandMedia() {
           >
             <p className="font-sans text-base leading-relaxed text-white/85 sm:text-lg">
               Traditional education gates real skills behind resources and rigid methods. I&rsquo;m
-              building toward XR learning where anyone, anywhere, can practise real skills —
+              building toward XR learning where anyone, anywhere, can practise real skills:
               interactively, spatially, without the gatekeeping.
             </p>
           </div>

@@ -7,13 +7,13 @@ export default function Testimonials() {
       name: 'Measure, don’t guess',
       role: 'How I debug',
       avatar: '01',
-      text: 'If a claim matters, I verify it against the source before building on it. Assumptions are where systems quietly break — evidence first, then action.',
+      text: 'If a claim matters, I verify it against the source before building on it. Assumptions are where systems quietly break, so evidence comes first and action second.',
     },
     {
       name: 'Docs are part of done',
       role: 'How I ship',
       avatar: '02',
-      text: 'Documentation ships in the same change as the code. Stale docs are a defect, not a chore — the next engineer should never have to reverse-engineer intent.',
+      text: 'Documentation ships in the same change as the code. Stale docs are a defect, not a chore. The next engineer should never have to reverse-engineer intent.',
     },
     {
       name: 'Secure by default',
@@ -25,7 +25,7 @@ export default function Testimonials() {
       name: 'Honest reporting',
       role: 'How I communicate',
       avatar: '04',
-      text: 'If tests fail or a step was skipped, I say so plainly. An honest status report beats a green façade — every time, especially under deadline pressure.',
+      text: 'If tests fail or a step was skipped, I say so plainly. An honest status report beats a green façade every time, especially under deadline pressure.',
     },
     {
       name: 'Proven over clever',
@@ -37,7 +37,7 @@ export default function Testimonials() {
       name: 'Learning in public',
       role: 'How I grow',
       avatar: '06',
-      text: 'Everything I build outside work is open on GitHub from the first commit. Showing the process — including the rough edges — is how skills compound.',
+      text: 'Everything I build outside work is open on GitHub from the first commit. Showing the process, rough edges included, is how skills compound.',
     },
   ];
 
@@ -58,7 +58,7 @@ export default function Testimonials() {
             className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
           />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            The standards behind everything I ship — the same ones you&rsquo;ll find in my commits.
+            The standards behind everything I ship, and the same ones you&rsquo;ll find in my commits.
           </p>
         </AnimatedSection>
 

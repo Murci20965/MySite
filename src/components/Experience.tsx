@@ -23,11 +23,11 @@ const experiences: ExperienceData[] = [
     duration: 'May 2026 - Present',
     type: 'Full-time',
     description:
-      'Building the AI layer of an XR simulation-training platform — turning text and images into interactive 3D learning experiences.',
+      'Building the AI layer of an XR simulation-training platform, turning text and images into interactive 3D learning experiences.',
     achievements: [
       'Cut 3D asset turnaround from days to hours with text/image-to-GLB generation pipelines delivered into XR via WebXR',
       'Mapped natural-language instructions to avatar actions and animation logic with explainable AI-driven reasoning',
-      'Removed the need for engineering support in customising simulations — training scenarios, role-play dialogues and learning tasks generated from prompts',
+      'Removed the need for engineering support in customising simulations: training scenarios, role-play dialogues and learning tasks generated from prompts',
       'Reduced manual grading workload across learner scenarios through automated assessment and feedback tooling',
     ],
     technologies: ['Python', 'FastAPI', 'Next.js', 'Docker', 'PostgreSQL'],
@@ -97,7 +97,7 @@ export default function Experience() {
             className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
           />
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70 lg:text-xl">
-            From ML foundations to production AI systems — and now the AI layer of XR education.
+            From ML foundations to production AI systems, and now the AI layer of XR education.
           </p>
         </AnimatedSection>
 
