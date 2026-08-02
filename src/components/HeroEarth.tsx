@@ -11,11 +11,11 @@ import { earthJourney } from '../lib/earthJourney';
  * then it docks under the progress hairline and hands over to a DOM orb.
  * Anchors are viewport-relative (x right+, y up+, each in [-0.5, 0.5]).
  */
-const PHASE_HERO = { nx: 0.25, ny: 0.02, s: 1 };
-const PHASE_ABOUT = { nx: 0.3, ny: 0.0, s: 0.55 };
+const PHASE_HERO = { nx: 0.34, ny: 0.05, s: 0.62 };
+const PHASE_ABOUT = { nx: 0.38, ny: 0.0, s: 0.42 };
 const PHASE_DOCK = { nx: 0.45, ny: 0.46, s: 0.055 };
 // Narrow screens: tuck the globe higher and smaller so it never crowds the hero text.
-const PHASE_HERO_SM = { nx: 0.22, ny: 0.24, s: 0.62 };
+const PHASE_HERO_SM = { nx: 0.2, ny: 0.26, s: 0.4 };
 // Y rotation (radians) at which Africa faces the camera — tuned visually.
 const AFRICA_Y = 0.55;
 // Texture-seam longitude offset for placing surface markers — tuned with AFRICA_Y.

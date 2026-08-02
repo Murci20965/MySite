@@ -23,7 +23,10 @@ import HeroBackdrop from './components/HeroBackdrop';
 
 function App() {
   return (
-    <div className="min-h-screen bg-black overflow-x-hidden">
+    // overflow-x-CLIP, never -hidden: `hidden` turns this into a scroll
+    // container and silently breaks every position:sticky on the page
+    // (the Vision expansion and the Principles card stack both depend on it).
+    <div className="min-h-screen bg-black overflow-x-clip">
       <FutureticParticles />
       <GlowingOrbs />
       <div className="grain-overlay" aria-hidden="true" />

@@ -30,11 +30,14 @@ export default function ExpandMedia() {
       if (dimRef.current) {
         dimRef.current.style.opacity = String(0.55 - p * 0.35);
       }
+      // Clamped so the words separate dramatically but never leave the
+      // viewport (42vw pushed "made spatial" off the right edge).
+      const spread = Math.min(26, (window.innerWidth * 0.26) / 16);
       if (leftRef.current) {
-        leftRef.current.style.transform = `translateX(${-p * 42}vw)`;
+        leftRef.current.style.transform = `translateX(${-p * spread}vw)`;
       }
       if (rightRef.current) {
-        rightRef.current.style.transform = `translateX(${p * 42}vw)`;
+        rightRef.current.style.transform = `translateX(${p * spread}vw)`;
       }
       if (copyRef.current) {
         const t = Math.max(0, (p - 0.72) / 0.28);
@@ -82,7 +85,7 @@ export default function ExpandMedia() {
 
           <div
             ref={mediaRef}
-            className="relative h-[78vh] w-[92vw] max-w-6xl overflow-hidden rounded-2xl border border-white/10 will-change-transform"
+            className="relative h-[64vh] w-[94vw] max-w-6xl overflow-hidden rounded-2xl border border-white/10 will-change-transform"
             style={{ transform: 'scale(0.3)' }}
           >
             <img
@@ -111,10 +114,10 @@ export default function ExpandMedia() {
 
           <div
             ref={copyRef}
-            className="pointer-events-none absolute bottom-16 z-20 max-w-xl px-6 text-center"
+            className="pointer-events-none absolute bottom-10 z-20 max-w-2xl px-6 text-center"
             style={{ opacity: 0 }}
           >
-            <p className="font-sans text-base leading-relaxed text-white/75 sm:text-lg">
+            <p className="font-sans text-base leading-relaxed text-white/85 sm:text-lg">
               Traditional education gates real skills behind resources and rigid methods. I&rsquo;m
               building toward XR learning where anyone, anywhere, can practise real skills —
               interactively, spatially, without the gatekeeping.
