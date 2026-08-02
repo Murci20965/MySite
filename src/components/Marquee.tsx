@@ -19,7 +19,7 @@ const ITEMS = [
 export default function Marquee() {
   const track = [...ITEMS, ...ITEMS];
   return (
-    <div className="t-marquee py-5" aria-hidden="true">
+    <div className="t-marquee py-7" aria-hidden="true">
       <div className="t-marquee-track">
         {track.map((item, i) => (
           <span key={i} className="flex shrink-0 items-center gap-8 pr-8">

@@ -81,7 +81,7 @@ const experiences: ExperienceData[] = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="relative bg-black py-24 lg:py-32">
+    <section id="experience" className="relative bg-black pt-12 pb-24 lg:pt-16 lg:pb-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">

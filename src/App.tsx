@@ -18,7 +18,6 @@ import ExpandMedia from './components/ExpandMedia';
 import Marquee from './components/Marquee';
 import ChatWidget from './components/ChatWidget';
 import FutureticParticles from './components/FutureticParticles';
-import GlowingOrbs from './components/GlowingOrbs';
 import HeroBackdrop from './components/HeroBackdrop';
 
 function App() {
@@ -28,7 +27,6 @@ function App() {
     // (the Vision expansion and the Principles card stack both depend on it).
     <div className="min-h-screen bg-black overflow-x-clip">
       <FutureticParticles />
-      <GlowingOrbs />
       <div className="grain-overlay" aria-hidden="true" />
       <div className="relative z-10">
         <SimpleCursor />
@@ -47,9 +45,10 @@ function App() {
             <Marquee />
             <Experience />
             <Projects />
+            {/* Receipts land right after the work, before the vision moment. */}
+            <Stats />
             <ExpandMedia />
             <Skills />
-            <Stats />
             <Blog />
             <OpenSource />
             <Education />
