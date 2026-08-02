@@ -24,7 +24,7 @@ export default function Footer() {
 
   return (
     <footer id="site-footer" className="border-t border-white/10 bg-black py-16">
-      <div className="mx-auto max-w-5xl px-6 lg:px-8">
+      <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <div className="grid gap-12 md:grid-cols-[2fr_1fr_1fr]">
           <div>
             <div className="font-display text-2xl font-medium text-white">

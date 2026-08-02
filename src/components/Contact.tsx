@@ -86,7 +86,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="relative bg-black py-24 lg:py-32">
-      <div className="mx-auto max-w-5xl px-6 lg:px-8">
+      <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">

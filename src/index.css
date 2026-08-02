@@ -789,6 +789,33 @@
   }
 }
 
+/* Project system diagrams: micro labels + a lime pulse that runs the flow
+   path on card hover, so the pipeline reads as alive. */
+.t-diagram-t {
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.t-diagram-pulse {
+  stroke-dasharray: 24 320;
+  stroke-dashoffset: 344;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.group:hover .t-diagram-pulse {
+  opacity: 1;
+  animation: t-diagram-run 1.5s linear infinite;
+}
+@keyframes t-diagram-run {
+  to { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .t-diagram-pulse {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 /* Capability marquee: duplicated track slides half its width, loops seamlessly. */
 .t-marquee {
   overflow: hidden;

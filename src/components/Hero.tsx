@@ -63,7 +63,7 @@ export default function Hero() {
       <div className="relative z-20 w-full">
         <div
           ref={stageRef}
-          className="t-stagger max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-20 py-12 sm:py-16 lg:py-20"
+          className="t-stagger mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24 py-12 sm:py-16 lg:py-20"
         >
           <div className="flex justify-start lg:justify-start">
             <div className="w-full lg:w-[62%] lg:pr-12 xl:pr-16">

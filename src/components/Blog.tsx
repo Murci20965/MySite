@@ -18,7 +18,6 @@ export default function Blog() {
       readTime: '6 min read',
       category: 'AI Engineering',
       tags: ['LLM Agents', 'Pydantic', 'FastAPI'],
-      image: '/projects/avatar-pipeline.png',
       link: 'https://github.com/Murci20965/MySite/blob/main/content/blog/one-llm-fourteen-animations.md',
     },
     {
@@ -29,7 +28,6 @@ export default function Blog() {
       readTime: '6 min read',
       category: '3D & XR',
       tags: ['Text-to-3D', 'Blender', 'WebGL'],
-      image: '/projects/orbit-3d-pipeline.png',
       link: 'https://github.com/Murci20965/MySite/blob/main/content/blog/taming-ai-generated-3d.md',
     },
     {
@@ -40,7 +38,6 @@ export default function Blog() {
       readTime: '5 min read',
       category: 'MLOps',
       tags: ['XGBoost', 'CI/CD', 'Docker'],
-      image: '/projects/real_estate_price_predictor.png',
       link: 'https://github.com/Murci20965/MySite/blob/main/content/blog/r2-is-not-the-finish-line.md',
     },
     {
@@ -51,7 +48,6 @@ export default function Blog() {
       readTime: '6 min read',
       category: 'Machine Learning',
       tags: ['Transfer Learning', 'PyTorch', 'Medical Imaging'],
-      image: '/projects/medical_image_classifier.png',
       link: 'https://github.com/Murci20965/MySite/blob/main/content/blog/transfer-learning-on-a-budget.md',
     },
   ];
@@ -100,7 +96,7 @@ export default function Blog() {
 
   return (
     <section id="blog" className="relative bg-black py-24 lg:py-32">
-      <div className="mx-auto max-w-5xl px-6 lg:px-8">
+      <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
@@ -135,7 +131,7 @@ export default function Blog() {
           </div>
         </AnimatedSection>
 
-        <div className="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2">
+        <div className="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2 xl:grid-cols-4">
           {filteredPosts.map((post, index) => (
             <AnimatedSection key={post.title} animation="fade-in" delay={index % 2 === 1}>
               <a
@@ -145,12 +141,13 @@ export default function Blog() {
                 className="group flex cursor-pointer flex-col"
               >
                 <TiltCard className="aspect-[16/10] border border-white/10">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    loading="lazy"
-                    className="h-full w-full object-cover"
-                  />
+                  {/* Typographic cover — no stock imagery, no repeated art. */}
+                  <div className="flex h-full w-full flex-col justify-between bg-[#0e0e0e] p-6">
+                    <span className="h-px w-10 bg-lime-400/50" />
+                    <span className="self-end font-display text-7xl leading-none text-white/[0.07]">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  </div>
                   <span className="absolute left-3 top-3 z-10 rounded-full bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/80 backdrop-blur-sm">
                     {post.category}
                   </span>

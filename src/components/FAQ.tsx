@@ -41,7 +41,7 @@ export default function FAQ() {
 
   return (
     <section id="faq" className="relative bg-black py-24 lg:py-32">
-      <div className="mx-auto max-w-3xl px-6 lg:px-8">
+      <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
@@ -50,17 +50,24 @@ export default function FAQ() {
             <span className="h-px flex-1 bg-white/15" />
             <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">09</span>
           </div>
-
-          <RevealHeading
-            text="Common questions"
-            className="mb-6 font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
-          />
-          <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
-            How I work, and what to expect from a project.
-          </p>
         </AnimatedSection>
 
-        <div className="mt-12 border-t border-white/10">
+        {/* Two columns so the answers keep a readable measure while the
+            section still spans the page. */}
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)] lg:gap-24">
+          <AnimatedSection animation="fade-in">
+            <div className="lg:sticky lg:top-32">
+              <RevealHeading
+                text="Common questions"
+                className="mb-6 font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl"
+              />
+              <p className="max-w-md font-sans text-lg leading-relaxed text-white/70">
+                How I work, and what to expect from a project.
+              </p>
+            </div>
+          </AnimatedSection>
+
+          <div className="border-t border-white/10">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
@@ -89,6 +96,7 @@ export default function FAQ() {
               </div>
             );
           })}
+          </div>
         </div>
       </div>
     </section>

@@ -9,7 +9,7 @@ export default function Stats() {
 
   return (
     <section id="stats" className="relative bg-black py-16 lg:py-20">
-      <div className="mx-auto max-w-5xl px-6 lg:px-8">
+      <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <div className="grid gap-10 border-y border-white/10 py-12 sm:grid-cols-3">
           {stats.map((stat) => (
             <div key={stat.label}>

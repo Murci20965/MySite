@@ -5,7 +5,7 @@ import { Github, Linkedin, Twitter } from 'lucide-react';
 export default function About() {
   return (
     <section id="about" className="relative pt-32 pb-24 lg:pt-40 lg:pb-32 overflow-hidden">
-      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in" delay>
           <div className="flex items-center gap-4 mb-8">
             <span className="font-mono text-[11px] tracking-[0.28em] uppercase text-white/50">

@@ -3,6 +3,7 @@ import { Github, ArrowUpRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
 import TiltCard from './TiltCard';
+import ProjectDiagram from './ProjectDiagram';
 
 const ModelViewer = lazy(() => import('./ModelViewer'));
 
@@ -27,7 +28,7 @@ export default function Projects() {
       model: PIPELINE_MODEL,
       description:
         'A "Director & Marionette" engine that translates natural language into 14 deterministic 3D skeletal animation states — Groq Llama-3.3-70b under strict Pydantic JSON validation, rendered in Next.js 16 / React Three Fiber with 0.5s animation crossfading.',
-      image: '/projects/avatar-pipeline.png',
+      diagram: 'avatar' as const,
       metrics: { accuracy: '14 states', impact: '0.5s crossfade', data: 'Llama-3.3-70b' },
       tech: ['FastAPI', 'Groq', 'Next.js 16', 'React Three Fiber', 'Docker'],
       github: 'https://github.com/Murci20965/avatar-pipeline',
@@ -40,7 +41,7 @@ export default function Projects() {
       model: PIPELINE_MODEL,
       description:
         'Multimodal text/image-to-3D generation pipeline producing optimised, web-ready 3D models — a Dockerised headless Blender engine centres, scales and formats AI-generated meshes for WebGL, with asyncio orchestration keeping latency low.',
-      image: '/projects/orbit-3d-pipeline.png',
+      diagram: 'orbit' as const,
       metrics: { accuracy: 'Text + image', impact: 'Web-ready GLB', data: 'Headless Blender' },
       tech: ['Next.js 16', 'FastAPI', 'Tripo3D', 'Llama-4 Vision', 'Blender'],
       github: 'https://github.com/Murci20965/orbit-3d-pipeline',
@@ -52,7 +53,7 @@ export default function Projects() {
       category: 'Machine Learning',
       description:
         'End-to-end MLOps system predicting house prices with gradient boosting — from training and evaluation through a CI/CD pipeline with GitHub Actions and Docker to a deployable FastAPI service.',
-      image: '/projects/real_estate_price_predictor.png',
+      diagram: 'regression' as const,
       metrics: { accuracy: 'R² 0.9037', impact: 'RMSE 0.1341', data: 'CI/CD + Docker' },
       tech: ['XGBoost', 'FastAPI', 'Docker', 'GitHub Actions'],
       github: 'https://github.com/Murci20965/real_estate_price_predictor',
@@ -64,7 +65,7 @@ export default function Projects() {
       category: 'Machine Learning',
       description:
         'End-to-end pneumonia-detection system on chest X-rays using ResNet50 transfer learning — full pipeline from training and evaluation to a deployment-ready FastAPI service with an interactive Streamlit UI.',
-      image: '/projects/medical_image_classifier.png',
+      diagram: 'transfer' as const,
       metrics: { accuracy: '82.85% acc', impact: '0.96 recall', data: 'ResNet50' },
       tech: ['PyTorch', 'ResNet50', 'FastAPI', 'Streamlit', 'Docker'],
       github: 'https://github.com/Murci20965/medical_image_classifier',
@@ -76,7 +77,7 @@ export default function Projects() {
       category: 'AI Apps',
       description:
         'Automated tool that evaluates how well a jobseeker’s resume matches a job posting — structured LLM analysis turned into actionable fit feedback.',
-      image: '/projects/resume-match-ai.png',
+      diagram: 'match' as const,
       metrics: { accuracy: 'Fit scoring', impact: 'Instant feedback', data: 'LLM-powered' },
       tech: ['Python', 'LLM APIs', 'FastAPI'],
       github: 'https://github.com/Murci20965/resume-match-ai',
@@ -88,7 +89,7 @@ export default function Projects() {
       category: 'AI Apps',
       description:
         'AI-powered personal finance management system — automated transaction understanding and budgeting intelligence built as a full-stack TypeScript application.',
-      image: '/projects/smart-spend.png',
+      diagram: 'spend' as const,
       metrics: { accuracy: 'Auto-categorise', impact: 'Budget insight', data: 'Full-stack TS' },
       tech: ['TypeScript', 'React', 'AI APIs'],
       github: 'https://github.com/Murci20965/smart-spend',
@@ -137,7 +138,7 @@ export default function Projects() {
 
   return (
     <section id="projects" className="relative bg-black py-24 lg:py-32">
-      <div className="mx-auto max-w-5xl px-6 lg:px-8">
+      <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
@@ -172,7 +173,7 @@ export default function Projects() {
           </div>
         </AnimatedSection>
 
-        <div className="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2">
+        <div className="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2 xl:grid-cols-3">
           {filteredProjects.map((project, index) => (
             <AnimatedSection key={project.title} animation="fade-in" delay={index % 2 === 1}>
               <article className="group flex flex-col">
@@ -193,12 +194,7 @@ export default function Projects() {
                     </div>
                   ) : (
                     <TiltCard className="aspect-[16/10] border border-white/10">
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        loading="lazy"
-                        className="h-full w-full object-cover"
-                      />
+                      <ProjectDiagram variant={project.diagram} />
                       <span className="absolute left-3 top-3 z-10 rounded-full bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/80 backdrop-blur-sm">
                         {project.category}
                       </span>
