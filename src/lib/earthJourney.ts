@@ -20,6 +20,16 @@ export interface EarthPose {
   o: number;
   /** y rotation target in radians; null keeps the idle spin */
   ry: number | null;
+  /**
+   * Minimum position of the globe's LEFT edge, as a fraction of viewport
+   * width, so it can sit close to the copy without ever covering it.
+   *
+   * The globe's on-screen size is driven by viewport HEIGHT (the camera's
+   * vertical fov is fixed) while `nx` is a fraction of WIDTH, so a single nx
+   * that looks right on a short window overlaps the text on a tall one.
+   * This clamp is resolved per frame against the real radius. 0 = no clamp.
+   */
+  clampLeft?: number;
 }
 
 export interface EarthStation extends EarthPose {
@@ -45,10 +55,19 @@ export const AFRICA_Y = 0.55;
  * `hold` parks a pose while a tall or pinned section plays out.
  */
 export const STATIONS: EarthStation[] = [
-  // nx is the horizontal anchor: lower values pull the planet left, toward
-  // the hero copy. 0.34 closes most of the gap while leaving the bio clear.
-  { at: 'hero', nx: 0.34, ny: 0.02, s: 1.5, o: 1, ry: null, hold: 0.3 },
-  { at: 'about', nx: 0.4, ny: -0.02, s: 0.95, o: 0.92, ry: AFRICA_Y, hold: 0.25 },
+  // nx pulls the planet toward the copy; clampLeft stops it at the text edge
+  // on any screen, so these two ride as close as they are allowed to.
+  { at: 'hero', nx: 0.16, ny: 0.02, s: 1.5, o: 1, ry: null, hold: 0.3, clampLeft: 0.52 },
+  {
+    at: 'about',
+    nx: 0.3,
+    ny: -0.02,
+    s: 0.95,
+    o: 0.92,
+    ry: AFRICA_Y,
+    hold: 0.25,
+    clampLeft: 0.52,
+  },
   { at: 'experience', nx: 0.6, ny: 0.08, s: 0.55, o: 0.42, ry: AFRICA_Y, hold: 0.2 },
   { at: 'projects', nx: 0.68, ny: 0.16, s: 0.4, o: 0.14, ry: AFRICA_Y, hold: 0.35 },
   { at: 'stats', nx: 0.6, ny: 0.0, s: 0.5, o: 0.26, ry: AFRICA_Y },

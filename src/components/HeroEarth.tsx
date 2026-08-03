@@ -51,9 +51,22 @@ function EarthModel({ baseScale }: { baseScale: number }) {
     // loop only damps toward it, so motion stays smooth at any scroll speed.
     const pose = reduce ? STATIONS[0] : earthJourney.pose;
 
-    g.position.x = MathUtils.damp(g.position.x, pose.nx * viewport.width, 5, delta);
+    const scale = pose.s * baseScale;
+
+    // Hold the globe's left edge clear of the copy. Its on-screen size comes
+    // from viewport HEIGHT (fixed vertical fov) while nx is a fraction of
+    // WIDTH, so without this a value tuned on a short window overlaps the
+    // text on a tall one. Resolved per frame against the measured radius.
+    let targetX = pose.nx * viewport.width;
+    const clamp = pose.clampLeft ?? 0;
+    if (clamp > 0) {
+      const minCentre = (clamp - 0.5) * viewport.width + radius * scale;
+      targetX = Math.max(targetX, minCentre);
+    }
+
+    g.position.x = MathUtils.damp(g.position.x, targetX, 5, delta);
     g.position.y = MathUtils.damp(g.position.y, pose.ny * viewport.height, 5, delta);
-    g.scale.setScalar(MathUtils.damp(g.scale.x, pose.s * baseScale, 5, delta));
+    g.scale.setScalar(MathUtils.damp(g.scale.x, scale, 5, delta));
 
     // Rotation: idle spin until a station asks for a specific facing.
     if (reduce) {
@@ -177,6 +190,8 @@ export default function HeroEarth() {
       pose.ny = MathUtils.lerp(a.st.ny, b.st.ny, t);
       pose.s = MathUtils.lerp(a.st.s, b.st.s, t);
       pose.o = MathUtils.lerp(a.st.o, b.st.o, t);
+      // 0 means "no clamp", so interpolating in and out of it is safe.
+      pose.clampLeft = MathUtils.lerp(a.st.clampLeft ?? 0, b.st.clampLeft ?? 0, t);
       pose.ry = a.st.ry === null && t < 0.5 ? null : (b.st.ry ?? a.st.ry);
 
       // The About beat (the Johannesburg dot) runs on its own local progress.
