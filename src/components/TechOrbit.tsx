@@ -93,16 +93,43 @@ function ParticleCore() {
         ctx.fillRect(cx + x3 * r, cy + y3 * r, size, size);
       }
       ctx.globalAlpha = 1;
-      if (!reduce) {
-        rot += 0.0022;
-        raf = requestAnimationFrame(draw);
-      }
+      if (!reduce) rot += 0.0022;
     };
-    raf = requestAnimationFrame(draw);
+
+    // Only spin while the section is near the viewport. Skills is one of
+    // thirteen sections, so this idles ~90% of a scroll through the page.
+    let running = false;
+    const loop = () => {
+      draw();
+      raf = running ? requestAnimationFrame(loop) : 0;
+    };
+    const start = () => {
+      if (reduce) {
+        draw();
+        return;
+      }
+      if (running) return;
+      running = true;
+      raf = requestAnimationFrame(loop);
+    };
+    const stop = () => {
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    };
+
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop()), {
+      rootMargin: '200px',
+    });
+    io.observe(canvas);
+    const onVisibility = () => (document.hidden ? stop() : undefined);
+    document.addEventListener('visibilitychange', onVisibility);
 
     window.addEventListener('resize', resize);
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('resize', resize);
     };
   }, []);

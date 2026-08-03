@@ -38,8 +38,18 @@ export default function FutureticParticles() {
     }
 
     let rafId = 0;
+    // The link-drawing below is O(n²) (50 particles = 1225 pair checks per
+    // frame). At 60fps that is pure waste for a backdrop nobody looks at, so
+    // it runs at ~30fps and stops entirely when the tab is hidden.
+    const FRAME_MS = 1000 / 30;
+    let last = 0;
 
-    const animate = () => {
+    const animate = (now = 0) => {
+      if (now - last < FRAME_MS) {
+        rafId = requestAnimationFrame(animate);
+        return;
+      }
+      last = now;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
 
@@ -83,10 +93,20 @@ export default function FutureticParticles() {
       canvas.height = window.innerHeight;
     };
 
+    const onVisibility = () => {
+      cancelAnimationFrame(rafId);
+      if (!document.hidden) {
+        last = 0;
+        rafId = requestAnimationFrame(animate);
+      }
+    };
+
     window.addEventListener('resize', handleResize);
+    document.addEventListener('visibilitychange', onVisibility);
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
 

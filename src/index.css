@@ -789,6 +789,47 @@
   }
 }
 
+/* ---- Section entrance ------------------------------------------------------
+   Every section enters the same way: content wipes up from under a clip-path
+   with a small settle, instead of a flat opacity fade. One behaviour applied
+   everywhere is what makes a long page feel composed rather than assembled. */
+:root {
+  --enter-dur: 760ms;
+  --enter-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --enter-rise: 22px;
+  --enter-delay: 130ms;
+}
+
+.t-enter {
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+  transform: translateY(var(--enter-rise));
+  transition:
+    clip-path var(--enter-dur) var(--enter-ease),
+    opacity calc(var(--enter-dur) * 0.7) var(--enter-ease),
+    transform var(--enter-dur) var(--enter-ease);
+  will-change: clip-path, transform;
+}
+.t-enter--delay {
+  transition-delay: var(--enter-delay);
+}
+.t-enter.is-in {
+  clip-path: inset(0 0 0 0);
+  opacity: 1;
+  transform: none;
+  /* released once the entrance is done so long pages don't keep layers alive */
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-enter {
+    clip-path: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 /* Project system diagrams: micro labels + a lime pulse that runs the flow
    path on card hover, so the pipeline reads as alive. */
 .t-diagram-t {
