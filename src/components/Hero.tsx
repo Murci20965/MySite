@@ -74,8 +74,10 @@ export default function Hero() {
                 </span>
               </div>
 
-              <h1 className="t-stagger-line t-stagger-line--2 font-display text-4xl sm:text-5xl md:text-6xl xl:text-[4.25rem] font-semibold mb-6 leading-[0.95] tracking-[-0.015em]">
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 sm:gap-x-5">
+              {/* One line, always: the name never wraps, so it scales with the
+                  viewport instead of breaking across two rows. */}
+              <h1 className="t-stagger-line t-stagger-line--2 font-display text-[clamp(2rem,8.6vw,3rem)] lg:text-[clamp(3rem,4.3vw,4.6rem)] font-semibold mb-6 leading-[1] tracking-[-0.02em] whitespace-nowrap">
+                <div className="flex flex-nowrap items-center gap-x-3 sm:gap-x-4">
                   <span className="text-white whitespace-nowrap">Nhlanhla</span>
                   <span className="text-white/50 whitespace-nowrap">
                     M

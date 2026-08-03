@@ -101,6 +101,14 @@ export default function ExpandMedia() {
             <div ref={dimRef} className="absolute inset-0 bg-black" style={{ opacity: 0.55 }} />
           </div>
 
+          {/* Legibility scrim: sits above the returning Earth (z-30) and below
+              the type (z-40), so the planet reads as atmosphere behind the
+              words instead of competing with them. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-[35] bg-[radial-gradient(ellipse_60%_45%_at_50%_45%,rgba(0,0,0,0.72),rgba(0,0,0,0.35)_60%,transparent_85%)]"
+          />
+
           {/* z-40 keeps the title above the travelling Earth layer, which
               lifts to z-30 when it returns as this section's horizon. */}
           <div className="pointer-events-none absolute z-40 flex w-full flex-col items-center gap-2 text-center mix-blend-difference">

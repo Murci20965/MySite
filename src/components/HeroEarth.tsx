@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import { Box3, MathUtils, Vector3 } from 'three';
 import type { Group, Mesh } from 'three';
-import { earthJourney, STATIONS, STATIONS_SM } from '../lib/earthJourney';
+import { AFRICA_Y, earthJourney, STATIONS, STATIONS_SM } from '../lib/earthJourney';
 import type { EarthStation } from '../lib/earthJourney';
 
 /* The Earth crosses the whole page. Where it sits per section lives in
@@ -76,7 +76,9 @@ function EarthModel({ baseScale }: { baseScale: number }) {
   });
 
   return (
-    <group ref={group}>
+    // Starts facing Africa so the first impression is always land, then the
+    // hero's idle spin drifts on from there.
+    <group ref={group} rotation={[0, AFRICA_Y, 0]}>
       <primitive object={scene} scale={0.003} />
       <mesh ref={dot} position={joburg}>
         <sphereGeometry args={[radius * 0.045, 16, 16]} />
@@ -237,8 +239,12 @@ export default function HeroEarth() {
           dpr={small ? [1, 1.25] : [1, 1.5]}
           camera={{ position: [0, 0, 8], fov: 42 }}
         >
-          <ambientLight intensity={0.35} />
-          <directionalLight position={[5, 2, 5]} intensity={2.6} />
+          {/* Lit from near the camera with a slight offset: at the larger hero
+              scale a side light left most of the visible hemisphere in night,
+              so the planet read as a dark blob. This keeps a terminator for
+              depth while the face we actually see stays lit. */}
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[3, 2.5, 9]} intensity={3} />
           <Suspense fallback={null}>
             <EarthModel baseScale={small ? 0.7 : 1} />
           </Suspense>
