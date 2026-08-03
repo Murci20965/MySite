@@ -789,6 +789,15 @@
   }
 }
 
+/* The travelling Earth is decoration and must never intercept input. Its
+   R3F canvas sets pointer-events:auto on its own wrapper, so this is enforced
+   for the whole subtree. Scoped to this layer so the project-card model
+   viewer stays draggable. */
+.t-earth-layer,
+.t-earth-layer * {
+  pointer-events: none !important;
+}
+
 /* ---- Section entrance ------------------------------------------------------
    Every section enters the same way: content wipes up from under a clip-path
    with a small settle, instead of a flat opacity fade. One behaviour applied

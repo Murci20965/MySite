@@ -245,11 +245,18 @@ export default function HeroEarth() {
     // as a 300x150 default canvas — an invisible Earth).
     <div
       ref={containerRef}
-      className="pointer-events-none fixed left-0 top-0 z-0 h-[100dvh] w-screen"
+      className="t-earth-layer pointer-events-none fixed left-0 top-0 z-0 h-[100dvh] w-screen"
       style={{ opacity: 1 }}
     >
       {sized && !journeyDone && (
         <Canvas
+          // R3F's wrapper hard-sets pointerEvents:'auto', which re-enables
+          // pointer events inside our pointer-events-none layer. Because this
+          // canvas covers the viewport and lifts above content at some
+          // stations, it swallowed every click (forms became untypable).
+          // Overridden here and again in CSS, since this style object is
+          // spread after R3F's default.
+          style={{ pointerEvents: 'none' }}
           gl={{ alpha: true, antialias: !small }}
           dpr={small ? [1, 1.25] : [1, 1.5]}
           camera={{ position: [0, 0, 8], fov: 42 }}
