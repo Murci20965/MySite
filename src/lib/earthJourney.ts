@@ -45,8 +45,10 @@ export const AFRICA_Y = 0.55;
  * `hold` parks a pose while a tall or pinned section plays out.
  */
 export const STATIONS: EarthStation[] = [
-  { at: 'hero', nx: 0.45, ny: 0.02, s: 1.5, o: 1, ry: null, hold: 0.3 },
-  { at: 'about', nx: 0.44, ny: -0.02, s: 0.95, o: 0.92, ry: AFRICA_Y, hold: 0.25 },
+  // nx is the horizontal anchor: lower values pull the planet left, toward
+  // the hero copy. 0.34 closes most of the gap while leaving the bio clear.
+  { at: 'hero', nx: 0.34, ny: 0.02, s: 1.5, o: 1, ry: null, hold: 0.3 },
+  { at: 'about', nx: 0.4, ny: -0.02, s: 0.95, o: 0.92, ry: AFRICA_Y, hold: 0.25 },
   { at: 'experience', nx: 0.6, ny: 0.08, s: 0.55, o: 0.42, ry: AFRICA_Y, hold: 0.2 },
   { at: 'projects', nx: 0.68, ny: 0.16, s: 0.4, o: 0.14, ry: AFRICA_Y, hold: 0.35 },
   { at: 'stats', nx: 0.6, ny: 0.0, s: 0.5, o: 0.26, ry: AFRICA_Y },
