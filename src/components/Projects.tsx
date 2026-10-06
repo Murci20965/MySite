@@ -107,9 +107,9 @@ export default function Projects() {
     if (!container || !underline) return;
     const active = container.querySelector<HTMLElement>('[data-active="true"]');
     if (!active) return;
+    // The bar is 1px wide: one transform both places and stretches it.
     const apply = () => {
-      underline.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop + active.offsetHeight}px)`;
-      underline.style.width = `${active.offsetWidth}px`;
+      underline.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop + active.offsetHeight}px) scaleX(${active.offsetWidth})`;
     };
     if (animate) {
       apply();
