@@ -30,14 +30,9 @@ export default function HeroTerminal() {
   };
 
   return (
-    <div className="t-terminal absolute inset-x-[4%] bottom-[5%] rounded-lg border border-white/10 bg-black/70 font-mono text-[12px] leading-relaxed text-white/85 backdrop-blur-md">
-      <div className="flex items-center gap-2 border-b border-white/10 px-3 py-2">
-        <span className="h-2 w-2 rounded-full bg-white/20" />
-        <span className="h-2 w-2 rounded-full bg-white/20" />
-        <span className="h-2 w-2 rounded-full bg-lime-400/80" />
-        <span className="ml-2 text-[11px] text-white/55">murci@portfolio: ~/ask</span>
-      </div>
-
+    // Two rows at rest (suggestions, prompt) so the film keeps most of the
+    // screen; the identity a title bar would carry lives in the prompt.
+    <div className="t-terminal absolute inset-x-[4%] bottom-[4%] rounded-lg border border-white/10 bg-black/70 font-mono text-[12px] leading-relaxed text-white/85 backdrop-blur-md">
       <div ref={outRef} className="max-h-[6rem] overflow-y-auto px-3 pt-2 sm:max-h-[7.5rem]" aria-live="polite" aria-busy={busy}>
         {lastQuestion ? (
           <>
@@ -65,13 +60,16 @@ export default function HeroTerminal() {
       </div>
 
       <form
-        className="flex items-center gap-2 px-3 pb-2.5 pt-1.5"
+        className="flex items-center gap-2 px-3 pb-2 pt-1"
         onSubmit={(e) => {
           e.preventDefault();
           ask(input);
         }}
       >
-        <span className="text-lime-400" aria-hidden="true">$</span>
+        <span aria-hidden="true" className="shrink-0">
+          <span className="hidden text-white/55 sm:inline">murci@portfolio:</span>
+          <span className="text-lime-400">~$</span>
+        </span>
         <label htmlFor="hero-ask" className="sr-only">
           Ask the portfolio assistant about Murci
         </label>
