@@ -258,7 +258,7 @@ export default function OpenSource() {
         >
           <div className={`mx-auto w-full max-w-[1760px] ${gutter}`}>
             <AnimatedSection animation="fade-in">
-              <div className="mb-8 flex items-center gap-4">
+              <div className={`flex items-center gap-4 ${pinned ? 'mb-6' : 'mb-8'}`}>
                 <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
                   Open source
                 </span>
@@ -302,7 +302,7 @@ export default function OpenSource() {
           <ol
             ref={trackRef}
             aria-label="Open-source projects"
-            className={`flex gap-6 ${gutter} ${pinned ? 'mt-8' : 'mt-10'} ${
+            className={`flex gap-6 ${gutter} ${pinned ? 'mt-6' : 'mt-10'} ${
               pinned
                 ? 't-film-track'
                 : 't-carousel snap-x snap-mandatory overflow-x-auto scroll-px-6 pb-4 sm:scroll-px-10 lg:scroll-px-16 xl:scroll-px-24'
@@ -312,12 +312,14 @@ export default function OpenSource() {
               <li
                 key={w.repo}
                 className={`group relative flex shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0e0e0e] ${
-                  pinned ? 'h-[min(54vh,480px)] w-[min(440px,36vw)]' : 'w-[82vw] sm:w-[400px]'
+                  pinned ? 'w-[min(440px,36vw)]' : 'w-[82vw] sm:w-[400px]'
                 }`}
               >
-                {/* Art is wider than its frame (inset -2rem) so the parallax
+                {/* Fixed-height art, so the panel's height comes from its content
+                    (a fixed panel height clipped the links at 768px tall). The
+                    art is wider than its frame (inset -2rem) so the parallax
                     shift never reveals an edge. */}
-                <div className="relative h-[42%] min-h-[150px] shrink-0 overflow-hidden">
+                <div className="relative h-32 shrink-0 overflow-hidden xl:h-36">
                   <div className="t-film-art absolute inset-y-0 -left-8 -right-8">
                     <ProjectDiagram variant={w.diagram} />
                   </div>
@@ -336,7 +338,11 @@ export default function OpenSource() {
                   </div>
                   <h3 className="mb-2 font-display text-2xl font-medium text-white">{w.title}</h3>
                   <div className="mb-3 font-mono text-sm text-white">{w.metric}</div>
-                  <p className="mb-4 line-clamp-3 font-sans text-sm leading-relaxed text-white/60">{w.summary}</p>
+                  <p
+                    className={`mb-4 font-sans text-sm leading-relaxed text-white/60 ${pinned ? 'line-clamp-2' : 'line-clamp-3'}`}
+                  >
+                    {w.summary}
+                  </p>
                   <div className="mb-5 flex flex-wrap gap-2">
                     {w.tags.map((tag) => (
                       <span
