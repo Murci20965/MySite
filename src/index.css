@@ -161,105 +161,6 @@
 }
 
 :root {
-  /* card tilt (19): motion comes from the spring in TiltCard.tsx, which
-     writes --tilt-rx/ry/lift/scale each frame; only the glare fades in CSS */
-  --tilt-perspective: 1200px;
-  --tilt-glare-opacity: 0.26;
-  --tilt-glare-fade: 400ms;
-  --tilt-glare-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  /* tabs sliding (16), adapted to a sliding underline */
-  --tabs-dur: 320ms;
-  --tabs-ease: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Card hover tilt (transitions.dev 19), spring-driven. No touch-action
-   override: touch never tilts, so a swipe that starts on a card scrolls. */
-.t-tilt-card {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  transform:
-    perspective(var(--tilt-perspective))
-    translate3d(0, var(--tilt-lift, 0px), 0)
-    rotateX(var(--tilt-rx, 0deg))
-    rotateY(var(--tilt-ry, 0deg))
-    scale(var(--tilt-scale, 1));
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-.t-tilt-glare {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  mix-blend-mode: screen;
-  background:
-    radial-gradient(circle 95px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
-      rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.06) 52%, rgba(255, 255, 255, 0) 84%),
-    radial-gradient(circle 200px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
-      rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04) 58%, rgba(255, 255, 255, 0) 78%),
-    radial-gradient(circle 360px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
-      rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 88%);
-  transition: opacity var(--tilt-glare-fade) var(--tilt-glare-ease);
-}
-.t-tilt.is-hover .t-tilt-glare {
-  opacity: var(--tilt-glare-opacity);
-}
-
-/* Spotlight border (21st.dev pattern): a 1px ring lit lime where the cursor
-   is, carved out with a mask so only the border glows. Reuses the glare's
-   cursor vars — no extra JS. */
-.t-tilt-spot {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  padding: 1px;
-  background: radial-gradient(
-    240px circle at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
-    rgba(163, 230, 53, 0.55),
-    rgba(163, 230, 53, 0.08) 55%,
-    transparent 78%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity var(--tilt-glare-fade) var(--tilt-glare-ease);
-}
-.t-tilt.is-hover .t-tilt-spot {
-  opacity: 1;
-}
-
-/* Sliding underline (transitions.dev 16, adapted to editorial text tabs) */
-/* A fixed 1px bar positioned and stretched by one transform
-   (translate + scaleX), so sliding between tabs never touches layout. */
-.t-underline {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 2px;
-  width: 1px;
-  background: #fff;
-  transform-origin: 0 50%;
-  transform: translate(0, 0) scaleX(0);
-  transition: transform var(--tabs-dur) var(--tabs-ease);
-  will-change: transform;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .t-tilt-card {
-    transform: none !important;
-    transition: none !important;
-  }
-  .t-underline {
-    transition: none !important;
-  }
-}
-
-:root {
   /* number pop-in (02) */
   --digit-dur: 500ms;
   --digit-distance: 8px;
@@ -442,6 +343,13 @@
   --chars-stagger: 18ms;
   --chars-rise: 0.35em;
   --chars-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Scroll-linked layers (progress bar, Vision band) are written from scroll
+   position every frame; they opt out of the global `*` transition rule, which
+   would otherwise ease each write over 200ms and make them trail the scroll. */
+.t-scroll-linked {
+  transition: none;
 }
 
 /* Reading-progress hairline: transform-driven so it never triggers layout. */
@@ -688,64 +596,6 @@
   }
 }
 
-/* ---- Skeleton loader (transitions.dev 14, transform/opacity variant) -------
-   The 3D viewer's placeholder. The orb pulses (opacity), a highlight band
-   sweeps across (transform), and the layer fades out once the model is
-   ready. The upstream snippet's cross-blur is dropped: filters are off the
-   animated path site-wide. */
-:root {
-  --skel-pulse-dur: 1000ms;
-  --skel-pulse-min: 0.5;
-  --skel-sweep-dur: 1400ms;
-  --skel-reveal-dur: 400ms;
-}
-.t-skel-viewer {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  overflow: hidden;
-  background: #0b0b0b;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity var(--skel-reveal-dur) ease-in-out;
-}
-.t-skel-viewer.is-ready {
-  opacity: 0;
-}
-.t-skel-orb {
-  width: 34%;
-  max-width: 160px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02) 60%, transparent 70%);
-  animation: t-skel-pulse var(--skel-pulse-dur) ease-in-out infinite alternate;
-}
-/* 40% wide band; translateX is relative to its own width, so -100% -> 350%
-   carries it from fully off the left edge to fully off the right. */
-.t-skel-sweep {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 40%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
-  transform: translateX(-100%);
-  animation: t-skel-sweep var(--skel-sweep-dur) linear infinite;
-}
-@keyframes t-skel-pulse {
-  from { opacity: 1; }
-  to { opacity: var(--skel-pulse-min); }
-}
-@keyframes t-skel-sweep {
-  to { transform: translateX(350%); }
-}
-
 /* Typing indicator (chat): three dots rise and brighten in sequence. */
 .t-typing {
   display: inline-flex;
@@ -769,60 +619,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .t-skel-orb,
   .t-typing span {
     animation: none !important;
-  }
-  .t-skel-sweep {
-    display: none;
-  }
-  .t-skel-viewer {
-    transition: none !important;
-  }
-  .t-typing span {
     opacity: 0.7;
-  }
-}
-
-/* ---- Project filter: same-document view transition ------------------------
-   Only the named project cards are captured. The root is opted out, so the
-   rest of the page (including the sliding filter underline, which runs its
-   own transition) stays live instead of being frozen into a snapshot.
-   Measured in the production build, 6 alternating runs each: capturing the
-   root (a 21k px page with two canvases) stalled 2 of 6 transitions for
-   1.1-1.4 s before any motion started; without it, all 6 started in
-   67-150 ms. Cards present in both states glide to their new slot (the
-   group animates transform); cards entering or leaving fade and scale. */
-:root {
-  view-transition-name: none;
-}
-::view-transition-group(*) {
-  animation-duration: 420ms;
-  animation-timing-function: var(--stagger-ease);
-}
-::view-transition-new(*):only-child {
-  animation: t-vt-enter 360ms var(--stagger-ease) both;
-}
-::view-transition-old(*):only-child {
-  animation: t-vt-exit 200ms ease-in both;
-}
-@keyframes t-vt-enter {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-}
-@keyframes t-vt-exit {
-  to {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
   }
 }
 
@@ -862,5 +661,65 @@
   .t-navlink::after,
   .t-nudge {
     transition: none !important;
+  }
+}
+
+/* ---- Open-source filmstrip ---------------------------------------------------
+   Pinned mode: OpenSource.tsx writes one translate3d on the track and an
+   opacity/scale per panel from scroll progress; nothing here animates on its
+   own. The progress bar is a full-width bar scaled from the left. */
+.t-film-track {
+  will-change: transform;
+}
+.t-film-track > li,
+.t-film-art {
+  will-change: transform, opacity;
+}
+/* Scroll-linked motion must track the scroll exactly: opt out of the global
+   `*` transition rule, which would ease every write over 200ms and make the
+   strip trail the scrollbar. */
+.t-film-track,
+.t-film-track > li,
+.t-film-art {
+  transition: none;
+}
+.t-film-bar {
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+
+/* "Live" badge: a lime dot with a ring that expands and fades (transform +
+   opacity), marking the projects with a working demo. */
+.t-live {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.t-live::before,
+.t-live::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a3e635;
+}
+.t-live::after {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -3px;
+  animation: t-live-ping 1.8s ease-out infinite;
+}
+@keyframes t-live-ping {
+  to {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-live::after {
+    animation: none !important;
+    opacity: 0;
   }
 }

@@ -50,7 +50,7 @@ export const AFRICA_Y = 0.55;
  * Desktop timeline. Order must match the page's section order.
  *
  * The planet is a companion, not a switch: it swells and recedes rather than
- * blinking on and off. Only the Blog-to-Education stretch drops to true zero,
+ * blinking on and off. Only the Education stretch drops to true zero,
  * which gives the page one real rest (and lets the canvas unmount there).
  * `hold` parks a pose while a tall or pinned section plays out.
  */
@@ -69,15 +69,14 @@ export const STATIONS: EarthStation[] = [
     clampLeft: 0.52,
   },
   { at: 'experience', nx: 0.6, ny: 0.08, s: 0.55, o: 0.42, ry: AFRICA_Y, hold: 0.2 },
-  { at: 'projects', nx: 0.68, ny: 0.16, s: 0.4, o: 0.14, ry: AFRICA_Y, hold: 0.35 },
+  // Pinned filmstrip: park faintly while the strip slides past.
+  { at: 'opensource', nx: 0.68, ny: 0.16, s: 0.4, o: 0.14, ry: AFRICA_Y, hold: 0.6 },
   { at: 'stats', nx: 0.6, ny: 0.0, s: 0.5, o: 0.26, ry: AFRICA_Y },
   // Returns as the horizon behind Vision. Sits LOW so the title keeps a clear
   // field, and stays parked while the pinned section plays out.
   { at: 'vision', nx: 0.0, ny: -1.05, s: 1.45, o: 0.6, ry: AFRICA_Y, hold: 0.55 },
   { at: 'skills', nx: -0.3, ny: -0.5, s: 0.7, o: 0.16, ry: AFRICA_Y, hold: 0.3 },
   // The rest: dense reading, no planet.
-  { at: 'blog', nx: -0.55, ny: 0.2, s: 0.35, o: 0, ry: AFRICA_Y },
-  { at: 'opensource', nx: -0.55, ny: 0.2, s: 0.35, o: 0, ry: AFRICA_Y },
   { at: 'education', nx: -0.5, ny: 0.25, s: 0.3, o: 0, ry: AFRICA_Y, hold: 0.45 },
   { at: 'reviews', nx: -0.46, ny: 0.24, s: 0.34, o: 0.3, ry: AFRICA_Y, hold: 0.3 },
   { at: 'faq', nx: -0.5, ny: 0.28, s: 0.3, o: 0.16, ry: AFRICA_Y },

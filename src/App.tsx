@@ -2,10 +2,8 @@ import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import About from './components/About';
 import Experience from './components/Experience';
-import Projects from './components/Projects';
 import Skills from './components/Skills';
 import Stats from './components/Stats';
-import Blog from './components/Blog';
 import OpenSource from './components/OpenSource';
 import Education from './components/Education';
 import Testimonials from './components/Testimonials';
@@ -44,13 +42,12 @@ function App() {
           <div className="relative">
             <Marquee />
             <Experience />
-            <Projects />
+            {/* One work section: every project is open source. */}
+            <OpenSource />
             {/* Receipts land right after the work, before the vision moment. */}
             <Stats />
             <ExpandMedia />
             <Skills />
-            <Blog />
-            <OpenSource />
             <Education />
             <Testimonials />
             <FAQ />
