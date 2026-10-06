@@ -762,6 +762,66 @@
 }
 .t-typing span {
   width: 5px;
+
+/* ---- Open-source filmstrip ---------------------------------------------------
+   Pinned mode: OpenSource.tsx writes one translate3d on the track and an
+   opacity/scale per panel from scroll progress; nothing here animates on its
+   own. The progress bar is a full-width bar scaled from the left. */
+.t-film-track {
+  will-change: transform;
+}
+.t-film-track > li,
+.t-film-art {
+  will-change: transform, opacity;
+}
+/* Scroll-linked motion must track the scroll exactly: opt out of the global
+   `*` transition rule, which would ease every write over 200ms and make the
+   strip trail the scrollbar. */
+.t-film-track,
+.t-film-track > li,
+.t-film-art {
+  transition: none;
+}
+.t-film-bar {
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+
+/* "Live" badge: a lime dot with a ring that expands and fades (transform +
+   opacity), marking the projects with a working demo. */
+.t-live {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.t-live::before,
+.t-live::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a3e635;
+}
+.t-live::after {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -3px;
+  animation: t-live-ping 1.8s ease-out infinite;
+}
+@keyframes t-live-ping {
+  to {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-live::after {
+    animation: none !important;
+    opacity: 0;
+  }
+}
   height: 5px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.7);
