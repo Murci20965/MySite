@@ -35,7 +35,9 @@ function App() {
           {/* No background here: the fixed Earth canvas paints beneath this
               wrapper, so an opaque bg would hide it. The page black comes
               from the root element. */}
-          <div className="relative overflow-hidden">
+          {/* overflow-CLIP, not -hidden: the hero pins (sticky) while its
+              film plays, and `hidden` would make this the scroll container. */}
+          <div className="relative overflow-clip">
             <Hero />
             <About />
           </div>
