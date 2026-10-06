@@ -202,7 +202,7 @@ export default function ChatWidget() {
               aria-label="Send question"
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-black transition duration-300 hover:bg-white/85 active:scale-[0.98] disabled:opacity-50"
             >
-              <ArrowUpRight className="h-4 w-4" />
+              <ArrowUpRight className="t-nudge h-4 w-4" />
             </button>
           </form>
         </div>

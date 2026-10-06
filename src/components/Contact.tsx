@@ -177,7 +177,7 @@ export default function Contact() {
                       </span>
                       <span className="mt-1 flex items-center gap-1.5 font-sans text-sm text-white/80 transition-colors group-hover:text-white">
                         {link.value}
-                        <ArrowUpRight className="h-3.5 w-3.5 text-white/40" />
+                        <ArrowUpRight className="t-nudge h-3.5 w-3.5 text-white/40" />
                       </span>
                     </a>
                   </li>

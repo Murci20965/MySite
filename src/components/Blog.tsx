@@ -176,7 +176,7 @@ export default function Blog() {
                   </div>
 
                   <span className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors group-hover:text-white">
-                    Read more <ArrowUpRight className="h-4 w-4" />
+                    Read more <ArrowUpRight className="t-nudge h-4 w-4" />
                   </span>
                 </div>
               </a>

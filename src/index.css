@@ -818,3 +818,42 @@
     animation: none !important;
   }
 }
+
+/* ---- Micro-interactions ----------------------------------------------------
+   Nav links: a hairline draws in from the left on hover and stays under the
+   current section; it retracts toward the right, so the motion has a
+   direction. Outbound arrows: a 2px nudge toward where they point. Both are
+   transform-only. */
+.t-navlink {
+  position: relative;
+}
+.t-navlink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 320ms var(--stagger-ease);
+}
+.t-navlink:hover::after,
+.t-navlink:focus-visible::after,
+.t-navlink[aria-current]::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+.t-nudge {
+  transition: transform 240ms var(--stagger-ease);
+}
+:is(a, button):is(:hover, :focus-visible) .t-nudge {
+  transform: translate(2px, -2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-navlink::after,
+  .t-nudge {
+    transition: none !important;
+  }
+}

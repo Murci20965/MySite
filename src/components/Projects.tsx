@@ -289,7 +289,7 @@ export default function Projects() {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
                           >
-                            Live demo <ArrowUpRight className="h-4 w-4" />
+                            Live demo <ArrowUpRight className="t-nudge h-4 w-4" />
                           </a>
                         )}
                         {'model' in project && project.model && (
@@ -318,7 +318,7 @@ export default function Projects() {
               href="#contact"
               className="inline-flex items-center gap-2 font-sans text-sm font-medium text-white/80 transition-colors hover:text-white"
             >
-              Discuss a project <ArrowUpRight className="h-4 w-4" />
+              Discuss a project <ArrowUpRight className="t-nudge h-4 w-4" />
             </a>
           </div>
         </AnimatedSection>

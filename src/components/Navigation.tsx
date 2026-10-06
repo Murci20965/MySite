@@ -82,7 +82,7 @@ export default function Navigation() {
                     key={link.name}
                     href={link.href}
                     aria-current={isActive ? 'location' : undefined}
-                    className={`font-sans text-sm transition-colors ${
+                    className={`t-navlink font-sans text-sm transition-colors ${
                       isActive ? 'text-white' : 'text-white/60 hover:text-white'
                     }`}
                   >
