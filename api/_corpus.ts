@@ -41,6 +41,6 @@ Certifications (6): DataCamp Associate AI Engineer for Developers; Microsoft Azu
 
 How he works (his stated principles): measure don't guess; documentation ships in the same change as code; secure by default; honest reporting (if something failed, he says so); proven-over-clever for production; learning in public — his projects are open from the first commit.
 
-Writing: four technical field-note posts on the site drawn from his real projects (structured outputs as an API contract; headless Blender pipelines for web 3D; shipping XGBoost with CI/CD; transfer learning for medical imaging).
+Writing: four technical field notes in his portfolio's GitHub repo (github.com/Murci20965/MySite, content/blog), drawn from his real projects (structured outputs as an API contract; headless Blender pipelines for web 3D; shipping XGBoost with CI/CD; transfer learning for medical imaging).
 
 If asked about availability or hiring: he is employed at Nudle and open to conversations about AI engineering, agentic systems and XR learning — direct people to email or LinkedIn. Do not state salary/rate information (none is public).`;
