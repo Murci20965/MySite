@@ -16,7 +16,12 @@ export const config = { runtime: 'edge' };
  * the hard protection is the caps and Groq's own account rate limits.
  */
 
-const MODEL = 'llama-3.3-70b-versatile';
+// llama-3.3-70b-versatile was shut down for non-enterprise accounts on
+// 2026-08-16 (Groq deprecations page); the live API answered 404
+// model_not_found. Groq's recommended replacement is gpt-oss-120b, a
+// reasoning model: effort is kept low for chat latency and its reasoning is
+// excluded, so the stream carries only the answer in delta.content.
+const MODEL = 'openai/gpt-oss-120b';
 const MAX_MESSAGES = 12;
 const MAX_CHARS = 600;
 const WINDOW_MS = 5 * 60 * 1000;
@@ -81,8 +86,12 @@ export default async function handler(request: Request): Promise<Response> {
       body: JSON.stringify({
         model: MODEL,
         messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
-        max_tokens: 400,
+        // Groq's docs do not say whether reasoning tokens count toward this
+        // cap, so it leaves room for both and still bounds spend per reply.
+        max_tokens: 1024,
         temperature: 0.6,
+        reasoning_effort: 'low',
+        include_reasoning: false,
         stream: true,
       }),
     });

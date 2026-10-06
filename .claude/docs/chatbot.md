@@ -11,7 +11,7 @@ ChatWidget.tsx ── POST {messages} ──> /api/chat (Vercel Edge Function)
                                           │  prepends SYSTEM_PROMPT (api/_corpus.ts)
                                           ▼
                              Groq chat completions (OpenAI-compatible)
-                             model: llama-3.3-70b-versatile, stream: true
+                             model: openai/gpt-oss-120b, stream: true
                                           │
 ChatWidget <── SSE passthrough (text/event-stream, OpenAI delta frames) ──┘
 ```
@@ -32,7 +32,11 @@ redeploy. 404/400 with a model code = the model id changed. 429 = Groq account l
 30 req/min, 12K tokens/min, 1K req/day, 100K tokens/day). 0 = Groq unreachable. A POST with a
 non-JSON body is a free check that the key is set at all (400 means set, 503 means missing).
 History: 2026-10-06 the live chat returned 502 in 0.42 s with the key set; this logging was
-added to name the cause.
+added to name the cause. It named it: `404 model_not_found`. Groq shut `llama-3.3-70b-versatile`
+down for non-enterprise accounts on 2026-08-16 and recommends `openai/gpt-oss-120b`. The function
+now uses that model with `reasoning_effort: 'low'` and `include_reasoning: false` (only the answer
+streams in `delta.content`), and `max_tokens` is raised to 1024 because Groq does not document
+whether reasoning tokens count toward it.
 
 ## Security & spend posture
 - **Key**: `GROQ_API_KEY` — set by Murci in Vercel → Project → Settings → Environment
