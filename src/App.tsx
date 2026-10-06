@@ -15,27 +15,27 @@ import ScrollProgress from './components/ScrollProgress';
 import ExpandMedia from './components/ExpandMedia';
 import Marquee from './components/Marquee';
 import ChatWidget from './components/ChatWidget';
-import FutureticParticles from './components/FutureticParticles';
-import HeroBackdrop from './components/HeroBackdrop';
+import FilmStage from './components/FilmStage';
 
 function App() {
   return (
     // overflow-x-CLIP, never -hidden: `hidden` turns this into a scroll
     // container and silently breaks every position:sticky on the page
     // (the Vision expansion and the Principles card stack both depend on it).
-    <div className="min-h-screen bg-black overflow-x-clip">
-      <FutureticParticles />
+    <div className="min-h-screen bg-bg overflow-x-clip">
+      {/* The film is the background of every section (fixed, z-0); the
+          sections themselves stay transparent so it shows through. */}
+      <FilmStage />
       <div className="grain-overlay" aria-hidden="true" />
       <div className="relative z-10">
         <SimpleCursor />
         <ScrollProgress />
         <Navigation />
-        <HeroBackdrop />
         <div className="relative">
-          {/* No background here: the fixed Earth canvas paints beneath this
-              wrapper, so an opaque bg would hide it. The page black comes
-              from the root element. */}
-          <div className="relative overflow-hidden">
+          {/* No background on any wrapper: the fixed film paints beneath them.
+              overflow-CLIP, not -hidden: `hidden` would make this a scroll
+              container and break position: sticky inside it. */}
+          <div className="relative overflow-clip">
             <Hero />
             <About />
           </div>

@@ -81,12 +81,16 @@ authenticated), Google Drive, Canva. Gmail connector was erroring on 2026-08-01 
 
 ### Hero (`Hero.tsx`)
 - Eyebrow: `Data Scientist & AI Engineer` → **`AI Engineer — Agentic AI, RAG & MLOps`** (CV title).
-- Name markup untouched (the play-button-as-"o" split works — "Mokoena" keeps its o).
+- Name markup: plain two lines since the v3 hero (the play-button "o" went with the modal).
+- Bio ends "Ask the terminal anything about my work." (the terminal is the live assistant).
 - Bio (≤3 lines, `lg:line-clamp-3`): from CV profile — building production AI systems with LLM
   APIs, agentic workflows, RAG and end-to-end MLOps; currently applying it to XR simulation and
   assessment at Nudle.
-- **DECISION (Murci): hero video** — currently a Rickroll embed. No real intro video exists.
-  Options: record one later (keep button, point at unlisted YouTube when ready) or remove the modal.
+- **Hero video: resolved 2026-10-06.** The Rickroll modal is gone. Murci's "Prompt to People"
+  film (generated on OpenArt) is now the full-screen background of the whole site, scrubbed by
+  scroll; the hero opens on its first shot. See `film.md`.
+- **Planet chapter copy (later):** clip M6 ends over North America, not Johannesburg, and Murci
+  kept it. Do not caption it as arcs leaving Johannesburg.
 
 ### About (`About.tsx`)
 - Rewrite lead + two columns from CV profile + mission (XR education access) — keeping the
@@ -198,7 +202,7 @@ remote-friendly. First-open FAQ = strongest answer first.
 
 ## Functional gaps flagged (decide separately, all small)
 - Contact + newsletter forms discard input silently.
-- Hero video = Rickroll placeholder.
+- ~~Hero video = Rickroll placeholder.~~ Removed with the v3 hero (2026-10-06).
 - 18 dead/placeholder links (all fixed by the mapping above).
 - 14 Pexels stock images → real screenshots.
 

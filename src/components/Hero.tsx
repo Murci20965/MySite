@@ -1,10 +1,15 @@
-import { Play } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import HeroTerminal from './HeroTerminal';
 
+/**
+ * Chapter 01, "Prompt". The film plays behind the whole page (FilmStage); the
+ * hero is the story over its opening shot: a night desk, the camera gliding
+ * toward the laptop as you scroll. The copy sits on the left over a soft side
+ * scrim and leaves the right of the frame to the film. The terminal is the
+ * site assistant, so the first thing a visitor can do is ask.
+ */
 export default function Hero() {
-  const [modalMounted, setModalMounted] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
-  const surfaceRef = useRef<HTMLDivElement>(null);
 
   // Texts reveal: play the staggered entrance once on mount.
   useEffect(() => {
@@ -14,140 +19,68 @@ export default function Hero() {
     el.classList.add('is-shown');
   }, []);
 
-  // Modal: scale up from --modal-scale once the surface is mounted.
-  useEffect(() => {
-    if (!modalMounted) return;
-    const el = surfaceRef.current;
-    if (!el) return;
-    void el.offsetWidth; // commit the pre-open state, then scale up
-    el.classList.add('is-open');
-  }, [modalMounted]);
-
-  const openModal = () => setModalMounted(true);
-  const closeModal = () => {
-    const el = surfaceRef.current;
-    if (el) {
-      el.classList.remove('is-open');
-      el.classList.add('is-closing');
-      window.setTimeout(() => setModalMounted(false), 150);
-    } else {
-      setModalMounted(false);
-    }
-  };
-
   return (
-    <section id="hero" className="relative min-h-[100dvh] flex items-center justify-center pt-20 -mb-32">
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-      </div>
+    <section id="hero" className="relative flex min-h-[100dvh] items-center pt-24 pb-24 lg:pt-20">
+      {/* Legibility over the film: top to bottom on phones (the copy spans the
+          width over the centred subject), from the copy's side on wide
+          screens. The phone top is /60 because the lime kicker in Paper mode
+          needs ~85% paper coverage there (measured 3.95:1 at /20). */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-bg/60 via-bg/50 to-bg/75 lg:bg-gradient-to-r lg:from-bg/80 lg:via-bg/40 lg:to-transparent"
+      />
 
-      <div className="stars-container absolute inset-0">
-        <div className="radiate-star" style={{ top: '15%', left: '10%', animationDelay: '0s' }} />
-        <div className="radiate-star" style={{ top: '25%', left: '85%', animationDelay: '0.5s' }} />
-        <div className="radiate-star" style={{ top: '45%', left: '15%', animationDelay: '1s' }} />
-        <div className="radiate-star" style={{ top: '65%', left: '75%', animationDelay: '1.5s' }} />
-        <div className="radiate-star" style={{ top: '80%', left: '30%', animationDelay: '2s' }} />
-        <div className="radiate-star" style={{ top: '35%', left: '60%', animationDelay: '2.5s' }} />
-        <div className="radiate-star" style={{ top: '70%', left: '90%', animationDelay: '3s' }} />
-        <div className="radiate-star" style={{ top: '10%', left: '50%', animationDelay: '3.5s' }} />
-      </div>
+      <div
+        ref={stageRef}
+        className="t-stagger relative z-20 mx-auto w-full max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24"
+      >
+        <div className="max-w-xl">
+          <div className="t-stagger-line t-stagger-line--1 mb-5 flex items-center gap-3">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">01 · Prompt</span>
+            <span className="h-px w-10 bg-fg/20" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/60">AI Engineer</span>
+          </div>
 
-      <div className="relative z-20 w-full">
-        <div
-          ref={stageRef}
-          className="t-stagger mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24 py-10"
-        >
-          <div className="flex justify-start lg:justify-start">
-            <div className="w-full lg:w-[54%] lg:pr-12 xl:pr-16">
-              <div className="t-stagger-line t-stagger-line--1 flex items-center gap-3 mb-4 sm:mb-5">
-                <span className="w-2 h-2 rounded-full bg-white/80 flex-shrink-0"></span>
-                <span className="font-mono text-[11px] sm:text-xs text-white/60 uppercase tracking-[0.28em]">
-                  AI Engineer &middot; Agentic AI, RAG &amp; MLOps
-                </span>
-              </div>
+          <h1 className="t-stagger-line t-stagger-line--2 mb-6 font-display text-[clamp(2.6rem,9vw,3.4rem)] font-semibold leading-[0.98] tracking-[-0.02em] lg:text-[clamp(3.4rem,5vw,5.4rem)]">
+            Nhlanhla
+            <br />
+            <span className="text-fg/60">Mokoena</span>
+          </h1>
 
-              {/* One line, always: the name never wraps, so it scales with the
-                  viewport instead of breaking across two rows. */}
-              <h1 className="t-stagger-line t-stagger-line--2 font-display text-[clamp(2rem,8.6vw,3rem)] lg:text-[clamp(3rem,4.3vw,4.6rem)] font-semibold mb-6 leading-[1] tracking-[-0.02em] whitespace-nowrap">
-                <div className="flex flex-nowrap items-center gap-x-3 sm:gap-x-4">
-                  <span className="text-white whitespace-nowrap">Nhlanhla</span>
-                  <span className="text-white/50 whitespace-nowrap">
-                    M
-                    <button
-                      onClick={openModal}
-                      className="inline-flex items-center justify-center rounded-full bg-white/5 border border-white/25 hover:bg-white/15 hover:border-white/50 transition-colors duration-300 align-baseline"
-                      style={{ width: '0.5em', height: '0.5em', marginLeft: '0.03em', marginRight: '0.03em', transform: 'translateY(-0.06em)' }}
-                      aria-label="Play intro video"
-                    >
-                      <Play
-                        style={{ width: '0.28em', height: '0.28em', marginLeft: '0.03em' }}
-                        className="text-lime-400"
-                        fill="currentColor"
-                      />
-                    </button>
-                    koena
-                  </span>
-                </div>
-              </h1>
+          <p className="t-stagger-line t-stagger-line--3 max-w-md font-sans text-base leading-relaxed text-fg/75 lg:text-lg">
+            I build production AI systems: agentic workflows, RAG architectures and end-to-end MLOps.
+            At Nudle I engineer the generative pipelines behind XR simulation learning. Ask the
+            terminal anything about my work.
+          </p>
 
-              <p className="t-stagger-line t-stagger-line--3 font-sans text-base text-white/55 max-w-lg leading-relaxed">
-                I build production AI systems: agentic workflows, RAG architectures and end-to-end
-                MLOps. At Nudle I engineer the generative pipelines behind XR simulation learning.
-              </p>
+          <div className="t-stagger-line t-stagger-line--4 mt-8 flex flex-wrap gap-3">
+            <a
+              href="#opensource"
+              className="rounded-full bg-fg px-7 py-3 font-sans text-sm font-medium text-bg transition duration-300 hover:bg-fg/85 active:scale-[0.98]"
+            >
+              View my work
+            </a>
+            <a
+              href="#contact"
+              className="rounded-full border border-fg/25 px-7 py-3 font-sans text-sm font-medium text-fg transition duration-300 hover:border-fg/40 hover:bg-fg/10 active:scale-[0.98]"
+            >
+              Get in touch
+            </a>
+          </div>
 
-              <div className="t-stagger-line t-stagger-line--4 mt-9 flex flex-wrap gap-3">
-                <a
-                  href="#opensource"
-                  className="font-sans px-7 py-3 bg-white text-black text-sm font-medium rounded-full hover:bg-white/85 active:scale-[0.98] transition duration-300"
-                >
-                  View Projects
-                </a>
-                <a
-                  href="#contact"
-                  className="font-sans px-7 py-3 text-white text-sm font-medium border border-white/25 rounded-full hover:bg-white/10 hover:border-white/40 active:scale-[0.98] transition duration-300"
-                >
-                  Get in Touch
-                </a>
-              </div>
-            </div>
+          <div className="t-stagger-line t-stagger-line--4 mt-8 max-w-lg">
+            <HeroTerminal />
           </div>
         </div>
       </div>
 
-      {modalMounted && (
-        <div
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn"
-          onClick={closeModal}
-        >
-          <button
-            onClick={closeModal}
-            className="absolute top-8 right-8 text-white hover:text-gray-300 transition-colors"
-            aria-label="Close video"
-          >
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-          <div
-            ref={surfaceRef}
-            className="t-modal relative w-full max-w-4xl aspect-video"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="w-full h-full rounded-2xl border border-white/15 bg-white/[0.03] flex flex-col items-center justify-center gap-4 px-8 text-center">
-              <span className="inline-flex items-center justify-center w-14 h-14 rounded-full border border-white/25 bg-white/5">
-                <Play className="w-5 h-5 text-lime-400" fill="currentColor" />
-              </span>
-              <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-white/50">
-                Intro video coming soon
-              </p>
-              <p className="font-sans text-sm text-white/40 max-w-md">
-                A short introduction is on its way. Until then, the projects below speak for me.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-6 z-20 mx-auto flex max-w-[1760px] items-center gap-3 px-6 font-mono text-[11px] uppercase tracking-[0.22em] text-fg/60 sm:px-10 lg:px-16 xl:px-24"
+      >
+        <span className="h-px w-10 bg-fg/30" />
+        Scroll to play
+      </div>
     </section>
   );
 }

@@ -1,23 +1,30 @@
 # Portfolio assistant ("Ask about me") — 2026-08-01
 
 ## What it is
-A floating chat on the site answering visitor questions about Murci, grounded EXCLUSIVELY in
-his verified facts. It exists to position him well for employers — and to itself be proof he
+A chat on the site answering visitor questions about Murci, grounded EXCLUSIVELY in his verified
+facts. It has two faces sharing one client (`src/hooks/useChat.ts`): the terminal inside the
+hero, under the call-to-action buttons (`HeroTerminal.tsx`, shows the latest exchange) and the floating
+"Ask about me" chat (`ChatWidget.tsx`, keeps the conversation). The floating launcher steps aside
+while the hero terminal is on screen, so only one is offered at a time. It exists to position him well for employers — and to itself be proof he
 ships LLM systems.
 
 ## Architecture & data flow
 ```
-ChatWidget.tsx ── POST {messages} ──> /api/chat (Vercel Edge Function)
+HeroTerminal.tsx ─┐
+ChatWidget.tsx ───┴ useChat() ── POST {messages} ──> /api/chat (Vercel Edge Function)
                                           │  prepends SYSTEM_PROMPT (api/_corpus.ts)
                                           ▼
                              Groq chat completions (OpenAI-compatible)
                              model: openai/gpt-oss-120b, stream: true
                                           │
-ChatWidget <── SSE passthrough (text/event-stream, OpenAI delta frames) ──┘
+useChat() <── SSE passthrough (text/event-stream, OpenAI delta frames) ──┘
 ```
 - **No RAG / vector DB by design**: the whole verified corpus is a few KB and fits in the
   system prompt. Zero retrieval infrastructure, zero retrieval failures. Right-sized.
-- The client parses `data:` SSE lines itself (fetch + TextDecoder) — no SDK dependency.
+- The client (`useChat`) parses `data:` SSE lines itself (fetch + TextDecoder), no SDK
+  dependency. Each face has its own conversation. Errors are handled once, there: `429` shows
+  `BUSY_NOTE`, any other failure (non-2xx, no body, network error, no `/api` under `vite dev`)
+  shows `OFFLINE_NOTE` with the email address.
 
 ## API contract (`POST /api/chat`)
 Request: `{ "messages": [{ "role": "user"|"assistant", "content": string }] }`

@@ -87,52 +87,55 @@ const experiences: ExperienceData[] = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="relative bg-black pt-12 pb-24 lg:pt-16 lg:pb-32">
+    <section id="experience" className="relative pt-12 pb-24 lg:pt-16 lg:pb-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/50">
               Experience
             </span>
-            <span className="h-px flex-1 bg-white/15" />
-            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">02</span>
+            <span className="h-px flex-1 bg-fg/15" />
+            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">02</span>
           </div>
 
-          <RevealHeading
-            text="Professional experience"
-            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
-          />
-          <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70 lg:text-xl">
+          {/* Film cue: the light bursts into the agent network (M2, 6 s). */}
+          <div data-beat="m2:0.6">
+            <RevealHeading
+              text="Professional experience"
+              className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
+            />
+          </div>
+          <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg/70 lg:text-xl">
             From ML foundations to production AI systems, and now the AI layer of XR education.
           </p>
         </AnimatedSection>
 
-        <div className="mt-16 border-t border-white/10">
+        <div className="mt-16 border-t border-fg/10">
           {experiences.map((exp, index) => (
             <AnimatedSection key={exp.id} animation="fade-in" delay={index > 0}>
-              <article className="grid gap-6 border-b border-white/10 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
+              <article className="grid gap-6 border-b border-fg/10 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
                 <div>
-                  <div className="font-mono text-sm text-white/80">{exp.duration}</div>
-                  <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+                  <div className="font-mono text-sm text-fg/80">{exp.duration}</div>
+                  <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-fg/40">
                     {exp.type}
                   </div>
-                  <div className="mt-5 font-sans text-white/90">{exp.company}</div>
-                  <div className="font-sans text-sm text-white/50">{exp.location}</div>
+                  <div className="mt-5 font-sans text-fg/90">{exp.company}</div>
+                  <div className="font-sans text-sm text-fg/50">{exp.location}</div>
                 </div>
 
                 <div>
-                  <h3 className="mb-3 font-display text-2xl font-medium text-white sm:text-3xl">
+                  <h3 className="mb-3 font-display text-2xl font-medium text-fg sm:text-3xl">
                     {exp.role}
                   </h3>
-                  <p className="mb-8 max-w-2xl font-sans leading-relaxed text-white/60">
+                  <p className="mb-8 max-w-2xl font-sans leading-relaxed text-fg/60">
                     {exp.description}
                   </p>
 
                   <div className="mb-8 flex flex-wrap gap-x-10 gap-y-4">
                     {exp.metrics.map((metric, i) => (
                       <div key={i}>
-                        <div className="font-mono text-2xl text-white">{metric.value}</div>
-                        <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
+                        <div className="font-mono text-2xl text-fg">{metric.value}</div>
+                        <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.15em] text-fg/40">
                           {metric.label}
                         </div>
                       </div>
@@ -141,8 +144,8 @@ export default function Experience() {
 
                   <ul className="mb-8 space-y-2.5">
                     {exp.achievements.map((achievement, i) => (
-                      <li key={i} className="flex gap-3 font-sans text-sm text-white/70">
-                        <span className="select-none text-white/30">&mdash;</span>
+                      <li key={i} className="flex gap-3 font-sans text-sm text-fg/70">
+                        <span className="select-none text-fg/30">&mdash;</span>
                         <span>{achievement}</span>
                       </li>
                     ))}
@@ -152,7 +155,7 @@ export default function Experience() {
                     {exp.technologies.map((tech, i) => (
                       <span
                         key={i}
-                        className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] tracking-wide text-white/50"
+                        className="rounded-full border border-fg/10 px-3 py-1 font-mono text-[11px] tracking-wide text-fg/50"
                       >
                         {tech}
                       </span>
@@ -168,10 +171,10 @@ export default function Experience() {
             Principles covers HOW I work; this covers WHAT you get. */}
         <AnimatedSection animation="fade-in">
           <div className="mt-20">
-            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
+            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
               What I can build
             </div>
-            <div className="grid gap-5 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-5 border-t border-fg/10 pt-8 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 {
                   step: '01',
@@ -202,17 +205,19 @@ export default function Experience() {
                   href: 'https://github.com/Murci20965/real_estate_price_predictor',
                 },
               ].map((s) => (
-                <div key={s.step} className="flex flex-col rounded-2xl border border-white/10 p-6">
-                  <div className="font-mono text-[11px] text-lime-400/80">{s.step}</div>
-                  <h3 className="mt-3 font-display text-lg font-medium text-white">{s.title}</h3>
-                  <p className="mt-2 font-sans text-sm leading-relaxed text-white/55">{s.text}</p>
-                  <div className="mt-auto pt-5 font-mono text-[10px] uppercase tracking-[0.15em] text-white/35">
+                // A translucent surface: these sit over the brightest frames of the
+                // agent network, so the text gets a panel, not just a border.
+                <div key={s.step} className="flex flex-col rounded-2xl border border-fg/10 bg-bg/55 p-6">
+                  <div className="font-mono text-[11px] text-accent/80">{s.step}</div>
+                  <h3 className="mt-3 font-display text-lg font-medium text-fg">{s.title}</h3>
+                  <p className="mt-2 font-sans text-sm leading-relaxed text-fg/55">{s.text}</p>
+                  <div className="mt-auto pt-5 font-mono text-[10px] uppercase tracking-[0.15em] text-fg/35">
                     {s.href ? (
                       <a
                         href={s.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="transition-colors hover:text-lime-400"
+                        className="transition-colors hover:text-accent"
                       >
                         Proof: {s.proof}
                       </a>

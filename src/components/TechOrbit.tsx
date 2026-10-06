@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { THEME_EVENT, currentTheme, fgColor } from '../lib/theme';
 
 /* Orbiting tech stack (21st.dev pattern, house-adapted): three hairline rings
  * of real stack icons orbit a half-visible particle sphere. Pure CSS keyframe
@@ -76,6 +77,16 @@ function ParticleCore() {
     };
     resize();
 
+    // Front-most dots glow lime; the rest use the theme foreground. In light
+    // mode the lime is the darker accent so it reads on paper.
+    let base = fgColor(1);
+    let glow = currentTheme() === 'light' ? '#4d7c0f' : '#a3e635';
+    const onTheme = () => {
+      base = fgColor(1);
+      glow = currentTheme() === 'light' ? '#4d7c0f' : '#a3e635';
+    };
+    window.addEventListener(THEME_EVENT, onTheme);
+
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
       const r = Math.min(w, h) * 0.48;
@@ -88,7 +99,7 @@ function ParticleCore() {
         const z3 = sinT * Math.sin(p.phi + rot);
         const depth = (z3 + 1) / 2; // 0 back, 1 front
         ctx.globalAlpha = 0.12 + depth * 0.55;
-        ctx.fillStyle = depth > 0.82 ? '#a3e635' : '#ffffff';
+        ctx.fillStyle = depth > 0.82 ? glow : base;
         const size = 0.8 + depth * 1.3;
         ctx.fillRect(cx + x3 * r, cy + y3 * r, size, size);
       }
@@ -131,6 +142,7 @@ function ParticleCore() {
       io.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('resize', resize);
+      window.removeEventListener(THEME_EVENT, onTheme);
     };
   }, []);
 
@@ -157,7 +169,7 @@ export default function TechOrbit() {
         return (
           <div
             key={index}
-            className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rounded-full border border-white/10 ${orbit.size}`}
+            className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rounded-full border border-fg/10 ${orbit.size}`}
           >
             {icons.map((icon) => (
               <div
@@ -171,7 +183,7 @@ export default function TechOrbit() {
                 }
               >
                 <div
-                  className={`t-orbit-chip ${cw ? 't-orbit-counter-cw' : 't-orbit-counter-ccw'} relative z-10 -mt-6 flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-black`}
+                  className={`t-orbit-chip ${cw ? 't-orbit-counter-cw' : 't-orbit-counter-ccw'} relative z-10 -mt-6 flex h-12 w-12 items-center justify-center rounded-full border border-fg/15 bg-bg`}
                   style={{ '--counter-offset': `${-icon.angle}deg` } as React.CSSProperties}
                 >
                   <img src={icon.src} alt="" width={22} height={22} className="h-[22px] w-[22px]" loading="lazy" />

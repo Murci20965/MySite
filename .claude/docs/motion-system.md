@@ -1,7 +1,7 @@
 # Motion system
 
 How motion works on this site, the rules every animation follows, and how to add one without
-breaking them. Last updated 2026-10-06.
+breaking them. Last updated 2026-10-07.
 
 ## The rules
 
@@ -11,8 +11,8 @@ breaking them. Last updated 2026-10-06.
    `box-shadow` and colour tweens all repaint or re-layout every frame.
 2. **Reduced motion is honoured twice.** Every effect ships a `@media (prefers-reduced-motion:
    reduce)` block, and a global rule in `src/index.css` zeroes all durations as a backstop. JS
-   effects (filmstrip, scroll-linked Vision band, number pop-in) also check
-   `matchMedia` and skip the motion entirely.
+   effects (the film, filmstrip, number pop-in) also check `matchMedia` and skip the motion
+   entirely; the film then shows one still per section and every cued text is visible.
 3. **Fail open.** Nothing may stay invisible because an observer missed. `AnimatedSection`
    reveals by IntersectionObserver, by a geometry check on mount and by a 2.5 s timer.
 4. **Tokens, not literals.** Durations and easings live as CSS custom properties in
@@ -38,14 +38,16 @@ breaking them. Last updated 2026-10-06.
 | Heading reveal | `RevealHeading.tsx`, `.t-chars` | opacity, transform | per character; no `will-change` (it held a layer per character) |
 | Section numeral drift | `.t-drift` | transform | CSS scroll-driven (`animation-timeline: view()`), static where unsupported |
 | Reading progress | `ScrollProgress.tsx` | transform (`scaleX`) | rAF-throttled; `t-scroll-linked` |
-| Vision band | `ExpandMedia.tsx` | transform, opacity | letterbox = two page-black bars sliding out (replaced a per-frame `clip-path`); `t-scroll-linked` |
+| Film background | `FilmStage.tsx`, `lib/filmJourney.ts` | canvas frames (2 blended) + veil | the whole site's background, scrubbed by scroll; clips dissolve; see `film.md` |
+| Film text cues | `[data-beat]`, `.is-beat` | opacity, transform | text lands on a film moment; hidden only while `html[data-film="on"]` |
+| Vision title and copy | `ExpandMedia.tsx` | transform, opacity | driven by the film clock (doorway opens, classroom appears), not their own scroll; `t-scroll-linked` |
 | Open-source filmstrip | `OpenSource.tsx`, `.t-film-*` | transform, opacity | pinned horizontal strip, see below; carousel on phones and under reduced motion |
 | Live badge | `.t-live` | transform, opacity | ring expands and fades; marks projects with a live demo |
 | Principles stack | `.t-stack-card` | transform, opacity | scroll-driven; opacity 0.6 renders like brightness 0.6 on black |
-| Number pop-in | `PopNumber.tsx`, `.t-digit` | opacity, transform | |
-| Chat typing dots | `ChatWidget.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" |
+| Number pop-in | `PopNumber.tsx`, `.t-digit` | opacity, transform | Stats counters pop on a film moment (`beat="m4:0.6"`) |
+| Chat typing dots | `ChatWidget.tsx`, `HeroTerminal.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" / "Thinking" |
+| Chat launcher stow | `ChatWidget.tsx` | opacity, transform | hides (and leaves the tab order) while the hero terminal is in view |
 | Nav underline, arrow nudge | `.t-navlink`, `.t-nudge` | transform | |
-| Hero stars | `.radiate-star` | opacity, transform | glow is a static shadow |
 | Marquee, tech orbit | `.t-marquee-track`, `.t-orbit-*` | transform | infinite; frozen by the reduced-motion rule |
 
 ### Deliberate exceptions
@@ -63,6 +65,11 @@ The spring-physics card hover (`TiltCard`: stiffness 170, damping 16, ratio 0.61
 overshoot, settled under 0.9 s at 30/60/144 fps), the sliding filter underline, the
 view-transition project filter and the 3D viewer skeleton went out with the Selected work and
 Blog sections. They are in git history (merge `2a92464`) if a future section needs them.
+The hero's twinkling stars (`.radiate-star`) and the intro-video modal (`.t-modal`) went out
+with the Studio hero on branch `feat/v3`. On 2026-10-07 the film became the full-screen
+background, which retired the Studio laptop frame (`StudioScreen`, `FilmScrub`), the WebGL Earth
+journey (`HeroEarth`, `HeroBackdrop`, `earthJourney`, three.js) and the particle canvas
+(`FutureticParticles`); the Vision band lost its still image and letterbox bars.
 
 ## Open-source filmstrip
 

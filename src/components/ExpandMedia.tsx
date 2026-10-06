@@ -1,140 +1,76 @@
 import { useEffect, useRef } from 'react';
+import { filmClock } from '../lib/filmJourney';
 
-/* Scroll-expand media (21st.dev pattern, re-engineered): an in-flow sticky
- * section — no wheel hijacking, no forced scroll. As the visitor scrolls
- * through the tall wrapper, the media scales from a card to near-fullscreen,
- * the title words slide apart, and the mission copy fades in. Transform-only
- * per frame; reduced motion renders the fully-expanded state statically.
+/* Chapter 06, "Classroom": the film's emotional peak. The section is tall and
+ * its stage sticky, so it holds while film clip M5 plays behind it (lit
+ * server racks, a golden doorway opening at 5-7 s, the XR classroom from
+ * 8 s). The title and copy move with the FILM, not with their own scroll
+ * progress: the two words part as the doorway opens and the mission copy
+ * lands when the classroom appears. Under reduced motion (the film is a still
+ * then) both render in their final state.
  */
 
-const MEDIA_SRC = '/media/vision.png';
+// Film times (lib/film.ts: clip index + fraction). M5 is clip 4.
+const DOOR_OPEN = [4.45, 4.72] as const;
+const CLASSROOM = [4.78, 4.9] as const;
+
+const ramp = (T: number, [a, b]: readonly [number, number]) => Math.min(1, Math.max(0, (T - a) / (b - a)));
 
 export default function ExpandMedia() {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const barTopRef = useRef<HTMLDivElement>(null);
-  const barBottomRef = useRef<HTMLDivElement>(null);
-  const dimRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLHeadingElement>(null);
   const rightRef = useRef<HTMLHeadingElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const wrap = wrapRef.current;
-    if (!wrap) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let raf = 0;
-
-    const apply = (p: number) => {
-      // A letterbox opening vertically: full width throughout, so the section
-      // spans the page from the first frame and the reveal is the frame
-      // growing rather than a card zooming toward the viewer. Two page-black
-      // bars slide out (transform only) instead of a per-frame clip-path,
-      // which repainted the full-bleed image on every scroll frame.
-      if (barTopRef.current) {
-        barTopRef.current.style.transform = `translateY(${-p * 100}%)`;
-      }
-      if (barBottomRef.current) {
-        barBottomRef.current.style.transform = `translateY(${p * 100}%)`;
-      }
-      if (dimRef.current) {
-        dimRef.current.style.opacity = String(0.55 - p * 0.35);
-      }
-      // Clamped so the words separate dramatically but never leave the
-      // viewport (42vw pushed "made spatial" off the right edge).
+    const apply = (T: number) => {
+      const open = filmClock.on ? ramp(T, DOOR_OPEN) : 1;
+      const copy = filmClock.on ? ramp(T, CLASSROOM) : 1;
+      // Clamped so the words separate dramatically but never leave the viewport.
       const spread = Math.min(26, (window.innerWidth * 0.26) / 16);
-      if (leftRef.current) {
-        leftRef.current.style.transform = `translateX(${-p * spread}vw)`;
-      }
-      if (rightRef.current) {
-        rightRef.current.style.transform = `translateX(${p * spread}vw)`;
-      }
+      if (leftRef.current) leftRef.current.style.transform = `translateX(${-open * spread}vw)`;
+      if (rightRef.current) rightRef.current.style.transform = `translateX(${open * spread}vw)`;
       if (copyRef.current) {
-        const t = Math.max(0, (p - 0.72) / 0.28);
-        copyRef.current.style.opacity = String(t);
-        copyRef.current.style.transform = `translateY(${(1 - t) * 24}px)`;
+        copyRef.current.style.opacity = String(copy);
+        copyRef.current.style.transform = `translateY(${(1 - copy) * 24}px)`;
       }
     };
-
-    if (reduce) {
-      apply(1);
-      return;
-    }
-
-    const update = () => {
-      raf = 0;
-      const rect = wrap.getBoundingClientRect();
-      const total = rect.height - window.innerHeight;
-      const p = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 1;
-      apply(p);
-    };
-    const onScroll = () => {
-      if (!raf) raf = window.requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-      if (raf) window.cancelAnimationFrame(raf);
-    };
+    return filmClock.subscribe(apply);
   }, []);
 
   return (
-    <section id="vision" className="relative bg-black">
-      <div ref={wrapRef} className="relative h-[240vh]">
+    <section id="vision" className="relative">
+      <div className="relative h-[240vh]">
         <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden">
-          <div className="pointer-events-none absolute top-24 z-40 flex items-center gap-4">
-            <span className="h-px w-10 bg-white/20" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
-              Vision
-            </span>
-            <span className="h-px w-10 bg-white/20" />
+          {/* Its own small scrim: this label sits over the film's brightest frames. */}
+          <div className="pointer-events-none absolute top-24 z-40 flex items-center gap-4 rounded-full bg-bg/60 px-4 py-1.5">
+            <span className="h-px w-10 bg-fg/25" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/60">Vision</span>
+            <span className="h-px w-10 bg-fg/25" />
           </div>
 
-          <div className="absolute inset-0 h-full w-full">
-            <img
-              src={MEDIA_SRC}
-              alt="A dark planetary horizon with a constellation of connected learning nodes"
-              className="h-full w-full object-cover"
-              loading="lazy"
-            />
-            <div ref={dimRef} className="t-scroll-linked absolute inset-0 bg-black" style={{ opacity: 0.55 }} />
-            {/* Letterbox bars: each covers 39% at rest and slides fully out by
-                p = 1. Same black as the section, so they read as the frame
-                edge; the returning Earth (z-30) still paints above them. */}
-            <div
-              ref={barTopRef}
-              aria-hidden="true"
-              className="t-scroll-linked absolute inset-x-0 top-0 h-[39%] bg-black will-change-transform"
-            />
-            <div
-              ref={barBottomRef}
-              aria-hidden="true"
-              className="t-scroll-linked absolute inset-x-0 bottom-0 h-[39%] bg-black will-change-transform"
-            />
-          </div>
-
-          {/* Legibility scrim: sits above the returning Earth (z-30) and below
-              the type (z-40), so the planet reads as atmosphere behind the
-              words instead of competing with them. */}
+          {/* Legibility: a soft pool behind the title, and a floor under the copy. */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-[35] bg-[radial-gradient(ellipse_60%_45%_at_50%_45%,rgba(0,0,0,0.72),rgba(0,0,0,0.35)_60%,transparent_85%)]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_45%,rgb(var(--c-bg)/0.7),rgb(var(--c-bg)/0.3)_60%,transparent_85%)]"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-bg/90 via-bg/50 to-transparent"
           />
 
-          {/* z-40 keeps the title above the travelling Earth layer, which
-              lifts to z-30 when it returns as this section's horizon. */}
-          <div className="pointer-events-none absolute z-40 flex w-full flex-col items-center gap-2 text-center mix-blend-difference">
+          {/* Theme ink over the pool, not mix-blend-difference: the film is a
+              separate fixed layer, so a blend only ever saw the pool and
+              rendered grey on paper. */}
+          <div className="pointer-events-none absolute z-40 flex w-full flex-col items-center gap-2 text-center">
             <h2
               ref={leftRef}
-              className="t-scroll-linked font-display text-5xl font-medium leading-none tracking-[-0.01em] text-white sm:text-6xl lg:text-7xl"
+              className="t-scroll-linked font-display text-5xl font-medium leading-none tracking-[-0.01em] text-fg sm:text-6xl lg:text-7xl"
             >
               Learning,
             </h2>
             <h2
               ref={rightRef}
-              className="t-scroll-linked font-display text-5xl font-medium leading-none tracking-[-0.01em] text-white sm:text-6xl lg:text-7xl"
+              className="t-scroll-linked font-display text-5xl font-medium leading-none tracking-[-0.01em] text-fg sm:text-6xl lg:text-7xl"
             >
               made spatial
             </h2>
@@ -145,7 +81,7 @@ export default function ExpandMedia() {
             className="t-scroll-linked pointer-events-none absolute bottom-10 z-40 max-w-2xl px-6 text-center"
             style={{ opacity: 0 }}
           >
-            <p className="font-sans text-base leading-relaxed text-white/85 sm:text-lg">
+            <p className="font-sans text-base leading-relaxed text-fg/85 sm:text-lg">
               Traditional education gates real skills behind resources and rigid methods. I&rsquo;m
               building toward XR learning where anyone, anywhere, can practise real skills:
               interactively, spatially, without the gatekeeping.

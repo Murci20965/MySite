@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 // Real in-page links: the browser scrolls (smoothly, via `scroll-behavior` on
 // <html>, which the reduced-motion rule turns off), the URL hash updates so a
@@ -21,10 +22,11 @@ export default function Navigation() {
   const toggleRef = useRef<HTMLButtonElement>(null);
 
   // Scroll-spy: mark the nav link for whichever section sits near mid-viewport.
+  // Every section is observed, not just linked ones, so scrolling back to the
+  // hero (or Stats, Vision, FAQ) clears the underline instead of leaving the
+  // last linked section highlighted.
   useEffect(() => {
-    const sections = NAV_LINKS.map((l) => document.getElementById(l.href.slice(1))).filter(
-      (el): el is HTMLElement => el !== null
-    );
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('section[id]'));
     if (!sections.length) return;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -61,13 +63,13 @@ export default function Navigation() {
 
   return (
     <>
-      <nav aria-label="Primary" className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md">
+      <nav aria-label="Primary" className="fixed top-0 left-0 right-0 z-50 bg-bg/80 backdrop-blur-md">
         <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
           <div className="flex items-center justify-between h-20">
             <a
               href="#hero"
               onClick={closeMenu}
-              className="font-display text-2xl font-medium text-white hover:opacity-80 transition-opacity duration-300"
+              className="font-display text-2xl font-medium text-fg hover:opacity-80 transition-opacity duration-300"
               aria-label="Murci, back to top"
             >
               Murci
@@ -82,13 +84,14 @@ export default function Navigation() {
                     href={link.href}
                     aria-current={isActive ? 'location' : undefined}
                     className={`t-navlink font-sans text-sm transition-colors ${
-                      isActive ? 'text-white' : 'text-white/60 hover:text-white'
+                      isActive ? 'text-fg' : 'text-fg/60 hover:text-fg'
                     }`}
                   >
                     {link.name}
                   </a>
                 );
               })}
+              <ThemeToggle />
               <a
                 href={RESUME.href}
                 download={RESUME.filename}
@@ -98,16 +101,19 @@ export default function Navigation() {
               </a>
             </div>
 
-            <button
-              ref={toggleRef}
-              onClick={() => setIsMenuOpen((open) => !open)}
-              className="lg:hidden text-white hover:text-gray-300 transition-colors"
-              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={isMenuOpen}
-              aria-controls="mobile-menu"
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            <div className="flex items-center gap-4 lg:hidden">
+              <ThemeToggle />
+              <button
+                ref={toggleRef}
+                onClick={() => setIsMenuOpen((open) => !open)}
+                className="text-fg hover:text-fg/70 transition-colors"
+                aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-menu"
+              >
+                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
       </nav>
@@ -121,7 +127,7 @@ export default function Navigation() {
       <nav
         id="mobile-menu"
         aria-label="Mobile"
-        className={`fixed inset-0 bg-black z-[45] transition-[transform,visibility] duration-300 ease-in-out lg:hidden ${
+        className={`fixed inset-0 bg-bg z-[45] transition-[transform,visibility] duration-300 ease-in-out lg:hidden ${
           isMenuOpen ? 'translate-x-0 visible' : 'translate-x-full invisible'
         }`}
       >
@@ -131,7 +137,7 @@ export default function Navigation() {
               key={link.name}
               href={link.href}
               onClick={closeMenu}
-              className="font-display text-3xl sm:text-4xl font-medium text-white hover:text-white/70 transition-colors"
+              className="font-display text-3xl sm:text-4xl font-medium text-fg hover:text-fg/70 transition-colors"
             >
               {link.name}
             </a>

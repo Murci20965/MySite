@@ -13,25 +13,26 @@ const stats = [
 
 export default function Stats() {
   return (
-    <section id="stats" className="relative bg-black py-20 lg:py-24">
+    <section id="stats" className="relative py-20 lg:py-24">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-10 flex items-center gap-4">
             <span className="h-1.5 w-1.5 rounded-full bg-lime-400" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/50">
               By the numbers
             </span>
-            <span className="h-px flex-1 bg-white/15" />
+            <span className="h-px flex-1 bg-fg/15" />
           </div>
 
-          <div className="grid grid-cols-2 divide-x divide-y divide-white/10 border-y border-white/10 lg:grid-cols-4 lg:divide-y-0">
+          <div className="grid grid-cols-2 divide-x divide-y divide-fg/10 border-y border-fg/10 lg:grid-cols-4 lg:divide-y-0">
             {stats.map((stat) => (
               <div key={stat.label} className="px-5 py-10 first:pl-0 lg:px-10 lg:py-14">
-                <div className="font-display text-6xl font-medium leading-none text-white lg:text-8xl">
-                  <PopNumber value={stat.value} />
+                <div className="font-display text-6xl font-medium leading-none text-fg lg:text-8xl">
+                  {/* Pops as the data-centre racks come into view (M4, 6 s). */}
+                  <PopNumber value={stat.value} beat="m4:0.6" />
                 </div>
-                <div className="mt-5 font-sans text-base text-white/80 lg:text-lg">{stat.label}</div>
-                <div className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
+                <div className="mt-5 font-sans text-base text-fg/80 lg:text-lg">{stat.label}</div>
+                <div className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-fg/40">
                   {stat.description}
                 </div>
               </div>

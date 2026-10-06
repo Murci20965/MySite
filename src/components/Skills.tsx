@@ -32,22 +32,22 @@ export default function Skills() {
   ];
 
   return (
-    <section id="skills" className="relative bg-black py-24 lg:py-32">
+    <section id="skills" className="relative py-24 lg:py-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/50">
               Skills
             </span>
-            <span className="h-px flex-1 bg-white/15" />
-            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">04</span>
+            <span className="h-px flex-1 bg-fg/15" />
+            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">04</span>
           </div>
 
           <RevealHeading
             text="Technical expertise"
-            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
+            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
           />
-          <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
+          <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg/70">
             From agentic orchestration to XR delivery: the stack I own end to end.
           </p>
         </AnimatedSection>
@@ -58,21 +58,21 @@ export default function Skills() {
           </div>
         </AnimatedSection>
 
-        <div className="mt-16 grid gap-x-10 gap-y-12 border-t border-white/10 pt-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid gap-x-10 gap-y-12 border-t border-fg/10 pt-12 sm:grid-cols-2 lg:grid-cols-3">
           {skillCategories.map((category, index) => (
             <AnimatedSection key={category.title} animation="fade-in" index={index % 3}>
               <div>
                 <div className="mb-4 flex items-baseline gap-3">
-                  <span className="font-mono text-[11px] text-white/30">
+                  <span className="font-mono text-[11px] text-fg/30">
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  <h3 className="font-display text-lg font-medium text-white">{category.title}</h3>
+                  <h3 className="font-display text-lg font-medium text-fg">{category.title}</h3>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {category.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] tracking-wide text-white/55"
+                      className="rounded-full border border-fg/10 px-3 py-1 font-mono text-[11px] tracking-wide text-fg/55"
                     >
                       {skill}
                     </span>
@@ -84,12 +84,12 @@ export default function Skills() {
         </div>
 
         <AnimatedSection animation="fade-in">
-          <div className="mt-16 flex flex-col gap-8 border-t border-white/10 pt-8 md:flex-row md:items-center md:justify-between">
+          <div className="mt-16 flex flex-col gap-8 border-t border-fg/10 pt-8 md:flex-row md:items-center md:justify-between">
             <div className="max-w-md">
-              <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+              <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-fg/40">
                 Currently exploring
               </div>
-              <p className="font-sans text-lg text-white/80">
+              <p className="font-sans text-lg text-fg/80">
                 Multi-agent orchestration, WebXR interaction patterns, and self-hosted model serving.
               </p>
             </div>
@@ -100,8 +100,8 @@ export default function Skills() {
                 { v: '3', l: 'AI roles' },
               ].map((stat) => (
                 <div key={stat.l}>
-                  <div className="font-mono text-2xl text-white">{stat.v}</div>
-                  <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
+                  <div className="font-mono text-2xl text-fg">{stat.v}</div>
+                  <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-fg/40">
                     {stat.l}
                   </div>
                 </div>

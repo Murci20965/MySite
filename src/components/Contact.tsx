@@ -81,34 +81,37 @@ export default function Contact() {
   ];
 
   const fieldClass =
-    't-input w-full rounded-lg border border-white/15 bg-white/[0.03] px-4 py-3 font-sans text-sm text-white placeholder-white/30 transition-colors focus:border-white/40 focus:outline-none';
-  const labelClass = 'mb-2 block font-mono text-[11px] uppercase tracking-[0.15em] text-white/40';
+    't-input w-full rounded-lg border border-fg/15 bg-fg/[0.03] px-4 py-3 font-sans text-sm text-fg placeholder-fg/30 transition-colors focus:border-fg/40 focus:outline-none';
+  const labelClass = 'mb-2 block font-mono text-[11px] uppercase tracking-[0.15em] text-fg/40';
 
   return (
-    <section id="contact" className="relative bg-black py-24 lg:py-32">
+    <section id="contact" className="relative py-24 lg:py-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/50">
               Contact
             </span>
-            <span className="h-px flex-1 bg-white/15" />
-            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">08</span>
+            <span className="h-px flex-1 bg-fg/15" />
+            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">08</span>
           </div>
 
-          <RevealHeading
-            text="Let’s work together"
-            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
-          />
-          <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
+          {/* Film cue: the arcs fan out across the globe (M6, 7.6 s). */}
+          <div data-beat="m6:0.76">
+            <RevealHeading
+              text="Let’s work together"
+              className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
+            />
+          </div>
+          <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg/70">
             A role, a collaboration, or a question about my work: my inbox is open, and I typically reply within 24 hours.
           </p>
         </AnimatedSection>
 
-        <div className="mt-14 grid gap-12 border-t border-white/10 pt-12 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+        <div className="mt-14 grid gap-12 border-t border-fg/10 pt-12 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
           <div>
             {submitted ? (
-              <div className="rounded-2xl border border-white/15 p-10 text-center">
+              <div className="rounded-2xl border border-fg/15 p-10 text-center">
                 <span
                   ref={checkRef}
                   className="t-success-check mb-4 inline-block"
@@ -126,8 +129,8 @@ export default function Contact() {
                     />
                   </svg>
                 </span>
-                <div className="font-display text-2xl font-medium text-white">Draft ready to send</div>
-                <p className="mt-2 font-sans text-white/60">
+                <div className="font-display text-2xl font-medium text-fg">Draft ready to send</div>
+                <p className="mt-2 font-sans text-fg/60">
                   Your email app just opened with the message pre-filled &mdash; hit send and
                   I&rsquo;ll reply within 24 hours. Nothing opened? Email me directly at
                   nhlanhla18mokoena@gmail.com.
@@ -151,16 +154,18 @@ export default function Contact() {
                   <textarea id="message" name="message" required rows={6} value={formData.message} onChange={handleChange} className={`${fieldClass} resize-none`} placeholder="What would you like to talk about?" />
                 </div>
 
-                <button type="submit" className="rounded-full bg-white px-8 py-3.5 font-sans text-sm font-medium text-black transition duration-300 hover:bg-white/85 active:scale-[0.98]">
+                <button type="submit" className="rounded-full bg-fg px-8 py-3.5 font-sans text-sm font-medium text-bg transition duration-300 hover:bg-fg/85 active:scale-[0.98]">
                   Send message
                 </button>
               </form>
             )}
           </div>
 
-          <aside className="space-y-10">
+          {/* A translucent panel: on phones this list sits over the film's
+              brightest frames (the arcs across the globe) at the page's end. */}
+          <aside className="space-y-10 rounded-2xl border border-fg/10 bg-bg/55 p-6 lg:p-8">
             <div>
-              <div className="mb-5 font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
+              <div className="mb-5 font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
                 Direct
               </div>
               <ul className="space-y-4">
@@ -172,12 +177,12 @@ export default function Contact() {
                       rel={link.link.startsWith('http') ? 'noopener noreferrer' : undefined}
                       className="group block"
                     >
-                      <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
+                      <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-fg/40">
                         {link.label}
                       </span>
-                      <span className="mt-1 flex items-center gap-1.5 font-sans text-sm text-white/80 transition-colors group-hover:text-white">
+                      <span className="mt-1 flex items-center gap-1.5 font-sans text-sm text-fg/80 transition-colors group-hover:text-fg">
                         {link.value}
-                        <ArrowUpRight className="t-nudge h-3.5 w-3.5 text-white/40" />
+                        <ArrowUpRight className="t-nudge h-3.5 w-3.5 text-fg/40" />
                       </span>
                     </a>
                   </li>
@@ -186,16 +191,16 @@ export default function Contact() {
             </div>
 
             <div>
-              <div className="mb-5 font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
+              <div className="mb-5 font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
                 Currently
               </div>
               <ul className="space-y-3">
                 {preferences.map((pref) => (
-                  <li key={pref.label} className="flex justify-between gap-4 border-b border-white/10 pb-3">
-                    <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
+                  <li key={pref.label} className="flex justify-between gap-4 border-b border-fg/10 pb-3">
+                    <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-fg/40">
                       {pref.label}
                     </span>
-                    <span className="text-right font-sans text-sm text-white/80">{pref.value}</span>
+                    <span className="text-right font-sans text-sm text-fg/80">{pref.value}</span>
                   </li>
                 ))}
               </ul>

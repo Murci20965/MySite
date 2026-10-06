@@ -26,6 +26,11 @@ needs focus:
 | FAQ | Absent |
 | Contact | Returns large and low behind the form — "from here, for anywhere" |
 
+> **Superseded 2026-10-07: the WebGL Earth is retired.** The "Prompt to People" film became the
+> full-screen background of every section and ends on a globe, so the travelling 3D Earth (and
+> its three.js chunk, the biggest cost on the P30 lite) was removed at Murci's call. The film's
+> knot timeline (`src/lib/filmJourney.ts`, see `film.md`) is this section's successor.
+
 Implementation: extend `src/lib/earthJourney.ts` from a single `p` to a **station timeline**
 (array of `{ atSectionId, pose, opacity }`), interpolated by one rAF reader in `HeroEarth`.
 One WebGL context, one scroll listener, damped transitions. Sections declare their station by
