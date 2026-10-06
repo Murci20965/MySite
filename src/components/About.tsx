@@ -21,19 +21,20 @@ export default function About() {
           />
 
           <p className="font-sans text-xl lg:text-2xl text-white/80 leading-relaxed max-w-3xl mb-10">
-            I'm an AI engineer who owns systems end to end: from{' '}
+            I'm a production-focused AI engineer who owns systems end to end: from{' '}
             <span className="text-white">data pipeline</span> through{' '}
-            <span className="text-white">model training and inference</span> to deployment. I also
-            believe learning real skills shouldn't depend on where you were born.
+            <span className="text-white">model training and inference</span> to deployment,
+            translating mathematical concepts into production-grade systems. I also believe
+            learning real skills shouldn't depend on where you were born.
           </p>
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl font-sans text-white/60">
             <p className="text-base lg:text-lg leading-relaxed">
-              I work with <span className="text-white/90">LLM APIs and agentic workflows</span>,{' '}
-              <span className="text-white/90">RAG pipelines</span>, and{' '}
-              <span className="text-white/90">structured tool use</span>, shipped behind production
-              Python and FastAPI services, containerised with Docker and delivered through CI/CD. At
-              Nudle I'm applying that stack to XR simulation and assessment platforms.
+              I design <span className="text-white/90">agentic workflows</span> with LangChain,
+              LangGraph and n8n, <span className="text-white/90">RAG architectures</span> over vector
+              databases, and the <span className="text-white/90">end-to-end MLOps</span> that keeps
+              them honest: Python and FastAPI backends, Dockerised deployments, CI/CD and automated
+              model evaluation. At Nudle I'm engineering XR simulation platforms with that stack.
             </p>
             <p className="text-base lg:text-lg leading-relaxed">
               What drives me: traditional education gates real skills behind resources and rigid

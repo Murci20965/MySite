@@ -99,8 +99,8 @@ export default function Hero() {
               </h1>
 
               <p className="t-stagger-line t-stagger-line--3 font-sans text-base text-white/55 max-w-lg leading-relaxed">
-                I build production AI systems: agentic workflows, RAG pipelines and end-to-end
-                MLOps. Right now I turn natural language into interactive 3D learning at Nudle.
+                I build production AI systems: agentic workflows, RAG architectures and end-to-end
+                MLOps. At Nudle I engineer the generative pipelines behind XR simulation learning.
               </p>
 
               <div className="t-stagger-line t-stagger-line--4 mt-9 flex flex-wrap gap-3">
