@@ -15,8 +15,6 @@ import ScrollProgress from './components/ScrollProgress';
 import ExpandMedia from './components/ExpandMedia';
 import Marquee from './components/Marquee';
 import ChatWidget from './components/ChatWidget';
-import FutureticParticles from './components/FutureticParticles';
-import HeroBackdrop from './components/HeroBackdrop';
 
 function App() {
   return (
@@ -24,17 +22,12 @@ function App() {
     // container and silently breaks every position:sticky on the page
     // (the Vision expansion and the Principles card stack both depend on it).
     <div className="min-h-screen bg-bg overflow-x-clip">
-      <FutureticParticles />
       <div className="grain-overlay" aria-hidden="true" />
       <div className="relative z-10">
         <SimpleCursor />
         <ScrollProgress />
         <Navigation />
-        <HeroBackdrop />
         <div className="relative">
-          {/* No background here: the fixed Earth canvas paints beneath this
-              wrapper, so an opaque bg would hide it. The page black comes
-              from the root element. */}
           {/* overflow-CLIP, not -hidden: the hero pins (sticky) while its
               film plays, and `hidden` would make this the scroll container. */}
           <div className="relative overflow-clip">

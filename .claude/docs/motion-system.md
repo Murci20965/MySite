@@ -65,7 +65,9 @@ overshoot, settled under 0.9 s at 30/60/144 fps), the sliding filter underline, 
 view-transition project filter and the 3D viewer skeleton went out with the Selected work and
 Blog sections. They are in git history (merge `2a92464`) if a future section needs them.
 The hero's twinkling stars (`.radiate-star`) and the intro-video modal (`.t-modal`) went out
-with the Studio hero on branch `feat/v3`.
+with the Studio hero on branch `feat/v3`. On 2026-10-07 the WebGL Earth journey (`HeroEarth`,
+`HeroBackdrop`, `earthJourney`, three.js) and the particle canvas (`FutureticParticles`) were
+retired: the film is becoming the site's background and ends on a globe.
 
 ## Open-source filmstrip
 
