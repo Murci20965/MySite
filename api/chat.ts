@@ -7,7 +7,8 @@ export const config = { runtime: 'edge' };
  * Contract: POST { messages: [{ role: 'user' | 'assistant', content: string }] }
  * → Groq's OpenAI-compatible SSE stream, forwarded verbatim (text/event-stream).
  * Errors: 405 wrong method, 400 bad payload, 429 rate limited, 503 when
- * GROQ_API_KEY is not configured, 502 upstream failure.
+ * GROQ_API_KEY is not configured, 502 upstream failure with
+ * { upstream_status, upstream_code } naming Groq's reason (0 = unreachable).
  *
  * Abuse posture (no paid infra): hard caps on message count/length +
  * max_tokens, plus a best-effort per-IP token bucket. Edge isolates don't
@@ -69,23 +70,43 @@ export default async function handler(request: Request): Promise<Response> {
     return Response.json({ error: 'invalid_messages' }, { status: 400 });
   }
 
-  const upstream = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
-      max_tokens: 400,
-      temperature: 0.6,
-      stream: true,
-    }),
-  });
+  let upstream: Response;
+  try {
+    upstream = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
+        max_tokens: 400,
+        temperature: 0.6,
+        stream: true,
+      }),
+    });
+  } catch (err) {
+    console.error('chat: groq unreachable', err instanceof Error ? err.message : err);
+    return Response.json({ error: 'upstream_error', upstream_status: 0 }, { status: 502 });
+  }
 
   if (!upstream.ok || !upstream.body) {
-    return Response.json({ error: 'upstream_error' }, { status: 502 });
+    // Observability: name WHY Groq refused (401 bad key, 404 model, 429
+    // limits). Only Groq's status and error code are logged and returned;
+    // never the key, never the prompt.
+    let code = 'unknown';
+    try {
+      const body = (await upstream.json()) as { error?: { code?: string; type?: string } };
+      code = body.error?.code ?? body.error?.type ?? 'unknown';
+    } catch {
+      /* non-JSON error body */
+    }
+    console.error('chat: groq rejected', { status: upstream.status, code, model: MODEL });
+    return Response.json(
+      { error: 'upstream_error', upstream_status: upstream.status, upstream_code: code },
+      { status: 502 }
+    );
   }
 
   return new Response(upstream.body, {

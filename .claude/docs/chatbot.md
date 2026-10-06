@@ -25,6 +25,15 @@ Request: `{ "messages": [{ "role": "user"|"assistant", "content": string }] }`
 Responses: `200` SSE stream · `400 invalid_json|invalid_messages` · `405` · `429 rate_limited`
 · `502 upstream_error` · `503 chat_not_configured` (key missing).
 
+**Diagnosing a 502.** The body carries `upstream_status` and `upstream_code` from Groq (the same
+pair is logged server-side as `chat: groq rejected`). 401 = the key is invalid or revoked: make a
+new key at console.groq.com and replace `GROQ_API_KEY` in Vercel (Production and Preview), then
+redeploy. 404/400 with a model code = the model id changed. 429 = Groq account limits (free tier:
+30 req/min, 12K tokens/min, 1K req/day, 100K tokens/day). 0 = Groq unreachable. A POST with a
+non-JSON body is a free check that the key is set at all (400 means set, 503 means missing).
+History: 2026-10-06 the live chat returned 502 in 0.42 s with the key set; this logging was
+added to name the cause.
+
 ## Security & spend posture
 - **Key**: `GROQ_API_KEY` — set by Murci in Vercel → Project → Settings → Environment
   Variables (never in the repo, never in chat, per standing secret-hygiene rule). Absent key
