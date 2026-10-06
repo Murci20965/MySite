@@ -26,6 +26,11 @@ needs focus:
 | FAQ | Absent |
 | Contact | Returns large and low behind the form — "from here, for anywhere" |
 
+> **2026-10-06, v3 Studio hero:** the hero station is now opacity 0 (the laptop owns the right
+> half) with About's pose and `hold: 0.6`, so the planet first appears by fading in at About.
+> With the canvas unmounted at the hero, reduced motion (which pins the hero pose) shows no
+> planet at all.
+
 Implementation: extend `src/lib/earthJourney.ts` from a single `p` to a **station timeline**
 (array of `{ atSectionId, pose, opacity }`), interpolated by one rAF reader in `HeroEarth`.
 One WebGL context, one scroll listener, damped transitions. Sections declare their station by

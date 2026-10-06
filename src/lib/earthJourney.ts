@@ -50,14 +50,19 @@ export const AFRICA_Y = 0.55;
  * Desktop timeline. Order must match the page's section order.
  *
  * The planet is a companion, not a switch: it swells and recedes rather than
- * blinking on and off. Only the Education stretch drops to true zero,
- * which gives the page one real rest (and lets the canvas unmount there).
- * `hold` parks a pose while a tall or pinned section plays out.
+ * blinking on and off. It is absent at the hero, where the Studio laptop owns
+ * the right half, and fades in place for About; the Education stretch is the
+ * other true zero. Opacity 0 lets the canvas unmount, so reduced motion (which
+ * pins the hero pose) shows no planet at all. `hold` parks a pose while a
+ * tall or pinned section plays out.
  */
 export const STATIONS: EarthStation[] = [
+  // The hero pose mirrors About's, so scrolling down is a fade, not a fly-in.
+  // hold 0.6 keeps it at zero while the hero fills the screen (the focus line
+  // starts at raw 0.5 on a one-screen hero, ~0.42 on a phone's taller one).
   // nx pulls the planet toward the copy; clampLeft stops it at the text edge
   // on any screen, so these two ride as close as they are allowed to.
-  { at: 'hero', nx: 0.16, ny: 0.02, s: 1.5, o: 1, ry: null, hold: 0.3, clampLeft: 0.52 },
+  { at: 'hero', nx: 0.3, ny: -0.02, s: 0.95, o: 0, ry: AFRICA_Y, hold: 0.6, clampLeft: 0.52 },
   {
     at: 'about',
     nx: 0.3,
@@ -85,11 +90,11 @@ export const STATIONS: EarthStation[] = [
 ];
 
 /** Narrow screens: tucked away, smaller, and hidden more often. */
-export const STATIONS_SM: EarthStation[] = STATIONS.map((st) =>
-  st.at === 'hero'
-    ? { ...st, nx: 0.24, ny: 0.3, s: 0.62 }
-    : { ...st, s: st.s * 0.7, o: st.o > 0.6 ? 0.6 : st.o }
-);
+export const STATIONS_SM: EarthStation[] = STATIONS.map((st) => ({
+  ...st,
+  s: st.s * 0.7,
+  o: st.o > 0.6 ? 0.6 : st.o,
+}));
 
 export const earthJourney = {
   /** current interpolated pose, written by the scroll reader */
