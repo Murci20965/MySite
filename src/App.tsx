@@ -4,7 +4,6 @@ import About from './components/About';
 import Experience from './components/Experience';
 import Skills from './components/Skills';
 import Stats from './components/Stats';
-import Blog from './components/Blog';
 import OpenSource from './components/OpenSource';
 import Education from './components/Education';
 import Testimonials from './components/Testimonials';
@@ -49,7 +48,6 @@ function App() {
             <Stats />
             <ExpandMedia />
             <Skills />
-            <Blog />
             <Education />
             <Testimonials />
             <FAQ />

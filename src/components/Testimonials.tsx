@@ -50,7 +50,7 @@ export default function Testimonials() {
               Principles
             </span>
             <span className="h-px flex-1 bg-white/15" />
-            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">07</span>
+            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">06</span>
           </div>
 
         </AnimatedSection>
