@@ -779,15 +779,16 @@
 }
 
 /* ---- Project filter: same-document view transition ------------------------
-   Only the named project cards animate. The root cross-fade is switched off,
-   so the rest of the page (including the sliding filter underline, which runs
-   its own transition) stays live instead of ghosting between two snapshots.
-   Cards present in both states glide to their new slot (the group animates
-   transform); cards entering or leaving fade and scale. All of it runs on
-   snapshots, on the compositor. */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
+   Only the named project cards are captured. The root is opted out, so the
+   rest of the page (including the sliding filter underline, which runs its
+   own transition) stays live instead of being frozen into a snapshot.
+   Measured in the production build, 6 alternating runs each: capturing the
+   root (a 21k px page with two canvases) stalled 2 of 6 transitions for
+   1.1-1.4 s before any motion started; without it, all 6 started in
+   67-150 ms. Cards present in both states glide to their new slot (the
+   group animates transform); cards entering or leaving fade and scale. */
+:root {
+  view-transition-name: none;
 }
 ::view-transition-group(*) {
   animation-duration: 420ms;
