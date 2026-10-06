@@ -66,8 +66,8 @@ export default function Blog() {
     const active = container.querySelector<HTMLElement>('[data-active="true"]');
     if (!active) return;
     const apply = () => {
-      underline.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop + active.offsetHeight}px)`;
-      underline.style.width = `${active.offsetWidth}px`;
+      // The bar is 1px wide: one transform both places and stretches it.
+      underline.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop + active.offsetHeight}px) scaleX(${active.offsetWidth})`;
     };
     if (animate) {
       apply();
