@@ -225,25 +225,6 @@ export default function Experience() {
             </div>
           </div>
         </AnimatedSection>
-
-        <AnimatedSection animation="fade-in">
-          <div className="mt-16 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
-            <div>
-              <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
-                Availability
-              </div>
-              <p className="max-w-md font-sans text-lg text-white/80">
-                Open to conversations about AI engineering, agentic systems, and XR learning.
-              </p>
-            </div>
-            <a
-              href="#contact"
-              className="whitespace-nowrap rounded-full border border-white/25 px-6 py-3 font-sans text-sm font-medium text-white transition-colors hover:border-white/40 hover:bg-white/10"
-            >
-              Get in touch
-            </a>
-          </div>
-        </AnimatedSection>
       </div>
     </section>
   );

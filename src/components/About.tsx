@@ -49,7 +49,7 @@ export default function About() {
             <div className="flex items-center gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-emerald-400/90">
-                Available for new projects
+                Open to conversations
               </span>
             </div>
 
