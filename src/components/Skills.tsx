@@ -3,30 +3,31 @@ import RevealHeading from './RevealHeading';
 import TechOrbit from './TechOrbit';
 
 export default function Skills() {
+  // Six categories mirror the CV's "Core technical skills" table.
   const skillCategories = [
     {
       title: 'Agentic AI & GenAI',
-      skills: ['LangChain', 'LangGraph', 'RAG + Pinecone', 'Claude & OpenAI APIs', 'Structured tool use'],
+      skills: ['LangChain', 'LangGraph', 'n8n', 'RAG pipelines', 'Vector databases', 'Multi-agent workflows', 'Claude & OpenAI APIs'],
     },
     {
       title: 'ML & Deep Learning',
-      skills: ['PyTorch', 'Scikit-learn', 'XGBoost', 'Transfer learning', 'Pandas & NumPy'],
+      skills: ['PyTorch', 'Scikit-learn', 'Weights & Biases', 'Fine-tuning', 'Inference & evaluation'],
     },
     {
       title: 'MLOps & Delivery',
-      skills: ['Docker', 'GitHub Actions CI/CD', 'HuggingFace Spaces', 'Render', 'Vercel'],
+      skills: ['Docker', 'GitHub Actions CI/CD', 'End-to-end MLOps pipelines', 'Serverless deployments', 'Git'],
     },
     {
-      title: 'Backend & Data',
-      skills: ['Python', 'FastAPI', 'PostgreSQL', 'Redis', 'asyncio & ETL'],
+      title: 'Languages & Data',
+      skills: ['Python', 'FastAPI', 'Node.js', 'SQL', 'Pandas & NumPy', 'ETL pipelines'],
     },
     {
-      title: 'Cloud & Web',
-      skills: ['AWS', 'Terraform', 'Next.js', 'React', 'TypeScript'],
+      title: 'Cloud & Architecture',
+      skills: ['AWS', 'Microsoft Azure', 'Hugging Face Spaces', 'Render', 'Vercel', 'System design', 'Microservices'],
     },
     {
-      title: 'XR & 3D',
-      skills: ['React Three Fiber', 'WebXR', 'GLB pipelines', 'Headless Blender', 'Three.js'],
+      title: 'Web, XR & 3D',
+      skills: ['Next.js', 'React', 'React Three Fiber', 'WebXR', 'Headless Blender'],
     },
   ];
 
@@ -89,12 +90,12 @@ export default function Skills() {
                 Currently exploring
               </div>
               <p className="font-sans text-lg text-white/80">
-                WebXR interaction patterns, agentic AI systems, and local model serving.
+                Multi-agent orchestration, WebXR interaction patterns, and self-hosted model serving.
               </p>
             </div>
             <div className="flex gap-10">
               {[
-                { v: '11', l: 'Certifications' },
+                { v: '6', l: 'Certifications' },
                 { v: '2', l: 'Academies' },
                 { v: '3', l: 'AI roles' },
               ].map((stat) => (
