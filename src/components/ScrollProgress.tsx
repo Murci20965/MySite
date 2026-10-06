@@ -31,7 +31,7 @@ export default function ScrollProgress() {
 
   return (
     <div className="t-progress" aria-hidden="true">
-      <div ref={barRef} className="t-progress-bar" />
+      <div ref={barRef} className="t-progress-bar t-scroll-linked" />
     </div>
   );
 }

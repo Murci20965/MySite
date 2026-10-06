@@ -444,6 +444,13 @@
   --chars-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Scroll-linked layers (progress bar, Vision band) are written from scroll
+   position every frame; they opt out of the global `*` transition rule, which
+   would otherwise ease each write over 200ms and make them trail the scroll. */
+.t-scroll-linked {
+  transition: none;
+}
+
 /* Reading-progress hairline: transform-driven so it never triggers layout. */
 .t-progress {
   position: fixed;

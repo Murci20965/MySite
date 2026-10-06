@@ -99,19 +99,19 @@ export default function ExpandMedia() {
               className="h-full w-full object-cover"
               loading="lazy"
             />
-            <div ref={dimRef} className="absolute inset-0 bg-black" style={{ opacity: 0.55 }} />
+            <div ref={dimRef} className="t-scroll-linked absolute inset-0 bg-black" style={{ opacity: 0.55 }} />
             {/* Letterbox bars: each covers 39% at rest and slides fully out by
                 p = 1. Same black as the section, so they read as the frame
                 edge; the returning Earth (z-30) still paints above them. */}
             <div
               ref={barTopRef}
               aria-hidden="true"
-              className="absolute inset-x-0 top-0 h-[39%] bg-black will-change-transform"
+              className="t-scroll-linked absolute inset-x-0 top-0 h-[39%] bg-black will-change-transform"
             />
             <div
               ref={barBottomRef}
               aria-hidden="true"
-              className="absolute inset-x-0 bottom-0 h-[39%] bg-black will-change-transform"
+              className="t-scroll-linked absolute inset-x-0 bottom-0 h-[39%] bg-black will-change-transform"
             />
           </div>
 
@@ -128,13 +128,13 @@ export default function ExpandMedia() {
           <div className="pointer-events-none absolute z-40 flex w-full flex-col items-center gap-2 text-center mix-blend-difference">
             <h2
               ref={leftRef}
-              className="font-display text-5xl font-medium leading-none tracking-[-0.01em] text-white sm:text-6xl lg:text-7xl"
+              className="t-scroll-linked font-display text-5xl font-medium leading-none tracking-[-0.01em] text-white sm:text-6xl lg:text-7xl"
             >
               Learning,
             </h2>
             <h2
               ref={rightRef}
-              className="font-display text-5xl font-medium leading-none tracking-[-0.01em] text-white sm:text-6xl lg:text-7xl"
+              className="t-scroll-linked font-display text-5xl font-medium leading-none tracking-[-0.01em] text-white sm:text-6xl lg:text-7xl"
             >
               made spatial
             </h2>
@@ -142,7 +142,7 @@ export default function ExpandMedia() {
 
           <div
             ref={copyRef}
-            className="pointer-events-none absolute bottom-10 z-40 max-w-2xl px-6 text-center"
+            className="t-scroll-linked pointer-events-none absolute bottom-10 z-40 max-w-2xl px-6 text-center"
             style={{ opacity: 0 }}
           >
             <p className="font-sans text-base leading-relaxed text-white/85 sm:text-lg">
