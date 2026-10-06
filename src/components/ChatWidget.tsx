@@ -166,7 +166,16 @@ export default function ChatWidget() {
                       : 'max-w-[92%] font-sans text-sm leading-relaxed text-white/80'
                   }
                 >
-                  {m.content || (busy && i === messages.length - 1 ? '…' : m.content)}
+                  {m.content ||
+                    (busy && i === messages.length - 1 ? (
+                      <span className="t-typing" role="status" aria-label="Assistant is typing">
+                        <span />
+                        <span />
+                        <span />
+                      </span>
+                    ) : (
+                      m.content
+                    ))}
                 </div>
               </div>
             ))}

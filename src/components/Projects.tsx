@@ -4,6 +4,7 @@ import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
 import TiltCard from './TiltCard';
 import ProjectDiagram from './ProjectDiagram';
+import ViewerSkeleton from './ViewerSkeleton';
 
 const ModelViewer = lazy(() => import('./ModelViewer'));
 
@@ -185,15 +186,7 @@ export default function Projects() {
                 <div className="relative">
                   {'model' in project && project.model && active3D === project.title ? (
                     <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/10">
-                      <Suspense
-                        fallback={
-                          <div className="flex h-full w-full items-center justify-center bg-[#0b0b0b]">
-                            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/50">
-                              Loading model&hellip;
-                            </span>
-                          </div>
-                        }
-                      >
+                      <Suspense fallback={<ViewerSkeleton />}>
                         <ModelViewer path={project.model} />
                       </Suspense>
                     </div>
