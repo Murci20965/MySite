@@ -115,21 +115,24 @@ export default function Navigation() {
 
       {/* `invisible` (visibility: hidden) when closed takes the off-screen links
           out of the tab order and the accessibility tree; visibility is in the
-          transition list so it only flips after the slide-out finishes. */}
+          transition list so it only flips after the slide-out finishes.
+          z-[45]: above the floating chat launcher (z-40), below the nav bar
+          (z-50) so the close button stays on top. The list starts below the
+          80px bar and is sized so all eight items fit a 702px-tall phone. */}
       <nav
         id="mobile-menu"
         aria-label="Mobile"
-        className={`fixed inset-0 bg-black z-40 transition-[transform,visibility] duration-300 ease-in-out lg:hidden ${
+        className={`fixed inset-0 bg-black z-[45] transition-[transform,visibility] duration-300 ease-in-out lg:hidden ${
           isMenuOpen ? 'translate-x-0 visible' : 'translate-x-full invisible'
         }`}
       >
-        <div className="flex flex-col items-center justify-center h-full gap-8">
+        <div className="flex flex-col items-center justify-center h-full gap-5 pt-20 pb-6">
           {NAV_LINKS.map((link) => (
             <a
               key={link.name}
               href={link.href}
               onClick={closeMenu}
-              className="font-display text-4xl font-medium text-white hover:text-white/70 transition-colors"
+              className="font-display text-3xl sm:text-4xl font-medium text-white hover:text-white/70 transition-colors"
             >
               {link.name}
             </a>
@@ -138,7 +141,7 @@ export default function Navigation() {
             href={RESUME.href}
             download={RESUME.filename}
             onClick={closeMenu}
-            className="font-sans px-10 py-4 bg-lime-400 hover:bg-lime-500 text-black font-medium rounded-full transition duration-300 active:scale-[0.98] text-2xl"
+            className="mt-2 font-sans px-10 py-3.5 bg-lime-400 hover:bg-lime-500 text-black font-medium rounded-full transition duration-300 active:scale-[0.98] text-xl"
           >
             Resume
           </a>
