@@ -75,6 +75,7 @@ export default function FAQ() {
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
+                  aria-controls={`faq-panel-${index}`}
                   className="flex w-full items-center justify-between gap-6 py-6 text-left"
                 >
                   <span className="font-display text-lg font-medium text-white">{faq.question}</span>
@@ -84,13 +85,26 @@ export default function FAQ() {
                     }`}
                   />
                 </button>
+                {/* Accordion (transitions.dev 21). Height is the one property
+                    here that must animate layout: there is no transform that
+                    grows a box without distorting its text. It stays cheap:
+                    one short grid-rows tween on a small list. Padding lives on
+                    the inner block, never the 0fr track, or the panel cannot
+                    fully close; the answer itself only fades and rises. */}
                 <div
-                  className={`grid transition-all duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    isOpen ? 'grid-rows-[1fr] pb-6' : 'grid-rows-[0fr]'
+                  id={`faq-panel-${index}`}
+                  className={`grid transition-[grid-template-rows] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="max-w-2xl font-sans leading-relaxed text-white/60">{faq.answer}</p>
+                    <p
+                      className={`max-w-2xl pb-6 font-sans leading-relaxed text-white/60 transition-[opacity,transform,visibility] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                        isOpen ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-1 opacity-0'
+                      }`}
+                    >
+                      {faq.answer}
+                    </p>
                   </div>
                 </div>
               </div>
