@@ -98,7 +98,7 @@ export default function Hero() {
 
               <div className="t-stagger-line t-stagger-line--4 mt-9 flex flex-wrap gap-3">
                 <a
-                  href="#projects"
+                  href="#opensource"
                   className="font-sans px-7 py-3 bg-white text-black text-sm font-medium rounded-full hover:bg-white/85 active:scale-[0.98] transition duration-300"
                 >
                   View Projects

@@ -695,64 +695,6 @@
   }
 }
 
-/* ---- Skeleton loader (transitions.dev 14, transform/opacity variant) -------
-   The 3D viewer's placeholder. The orb pulses (opacity), a highlight band
-   sweeps across (transform), and the layer fades out once the model is
-   ready. The upstream snippet's cross-blur is dropped: filters are off the
-   animated path site-wide. */
-:root {
-  --skel-pulse-dur: 1000ms;
-  --skel-pulse-min: 0.5;
-  --skel-sweep-dur: 1400ms;
-  --skel-reveal-dur: 400ms;
-}
-.t-skel-viewer {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  overflow: hidden;
-  background: #0b0b0b;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity var(--skel-reveal-dur) ease-in-out;
-}
-.t-skel-viewer.is-ready {
-  opacity: 0;
-}
-.t-skel-orb {
-  width: 34%;
-  max-width: 160px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02) 60%, transparent 70%);
-  animation: t-skel-pulse var(--skel-pulse-dur) ease-in-out infinite alternate;
-}
-/* 40% wide band; translateX is relative to its own width, so -100% -> 350%
-   carries it from fully off the left edge to fully off the right. */
-.t-skel-sweep {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 40%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
-  transform: translateX(-100%);
-  animation: t-skel-sweep var(--skel-sweep-dur) linear infinite;
-}
-@keyframes t-skel-pulse {
-  from { opacity: 1; }
-  to { opacity: var(--skel-pulse-min); }
-}
-@keyframes t-skel-sweep {
-  to { transform: translateX(350%); }
-}
-
 /* Typing indicator (chat): three dots rise and brighten in sequence. */
 .t-typing {
   display: inline-flex;
@@ -762,6 +704,64 @@
 }
 .t-typing span {
   width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  opacity: 0.35;
+  animation: t-typing 1100ms var(--stagger-ease) infinite;
+}
+.t-typing span:nth-child(2) { animation-delay: 140ms; }
+.t-typing span:nth-child(3) { animation-delay: 280ms; }
+@keyframes t-typing {
+  0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-typing span {
+    animation: none !important;
+    opacity: 0.7;
+  }
+}
+
+/* ---- Micro-interactions ----------------------------------------------------
+   Nav links: a hairline draws in from the left on hover and stays under the
+   current section; it retracts toward the right, so the motion has a
+   direction. Outbound arrows: a 2px nudge toward where they point. Both are
+   transform-only. */
+.t-navlink {
+  position: relative;
+}
+.t-navlink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 320ms var(--stagger-ease);
+}
+.t-navlink:hover::after,
+.t-navlink:focus-visible::after,
+.t-navlink[aria-current]::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+.t-nudge {
+  transition: transform 240ms var(--stagger-ease);
+}
+:is(a, button):is(:hover, :focus-visible) .t-nudge {
+  transform: translate(2px, -2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-navlink::after,
+  .t-nudge {
+    transition: none !important;
+  }
+}
 
 /* ---- Open-source filmstrip ---------------------------------------------------
    Pinned mode: OpenSource.tsx writes one translate3d on the track and an
@@ -820,114 +820,5 @@
   .t-live::after {
     animation: none !important;
     opacity: 0;
-  }
-}
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.7);
-  opacity: 0.35;
-  animation: t-typing 1100ms var(--stagger-ease) infinite;
-}
-.t-typing span:nth-child(2) { animation-delay: 140ms; }
-.t-typing span:nth-child(3) { animation-delay: 280ms; }
-@keyframes t-typing {
-  0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }
-  30% { opacity: 1; transform: translateY(-3px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .t-skel-orb,
-  .t-typing span {
-    animation: none !important;
-  }
-  .t-skel-sweep {
-    display: none;
-  }
-  .t-skel-viewer {
-    transition: none !important;
-  }
-  .t-typing span {
-    opacity: 0.7;
-  }
-}
-
-/* ---- Project filter: same-document view transition ------------------------
-   Only the named project cards are captured. The root is opted out, so the
-   rest of the page (including the sliding filter underline, which runs its
-   own transition) stays live instead of being frozen into a snapshot.
-   Measured in the production build, 6 alternating runs each: capturing the
-   root (a 21k px page with two canvases) stalled 2 of 6 transitions for
-   1.1-1.4 s before any motion started; without it, all 6 started in
-   67-150 ms. Cards present in both states glide to their new slot (the
-   group animates transform); cards entering or leaving fade and scale. */
-:root {
-  view-transition-name: none;
-}
-::view-transition-group(*) {
-  animation-duration: 420ms;
-  animation-timing-function: var(--stagger-ease);
-}
-::view-transition-new(*):only-child {
-  animation: t-vt-enter 360ms var(--stagger-ease) both;
-}
-::view-transition-old(*):only-child {
-  animation: t-vt-exit 200ms ease-in both;
-}
-@keyframes t-vt-enter {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-}
-@keyframes t-vt-exit {
-  to {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
-}
-
-/* ---- Micro-interactions ----------------------------------------------------
-   Nav links: a hairline draws in from the left on hover and stays under the
-   current section; it retracts toward the right, so the motion has a
-   direction. Outbound arrows: a 2px nudge toward where they point. Both are
-   transform-only. */
-.t-navlink {
-  position: relative;
-}
-.t-navlink::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 320ms var(--stagger-ease);
-}
-.t-navlink:hover::after,
-.t-navlink:focus-visible::after,
-.t-navlink[aria-current]::after {
-  transform: scaleX(1);
-  transform-origin: left center;
-}
-.t-nudge {
-  transition: transform 240ms var(--stagger-ease);
-}
-:is(a, button):is(:hover, :focus-visible) .t-nudge {
-  transform: translate(2px, -2px);
-}
-@media (prefers-reduced-motion: reduce) {
-  .t-navlink::after,
-  .t-nudge {
-    transition: none !important;
   }
 }

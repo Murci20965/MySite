@@ -93,7 +93,7 @@ export default function Contact() {
               Contact
             </span>
             <span className="h-px flex-1 bg-white/15" />
-            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">10</span>
+            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">09</span>
           </div>
 
           <RevealHeading
