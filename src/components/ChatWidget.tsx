@@ -20,6 +20,19 @@ export default function ChatWidget() {
   const { messages, busy, send: ask } = useChat();
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  // One assistant on screen at a time: while the hero's terminal is visible
+  // the launcher steps aside (on phones it would sit on top of it).
+  const [heroAsk, setHeroAsk] = useState(false);
+
+  useEffect(() => {
+    const terminal = document.querySelector('#hero .t-terminal');
+    if (!terminal || !('IntersectionObserver' in window)) return;
+    // A fast scroll can batch several entries; the last one is current.
+    const io = new IntersectionObserver((entries) => setHeroAsk(entries[entries.length - 1].isIntersecting));
+    io.observe(terminal);
+    return () => io.disconnect();
+  }, []);
+  const stowed = heroAsk && !open;
 
   useEffect(() => {
     if (open) inputRef.current?.focus();
@@ -50,7 +63,11 @@ export default function ChatWidget() {
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-label="Ask the assistant about Murci"
-        className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5 rounded-full border border-fg/20 bg-bg/80 px-5 py-3 backdrop-blur-md transition-colors hover:border-fg/40"
+        aria-hidden={stowed || undefined}
+        tabIndex={stowed ? -1 : undefined}
+        className={`fixed bottom-5 right-5 z-40 flex items-center gap-2.5 rounded-full border border-fg/20 bg-bg/80 px-5 py-3 backdrop-blur-md transition-[opacity,transform,border-color] duration-300 hover:border-fg/40 ${
+          stowed ? 'pointer-events-none translate-y-3 opacity-0' : ''
+        }`}
       >
         <span className="h-1.5 w-1.5 rounded-full bg-lime-400" />
         <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-fg/80">

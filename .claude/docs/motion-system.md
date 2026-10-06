@@ -45,6 +45,7 @@ breaking them. Last updated 2026-10-06.
 | Number pop-in | `PopNumber.tsx`, `.t-digit` | opacity, transform | |
 | Chat typing dots | `ChatWidget.tsx`, `HeroTerminal.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" / "Thinking" |
 | Studio screen placeholder | `ScreenPlaceholder.tsx`, `.t-bokeh`, `.t-glyphs` | transform, opacity | bokeh drift + falling glyph streams until the film lands; `animation: none` under reduced motion |
+| Chat launcher stow | `ChatWidget.tsx` | opacity, transform | hides (and leaves the tab order) while the hero terminal is in view |
 | Nav underline, arrow nudge | `.t-navlink`, `.t-nudge` | transform | |
 | Marquee, tech orbit | `.t-marquee-track`, `.t-orbit-*` | transform | infinite; frozen by the reduced-motion rule |
 
