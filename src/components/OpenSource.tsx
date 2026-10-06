@@ -266,7 +266,10 @@ export default function OpenSource() {
                 <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">03</span>
               </div>
 
-              <div className="flex items-end justify-between gap-6">
+              {/* gap-4 + a 64 px bar on phones: the heading's min-content
+                  ("Open-source" never breaks) is 226 px, and 226 + 24 + 96
+                  overflowed the 312 px row and clipped the counter. */}
+              <div className="flex items-end justify-between gap-4 lg:gap-6">
                 {/* Film cue: the network crystallises into glass cubes (M3, 2 s). */}
                 <div data-beat="m3:0.2">
                   <RevealHeading
@@ -292,7 +295,7 @@ export default function OpenSource() {
                   <span className="mt-2 block font-mono text-[11px] uppercase tracking-[0.2em] text-fg/40">
                     of {pad(WORK.length)}
                   </span>
-                  <div className="ml-auto mt-3 h-0.5 w-24 overflow-hidden rounded-full bg-fg/10">
+                  <div className="ml-auto mt-3 h-0.5 w-16 overflow-hidden rounded-full bg-fg/10 lg:w-24">
                     <div ref={barRef} className="t-film-bar h-full w-full bg-lime-400" />
                   </div>
                 </div>
