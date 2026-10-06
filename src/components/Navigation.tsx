@@ -22,10 +22,11 @@ export default function Navigation() {
   const toggleRef = useRef<HTMLButtonElement>(null);
 
   // Scroll-spy: mark the nav link for whichever section sits near mid-viewport.
+  // Every section is observed, not just linked ones, so scrolling back to the
+  // hero (or Stats, Vision, FAQ) clears the underline instead of leaving the
+  // last linked section highlighted.
   useEffect(() => {
-    const sections = NAV_LINKS.map((l) => document.getElementById(l.href.slice(1))).filter(
-      (el): el is HTMLElement => el !== null
-    );
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('section[id]'));
     if (!sections.length) return;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -62,7 +63,7 @@ export default function Navigation() {
 
   return (
     <>
-      <nav aria-label="Primary" className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md">
+      <nav aria-label="Primary" className="fixed top-0 left-0 right-0 z-50 bg-bg/80 backdrop-blur-md">
         <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
           <div className="flex items-center justify-between h-20">
             <a
@@ -90,8 +91,8 @@ export default function Navigation() {
                   </a>
                 );
               })}
-              <a
               <ThemeToggle />
+              <a
                 href={RESUME.href}
                 download={RESUME.filename}
                 className="font-sans px-6 py-2.5 bg-lime-400 hover:bg-lime-500 text-black font-medium rounded-full transition duration-300 active:scale-[0.98] text-sm"
