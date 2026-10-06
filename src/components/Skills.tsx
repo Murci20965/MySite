@@ -60,7 +60,7 @@ export default function Skills() {
 
         <div className="mt-16 grid gap-x-10 gap-y-12 border-t border-white/10 pt-12 sm:grid-cols-2 lg:grid-cols-3">
           {skillCategories.map((category, index) => (
-            <AnimatedSection key={category.title} animation="fade-in" delay={index > 2}>
+            <AnimatedSection key={category.title} animation="fade-in" index={index % 3}>
               <div>
                 <div className="mb-4 flex items-baseline gap-3">
                   <span className="font-mono text-[11px] text-white/30">
