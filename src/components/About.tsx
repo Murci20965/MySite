@@ -15,12 +15,16 @@ export default function About() {
             <span className="t-drift font-mono text-[11px] tracking-[0.28em] uppercase text-fg/30">01</span>
           </div>
 
-          <RevealHeading
-            text="Who am I?"
-            className="font-display text-4xl sm:text-5xl lg:text-6xl font-medium text-fg leading-[1.05] tracking-[-0.01em] mb-10 max-w-3xl"
-          />
+          {/* Film cues (FilmStage): glyphs start on the laptop screen, the
+              screen fills the frame, then a point of light forms. */}
+          <div data-beat="m1:0.55">
+            <RevealHeading
+              text="Who am I?"
+              className="font-display text-4xl sm:text-5xl lg:text-6xl font-medium text-fg leading-[1.05] tracking-[-0.01em] mb-10 max-w-3xl"
+            />
+          </div>
 
-          <p className="font-sans text-xl lg:text-2xl text-fg/80 leading-relaxed max-w-3xl mb-10">
+          <p data-beat="m1:0.7" className="font-sans text-xl lg:text-2xl text-fg/80 leading-relaxed max-w-3xl mb-10">
             I'm a production-focused AI engineer who owns systems end to end: from{' '}
             <span className="text-fg">data pipeline</span> through{' '}
             <span className="text-fg">model training and inference</span> to deployment,
@@ -28,7 +32,7 @@ export default function About() {
             learning real skills shouldn't depend on where you were born.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl font-sans text-fg/60">
+          <div data-beat="m1:0.92" className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl font-sans text-fg/60">
             <p className="text-base lg:text-lg leading-relaxed">
               I design <span className="text-fg/90">agentic workflows</span> with LangChain,
               LangGraph and n8n, <span className="text-fg/90">RAG architectures</span> over vector

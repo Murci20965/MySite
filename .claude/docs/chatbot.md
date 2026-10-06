@@ -3,7 +3,7 @@
 ## What it is
 A chat on the site answering visitor questions about Murci, grounded EXCLUSIVELY in his verified
 facts. It has two faces sharing one client (`src/hooks/useChat.ts`): the terminal inside the
-hero's Studio laptop (`HeroTerminal.tsx`, shows the latest exchange) and the floating
+hero, under the call-to-action buttons (`HeroTerminal.tsx`, shows the latest exchange) and the floating
 "Ask about me" chat (`ChatWidget.tsx`, keeps the conversation). The floating launcher steps aside
 while the hero terminal is on screen, so only one is offered at a time. It exists to position him well for employers — and to itself be proof he
 ships LLM systems.

@@ -246,7 +246,7 @@ export default function OpenSource() {
   const gutter = 'px-6 sm:px-10 lg:px-16 xl:px-24';
 
   return (
-    <section id="opensource" className="relative bg-bg">
+    <section id="opensource" className="relative">
       <div ref={wrapRef} className="relative">
         <div
           ref={stageRef}
@@ -267,7 +267,8 @@ export default function OpenSource() {
               </div>
 
               <div className="flex items-end justify-between gap-6">
-                <div>
+                {/* Film cue: the network crystallises into glass cubes (M3, 2 s). */}
+                <div data-beat="m3:0.2">
                   <RevealHeading
                     text="Open-source work"
                     className="mb-4 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"

@@ -85,7 +85,7 @@ export default function Contact() {
   const labelClass = 'mb-2 block font-mono text-[11px] uppercase tracking-[0.15em] text-fg/40';
 
   return (
-    <section id="contact" className="relative bg-bg py-24 lg:py-32">
+    <section id="contact" className="relative py-24 lg:py-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
@@ -96,10 +96,13 @@ export default function Contact() {
             <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">08</span>
           </div>
 
-          <RevealHeading
-            text="Let’s work together"
-            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
-          />
+          {/* Film cue: the arcs fan out across the globe (M6, 7.6 s). */}
+          <div data-beat="m6:0.76">
+            <RevealHeading
+              text="Let’s work together"
+              className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
+            />
+          </div>
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg/70">
             A role, a collaboration, or a question about my work: my inbox is open, and I typically reply within 24 hours.
           </p>
@@ -158,7 +161,9 @@ export default function Contact() {
             )}
           </div>
 
-          <aside className="space-y-10">
+          {/* A translucent panel: on phones this list sits over the film's
+              brightest frames (the arcs across the globe) at the page's end. */}
+          <aside className="space-y-10 rounded-2xl border border-fg/10 bg-bg/55 p-6 lg:p-8">
             <div>
               <div className="mb-5 font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
                 Direct

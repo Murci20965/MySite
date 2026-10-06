@@ -42,7 +42,7 @@ export default function Testimonials() {
   ];
 
   return (
-    <section id="reviews" className="relative bg-bg py-24 lg:py-32">
+    <section id="reviews" className="relative py-24 lg:py-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">

@@ -1,27 +1,35 @@
-/* The "Prompt to People" film, as frame sequences for the scroll-scrub
- * chapters. Frames are encoded by scripts/encode-film.sh into
- * public/film/<id>/<width>/NNN.webp (1-based, zero-padded). Pipeline and
- * budgets: .claude/docs/film.md.
+/* The "Prompt to People" film: six clips encoded as frame sequences by
+ * scripts/encode-film.sh into public/film/<id>/<rendition>/NNN.webp (1-based,
+ * zero-padded). FilmStage draws them as the site's full-screen background.
+ * Pipeline, contract and budgets: .claude/docs/film.md.
+ *
+ * Film time T runs 0..6 across the whole film: the integer part is the clip
+ * (0 = M1 ... 5 = M6), the fraction is how far through it (0 = 0 s, 1 = 10 s).
  */
 
 export interface FilmClip {
   /** folder under public/film */
   id: string;
-  /** frames per rendition (every 2nd source frame of a 10 s, 24 fps clip) */
+  /** frames per rendition (every 3rd source frame of a 10 s, 24 fps clip) */
   count: number;
 }
 
-/** Desktop rendition on wide screens, the lighter one everywhere else. */
-export const WIDE_QUERY = '(min-width: 1024px)';
-export const RENDITIONS = { wide: 960, narrow: 640 } as const;
+export const CLIPS: FilmClip[] = [
+  { id: 'm1', count: 81 }, // night desk, dolly into the laptop, glyph waterfall
+  { id: 'm2', count: 81 }, // glyph rain, a point of light, burst (6 s), agent network
+  { id: 'm3', count: 81 }, // network crystallises into glass cubes (2 s), sideways track
+  { id: 'm4', count: 81 }, // cubes pass a gate of light (3-5 s) into a data-centre aisle
+  { id: 'm5', count: 81 }, // bright aisle, golden doorway (5-7 s), XR classroom (8 s)
+  { id: 'm6', count: 81 }, // night room, skylight, dusk city, orbit, arcs over the globe
+];
+export const FILM_END = CLIPS.length;
 
-export const FILM = {
-  /** Chapter 01: night desk, dolly into the laptop, code becomes streaming light. */
-  m1: { id: 'm1', count: 121 },
-} satisfies Record<string, FilmClip>;
+/** wide: the full 1280x720 frame; tall: a 432x720 centre crop for portrait screens. */
+export type Rendition = 'wide' | 'tall';
+export const RENDITION_WIDTH: Record<Rendition, number> = { wide: 1280, tall: 432 };
 
-export function frameUrl(clip: FilmClip, width: number, index: number): string {
-  return `/film/${clip.id}/${width}/${String(index + 1).padStart(3, '0')}.webp`;
+export function frameUrl(clip: FilmClip, rendition: Rendition, index: number): string {
+  return `/film/${clip.id}/${rendition}/${String(index + 1).padStart(3, '0')}.webp`;
 }
 
 /**
@@ -44,4 +52,10 @@ export function loadOrder(count: number): number[] {
     for (let i = 0; i < count; i += step) push(i);
   }
   return order;
+}
+
+/** "m2:0.6" (clip id, fraction through it) -> film time 1.6. NaN if malformed. */
+export function parseBeat(beat: string): number {
+  const m = /^m([1-6]):(0(?:\.\d+)?|1(?:\.0+)?)$/.exec(beat.trim());
+  return m ? Number(m[1]) - 1 + Number(m[2]) : NaN;
 }

@@ -87,7 +87,7 @@ const experiences: ExperienceData[] = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="relative bg-bg pt-12 pb-24 lg:pt-16 lg:pb-32">
+    <section id="experience" className="relative pt-12 pb-24 lg:pt-16 lg:pb-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
@@ -98,10 +98,13 @@ export default function Experience() {
             <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">02</span>
           </div>
 
-          <RevealHeading
-            text="Professional experience"
-            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
-          />
+          {/* Film cue: the light bursts into the agent network (M2, 6 s). */}
+          <div data-beat="m2:0.6">
+            <RevealHeading
+              text="Professional experience"
+              className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
+            />
+          </div>
           <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg/70 lg:text-xl">
             From ML foundations to production AI systems, and now the AI layer of XR education.
           </p>
@@ -202,7 +205,9 @@ export default function Experience() {
                   href: 'https://github.com/Murci20965/real_estate_price_predictor',
                 },
               ].map((s) => (
-                <div key={s.step} className="flex flex-col rounded-2xl border border-fg/10 p-6">
+                // A translucent surface: these sit over the brightest frames of the
+                // agent network, so the text gets a panel, not just a border.
+                <div key={s.step} className="flex flex-col rounded-2xl border border-fg/10 bg-bg/55 p-6">
                   <div className="font-mono text-[11px] text-accent/80">{s.step}</div>
                   <h3 className="mt-3 font-display text-lg font-medium text-fg">{s.title}</h3>
                   <p className="mt-2 font-sans text-sm leading-relaxed text-fg/55">{s.text}</p>

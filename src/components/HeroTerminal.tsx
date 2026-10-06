@@ -4,9 +4,9 @@ import { useChat } from '../hooks/useChat';
 const SUGGESTIONS = ['What has he shipped?', 'Show me the XR work', 'How does he work?'];
 
 /**
- * The assistant as the Studio screen's terminal: ask in plain words, the
+ * The assistant as a terminal in the hero: ask in plain words, the
  * answer streams in from the same verified corpus as the floating chat. Only
- * the latest exchange is shown (it is a small screen); the floating "Ask
+ * the latest exchange is shown (it lives in the hero); the floating "Ask
  * about me" chat keeps a full conversation. The answer region is a polite
  * live region, so screen readers hear it when it finishes.
  */
@@ -30,9 +30,10 @@ export default function HeroTerminal() {
   };
 
   return (
-    // Two rows at rest (suggestions, prompt) so the film keeps most of the
-    // screen; the identity a title bar would carry lives in the prompt.
-    <div className="t-terminal absolute inset-x-[4%] bottom-[4%] rounded-lg border border-white/10 bg-black/70 font-mono text-[12px] leading-relaxed text-white/85 backdrop-blur-md">
+    // Two rows at rest (suggestions, prompt) so it stays a quiet line under
+    // the hero copy; the identity a title bar would carry lives in the prompt.
+    // A terminal is dark in both themes, like the film behind it.
+    <div className="t-terminal relative rounded-lg border border-white/10 bg-black/75 font-mono text-[12px] leading-relaxed text-white/85 backdrop-blur-md">
       <div ref={outRef} className="max-h-[6rem] overflow-y-auto px-3 pt-2 sm:max-h-[7.5rem]" aria-live="polite" aria-busy={busy}>
         {lastQuestion ? (
           <>
@@ -82,7 +83,7 @@ export default function HeroTerminal() {
           maxLength={500}
           className="min-w-0 flex-1 bg-transparent text-white placeholder-white/55 caret-lime-400 focus:outline-none"
         />
-        <button type="submit" disabled={busy} className="text-[11px] text-white/60 transition-colors hover:text-lime-400 disabled:opacity-40">
+        <button type="submit" disabled={busy} className="text-[11px] text-white/70 transition-colors hover:text-lime-400 disabled:opacity-40">
           enter ↵
         </button>
       </form>

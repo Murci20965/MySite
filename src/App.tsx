@@ -15,6 +15,7 @@ import ScrollProgress from './components/ScrollProgress';
 import ExpandMedia from './components/ExpandMedia';
 import Marquee from './components/Marquee';
 import ChatWidget from './components/ChatWidget';
+import FilmStage from './components/FilmStage';
 
 function App() {
   return (
@@ -22,14 +23,18 @@ function App() {
     // container and silently breaks every position:sticky on the page
     // (the Vision expansion and the Principles card stack both depend on it).
     <div className="min-h-screen bg-bg overflow-x-clip">
+      {/* The film is the background of every section (fixed, z-0); the
+          sections themselves stay transparent so it shows through. */}
+      <FilmStage />
       <div className="grain-overlay" aria-hidden="true" />
       <div className="relative z-10">
         <SimpleCursor />
         <ScrollProgress />
         <Navigation />
         <div className="relative">
-          {/* overflow-CLIP, not -hidden: the hero pins (sticky) while its
-              film plays, and `hidden` would make this the scroll container. */}
+          {/* No background on any wrapper: the fixed film paints beneath them.
+              overflow-CLIP, not -hidden: `hidden` would make this a scroll
+              container and break position: sticky inside it. */}
           <div className="relative overflow-clip">
             <Hero />
             <About />
