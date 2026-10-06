@@ -29,7 +29,9 @@ Projects (all public on his GitHub):
 - Orbit-3D Asset Pipeline (live: orbit-3d-pipeline.vercel.app): multimodal text/image-to-3D (Tripo3D, Groq Llama-4 Vision); Dockerised headless Blender engine centres, scales and Draco-compresses meshes for WebGL; asyncio orchestration runs generation steps concurrently.
 - Real Estate Price Predictor: end-to-end MLOps with XGBoost; R² 0.9037 and RMSE 0.1341 (on log-transformed sale prices) on unseen test data; FastAPI service, Docker, GitHub Actions pipeline that tests, builds to Amazon ECR and deploys to Elastic Beanstalk.
 - Medical Image Classifier: chest X-ray pneumonia detection with ResNet50 transfer learning; 82.85% test accuracy, 0.96 recall and 0.80 precision for pneumonia (recall deliberately prioritised); FastAPI service with a Gradio UI, Dockerised.
-- Also: Resume-Match AI (resume-to-job-posting fit scoring), Smart-Spend (AI personal finance).
+- Cat vs Dog Classifier: full MLOps lifecycle on a vision model; CNN trained with FastAI on the Oxford-IIIT Pet dataset, served by FastAPI with a Gradio UI, Dockerised. No accuracy figure is published.
+- Resume-Match AI: scores how well a resume matches a job posting with structured LLM analysis.
+- Smart-Spend: Python personal-finance app (FastAPI, PostgreSQL, Redis, Hugging Face models) that categorises bank transactions, learns from user corrections and gives personalised advice.
 
 Skills (CV categories): Agentic AI & GenAI (LangChain, LangGraph, n8n, RAG pipelines, vector databases, multi-agent workflows, Claude & OpenAI APIs); ML & deep learning (PyTorch, scikit-learn, Weights & Biases, model training, fine-tuning, inference & evaluation); data (Pandas, NumPy, Matplotlib, SQL, ETL pipelines); languages & frameworks (Python, FastAPI, Next.js, React, Node.js); MLOps & delivery (Docker, Git, GitHub Actions CI/CD, end-to-end MLOps pipelines, serverless deployments); cloud (AWS, Microsoft Azure, Hugging Face Spaces, Render, Vercel); architecture (system design, scalable architecture, microservices); XR & 3D (React Three Fiber, WebXR, headless Blender).
 
