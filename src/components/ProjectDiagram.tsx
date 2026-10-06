@@ -10,7 +10,8 @@ export type DiagramVariant =
   | 'regression'
   | 'transfer'
   | 'match'
-  | 'spend';
+  | 'spend'
+  | 'vision';
 
 const LINE = '#3a3a3a';
 const LIME = '#a3e635';
@@ -206,6 +207,31 @@ function Spend() {
   );
 }
 
+function Vision() {
+  return (
+    <>
+      <line x1="76" y1="88" x2="100" y2="88" stroke={LINE} />
+      <line x1="148" y1="88" x2="172" y2="88" stroke={LINE} />
+      <line x1="220" y1="88" x2="244" y2="88" stroke={LIME_DIM} />
+      <rect x="32" y="74" width="44" height="28" {...box} />
+      <rect x="100" y="74" width="48" height="28" fill={box.fill} stroke={LIME} rx="4" />
+      <rect x="172" y="74" width="48" height="28" {...box} />
+      <rect x="244" y="74" width="44" height="28" {...box} />
+      <text x="54" y="92" textAnchor="middle" fill={LABEL} className="t-diagram-t">img</text>
+      <text x="124" y="92" textAnchor="middle" fill={LIME} className="t-diagram-t">CNN</text>
+      <text x="196" y="92" textAnchor="middle" fill={LABEL} className="t-diagram-t">API</text>
+      <text x="266" y="92" textAnchor="middle" fill={LABEL} className="t-diagram-t">UI</text>
+      <text x="124" y="130" textAnchor="middle" fill={MUTED} className="t-diagram-t">
+        FastAI
+      </text>
+      <text x="231" y="130" textAnchor="middle" fill={MUTED} className="t-diagram-t">
+        FastAPI + Gradio
+      </text>
+      <Pulse d="M54 88 H266" />
+    </>
+  );
+}
+
 const VARIANTS: Record<DiagramVariant, () => JSX.Element> = {
   avatar: Avatar,
   orbit: Orbit,
@@ -213,6 +239,7 @@ const VARIANTS: Record<DiagramVariant, () => JSX.Element> = {
   transfer: Transfer,
   match: Match,
   spend: Spend,
+  vision: Vision,
 };
 
 export default function ProjectDiagram({ variant }: { variant: DiagramVariant }) {
