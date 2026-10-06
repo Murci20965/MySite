@@ -716,7 +716,7 @@
 /* ---- Studio laptop (chapter 01) --------------------------------------------
    The bezel and deck follow the theme (graphite on black, warm stone on
    paper); the screen is always dark because it is a screen. Shadows are
-   static; the only motion is the placeholder's transform/opacity. */
+   static; the film on the screen is a canvas (FilmScrub.tsx). */
 :root,
 [data-theme='dark'] {
   --studio-bezel: 28 28 28;
@@ -769,57 +769,6 @@
   height: 5px;
   border-radius: 0 0 6px 6px;
   background: rgb(0 0 0 / 0.16);
-}
-
-/* Placeholder until the film arrives: a desk at night. Bokeh drift and
-   glyph streams are transform/opacity loops; under reduced motion they are
-   switched off, which leaves the bokeh still and the streams out of frame. */
-.t-screen-ph {
-  background:
-    radial-gradient(120% 80% at 75% 0%, rgb(163 230 53 / 0.1), transparent 60%),
-    radial-gradient(90% 70% at 12% 18%, rgb(90 120 170 / 0.18), transparent 65%),
-    linear-gradient(#0d0f12, #070707);
-}
-.t-bokeh {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(255 255 255 / 0.22), transparent 70%);
-  animation: t-bokeh-drift 9s ease-in-out infinite alternate;
-}
-.t-bokeh--lime {
-  background: radial-gradient(circle, rgb(163 230 53 / 0.3), transparent 70%);
-}
-.t-bokeh:nth-child(2) { animation-delay: -3s; animation-duration: 11s; }
-.t-bokeh:nth-child(3) { animation-delay: -6s; }
-.t-bokeh:nth-child(4) { animation-delay: -1.5s; animation-duration: 13s; }
-@keyframes t-bokeh-drift {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-    opacity: 0.6;
-  }
-  to {
-    transform: translate3d(8px, -10px, 0) scale(1.1);
-    opacity: 1;
-  }
-}
-.t-glyphs {
-  position: absolute;
-  top: -40%;
-  width: 1px;
-  height: 40%;
-  background: linear-gradient(transparent, rgb(163 230 53 / 0.35), transparent);
-  animation: t-glyph-fall 12s linear infinite;
-}
-@keyframes t-glyph-fall {
-  to {
-    transform: translate3d(0, 360%, 0);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .t-bokeh,
-  .t-glyphs {
-    animation: none !important;
-  }
 }
 
 /* ---- Muted-text floor (see the --tx-* tokens in the base layer) ----------- */

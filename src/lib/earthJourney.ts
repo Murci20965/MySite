@@ -58,11 +58,12 @@ export const AFRICA_Y = 0.55;
  */
 export const STATIONS: EarthStation[] = [
   // The hero pose mirrors About's, so scrolling down is a fade, not a fly-in.
-  // hold 0.6 keeps it at zero while the hero fills the screen (the focus line
-  // starts at raw 0.5 on a one-screen hero, ~0.42 on a phone's taller one).
+  // hold 0.8 keeps it at zero through the hero: on desktop the hero is two
+  // screens tall (one pinned while film M1 plays), so the focus line reaches
+  // raw 0.75 when the pin releases; a phone's one-screen hero starts at ~0.42.
   // nx pulls the planet toward the copy; clampLeft stops it at the text edge
   // on any screen, so these two ride as close as they are allowed to.
-  { at: 'hero', nx: 0.3, ny: -0.02, s: 0.95, o: 0, ry: AFRICA_Y, hold: 0.6, clampLeft: 0.52 },
+  { at: 'hero', nx: 0.3, ny: -0.02, s: 0.95, o: 0, ry: AFRICA_Y, hold: 0.8, clampLeft: 0.52 },
   {
     at: 'about',
     nx: 0.3,

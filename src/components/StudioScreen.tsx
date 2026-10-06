@@ -5,6 +5,8 @@ type Props = {
   media: ReactNode;
   /** Overlay on the screen's lower third (the hero terminal). */
   children?: ReactNode;
+  /** Under the laptop: the film's timeline. */
+  caption?: ReactNode;
   className?: string;
 };
 
@@ -13,7 +15,7 @@ type Props = {
  * always dark (it is a screen in both themes); the bezel and deck follow the
  * theme tokens, graphite on black and warm stone on paper.
  */
-export default function StudioScreen({ media, children, className = '' }: Props) {
+export default function StudioScreen({ media, children, caption, className = '' }: Props) {
   return (
     <figure className={`t-studio ${className}`}>
       <div className="t-studio-bezel">
@@ -23,6 +25,7 @@ export default function StudioScreen({ media, children, className = '' }: Props)
         </div>
       </div>
       <div className="t-studio-deck" aria-hidden="true" />
+      {caption}
     </figure>
   );
 }

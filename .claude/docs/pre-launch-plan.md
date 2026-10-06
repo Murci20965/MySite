@@ -27,7 +27,8 @@ needs focus:
 | Contact | Returns large and low behind the form — "from here, for anywhere" |
 
 > **2026-10-06, v3 Studio hero:** the hero station is now opacity 0 (the laptop owns the right
-> half) with About's pose and `hold: 0.6`, so the planet first appears by fading in at About.
+> half) with About's pose and `hold: 0.8` (the desktop hero is two screens tall while film M1
+> plays), so the planet first appears by fading in at About.
 > With the canvas unmounted at the hero, reduced motion (which pins the hero pose) shows no
 > planet at all.
 

@@ -44,7 +44,7 @@ breaking them. Last updated 2026-10-06.
 | Principles stack | `.t-stack-card` | transform, opacity | scroll-driven; opacity 0.6 renders like brightness 0.6 on black |
 | Number pop-in | `PopNumber.tsx`, `.t-digit` | opacity, transform | |
 | Chat typing dots | `ChatWidget.tsx`, `HeroTerminal.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" / "Thinking" |
-| Studio screen placeholder | `ScreenPlaceholder.tsx`, `.t-bokeh`, `.t-glyphs` | transform, opacity | bokeh drift + falling glyph streams until the film lands; `animation: none` under reduced motion |
+| Hero film scrub | `FilmScrub.tsx`, `Hero.tsx` | canvas frames; the timeline bar is `scaleX` (`t-scroll-linked`) | M1 frame sequence driven by scroll; the hero pins for one screen on desktop; a single still frame under reduced motion. See `film.md` |
 | Chat launcher stow | `ChatWidget.tsx` | opacity, transform | hides (and leaves the tab order) while the hero terminal is in view |
 | Nav underline, arrow nudge | `.t-navlink`, `.t-nudge` | transform | |
 | Marquee, tech orbit | `.t-marquee-track`, `.t-orbit-*` | transform | infinite; frozen by the reduced-motion rule |

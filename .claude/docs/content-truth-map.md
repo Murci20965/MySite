@@ -86,8 +86,10 @@ authenticated), Google Drive, Canva. Gmail connector was erroring on 2026-08-01 
   APIs, agentic workflows, RAG and end-to-end MLOps; currently applying it to XR simulation and
   assessment at Nudle.
 - **Hero video: resolved 2026-10-06.** The Rickroll modal is gone. The Studio laptop's screen
-  will play Murci's "Prompt to People" film (generated on OpenArt); a placeholder runs until
-  then, and the screen's terminal is the live assistant.
+  plays clip M1 of Murci's "Prompt to People" film (generated on OpenArt), scrubbed by scroll,
+  and the screen's terminal is the live assistant. See `film.md`.
+- **Planet chapter copy (later):** clip M6 ends over North America, not Johannesburg, and Murci
+  kept it. Do not caption it as arcs leaving Johannesburg.
 
 ### About (`About.tsx`)
 - Rewrite lead + two columns from CV profile + mission (XR education access) — keeping the
