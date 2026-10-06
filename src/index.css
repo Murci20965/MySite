@@ -7,6 +7,12 @@
     scroll-behavior: smooth;
   }
 
+  /* In-page links land below the fixed 80px nav (h-20) instead of under it:
+     Experience's 64px top padding left its kicker hidden behind the bar. */
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
   body {
     @apply bg-black text-white antialiased font-sans;
   }
