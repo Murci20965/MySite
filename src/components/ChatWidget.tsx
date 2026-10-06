@@ -166,7 +166,16 @@ export default function ChatWidget() {
                       : 'max-w-[92%] font-sans text-sm leading-relaxed text-white/80'
                   }
                 >
-                  {m.content || (busy && i === messages.length - 1 ? '…' : m.content)}
+                  {m.content ||
+                    (busy && i === messages.length - 1 ? (
+                      <span className="t-typing" role="status" aria-label="Assistant is typing">
+                        <span />
+                        <span />
+                        <span />
+                      </span>
+                    ) : (
+                      m.content
+                    ))}
                 </div>
               </div>
             ))}
@@ -193,7 +202,7 @@ export default function ChatWidget() {
               aria-label="Send question"
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-black transition duration-300 hover:bg-white/85 active:scale-[0.98] disabled:opacity-50"
             >
-              <ArrowUpRight className="h-4 w-4" />
+              <ArrowUpRight className="t-nudge h-4 w-4" />
             </button>
           </form>
         </div>

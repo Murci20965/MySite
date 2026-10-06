@@ -1,9 +1,12 @@
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
+import { flushSync } from 'react-dom';
 import { Github, ArrowUpRight, Box } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
 import TiltCard from './TiltCard';
 import ProjectDiagram from './ProjectDiagram';
+import ViewerSkeleton from './ViewerSkeleton';
 
 const ModelViewer = lazy(() => import('./ModelViewer'));
 
@@ -40,7 +43,7 @@ export default function Projects() {
       category: '3D & XR',
       model: PIPELINE_MODEL,
       description:
-        'Multimodal text/image-to-3D generation pipeline producing optimised, web-ready 3D models. A Dockerised headless Blender engine centres, scales and formats AI-generated meshes for WebGL, with asyncio orchestration keeping latency low.',
+        'Multimodal text/image-to-3D generation pipeline producing optimised, web-ready 3D models. A Dockerised headless Blender engine centres, scales and Draco-compresses AI-generated meshes for WebGL, with asyncio orchestration running generation steps concurrently.',
       diagram: 'orbit' as const,
       metrics: { accuracy: 'Text + image', impact: 'Web-ready GLB', data: 'Headless Blender' },
       tech: ['Next.js 16', 'FastAPI', 'Tripo3D', 'Llama-4 Vision', 'Blender'],
@@ -52,10 +55,10 @@ export default function Projects() {
       title: 'Real Estate Price Predictor',
       category: 'Machine Learning',
       description:
-        'End-to-end MLOps system predicting house prices with gradient boosting, from training and evaluation through a CI/CD pipeline with GitHub Actions and Docker to a deployable FastAPI service.',
+        'End-to-end MLOps system predicting house prices with XGBoost: a FastAPI service, Dockerised, with a GitHub Actions pipeline that tests, builds to Amazon ECR and deploys to Elastic Beanstalk. RMSE is measured on log-transformed sale prices.',
       diagram: 'regression' as const,
       metrics: { accuracy: 'R² 0.9037', impact: 'RMSE 0.1341', data: 'CI/CD + Docker' },
-      tech: ['XGBoost', 'FastAPI', 'Docker', 'GitHub Actions'],
+      tech: ['XGBoost', 'FastAPI', 'Docker', 'GitHub Actions', 'AWS'],
       github: 'https://github.com/Murci20965/real_estate_price_predictor',
       demo: '',
       duration: 'MLOps',
@@ -64,10 +67,10 @@ export default function Projects() {
       title: 'Medical Image Classifier',
       category: 'Machine Learning',
       description:
-        'End-to-end pneumonia-detection system on chest X-rays using ResNet50 transfer learning: a full pipeline from training and evaluation to a deployment-ready FastAPI service with an interactive Streamlit UI.',
+        'End-to-end pneumonia-detection system on chest X-rays using ResNet50 transfer learning: a full pipeline from training and evaluation to a deployment-ready FastAPI service with an interactive Gradio UI.',
       diagram: 'transfer' as const,
       metrics: { accuracy: '82.85% acc', impact: '0.96 recall', data: 'ResNet50' },
-      tech: ['PyTorch', 'ResNet50', 'FastAPI', 'Streamlit', 'Docker'],
+      tech: ['PyTorch', 'ResNet50', 'FastAPI', 'Gradio', 'Docker'],
       github: 'https://github.com/Murci20965/medical_image_classifier',
       demo: '',
       duration: 'MLOps',
@@ -98,8 +101,27 @@ export default function Projects() {
     },
   ];
 
-  const filteredProjects =
-    selectedFilter === 'All' ? projects : projects.filter((p) => p.category === selectedFilter);
+  const isShown = (category: string) => selectedFilter === 'All' || category === selectedFilter;
+
+  // Filtering is a same-document view transition where supported (Baseline
+  // since Oct 2025): the browser snapshots the grid, we swap state, and each
+  // card (named by its view-transition-name) glides to its new slot while cards entering or
+  // leaving fade and scale. Snapshots animate on the compositor. Without the
+  // API, or under reduced motion, the state simply swaps.
+  const selectFilter = (filter: string) => {
+    if (filter === selectedFilter) return;
+    const doc = document as Document & { startViewTransition?: (update: () => void) => unknown };
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!doc.startViewTransition || reduce) {
+      setSelectedFilter(filter);
+      return;
+    }
+    // flushSync: the DOM must already show the new state when the callback
+    // returns, or the browser snapshots the old grid as the "new" one.
+    doc.startViewTransition(() => {
+      flushSync(() => setSelectedFilter(filter));
+    });
+  };
 
   const positionUnderline = useCallback((animate: boolean) => {
     const container = tabsRef.current;
@@ -107,9 +129,9 @@ export default function Projects() {
     if (!container || !underline) return;
     const active = container.querySelector<HTMLElement>('[data-active="true"]');
     if (!active) return;
+    // The bar is 1px wide: one transform both places and stretches it.
     const apply = () => {
-      underline.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop + active.offsetHeight}px)`;
-      underline.style.width = `${active.offsetWidth}px`;
+      underline.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop + active.offsetHeight}px) scaleX(${active.offsetWidth})`;
     };
     if (animate) {
       apply();
@@ -156,12 +178,18 @@ export default function Projects() {
             Real systems, really shipped: from text-to-3D pipelines to end-to-end MLOps. Code is public; two are live.
           </p>
 
-          <div ref={tabsRef} className="relative mt-10 flex flex-wrap gap-x-6 gap-y-3 pb-2">
+          <div
+            ref={tabsRef}
+            role="group"
+            aria-label="Filter projects"
+            className="relative mt-10 flex flex-wrap gap-x-6 gap-y-3 pb-2"
+          >
             {filters.map((filter) => (
               <button
                 key={filter}
                 data-active={selectedFilter === filter}
-                onClick={() => setSelectedFilter(filter)}
+                aria-pressed={selectedFilter === filter}
+                onClick={() => selectFilter(filter)}
                 className={`font-mono text-[11px] uppercase tracking-[0.18em] transition-colors ${
                   selectedFilter === filter ? 'text-white' : 'text-white/40 hover:text-white/70'
                 }`}
@@ -174,113 +202,114 @@ export default function Projects() {
         </AnimatedSection>
 
         <div className="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2 xl:grid-cols-3">
-          {filteredProjects.map((project, index) => (
-            <AnimatedSection
-              key={project.title}
-              animation="fade-in"
-              delay={index % 2 === 1}
-              className="h-full"
-            >
-              <article className="group flex h-full flex-col">
-                <div className="relative">
-                  {'model' in project && project.model && active3D === project.title ? (
-                    <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/10">
-                      <Suspense
-                        fallback={
-                          <div className="flex h-full w-full items-center justify-center bg-[#0b0b0b]">
-                            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/50">
-                              Loading model&hellip;
-                            </span>
-                          </div>
-                        }
-                      >
-                        <ModelViewer path={project.model} />
-                      </Suspense>
-                    </div>
-                  ) : (
-                    <TiltCard className="aspect-[16/10] border border-white/10">
-                      <ProjectDiagram variant={project.diagram} />
-                      <span className="absolute left-3 top-3 z-10 rounded-full bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/80 backdrop-blur-sm">
-                        {project.category}
-                      </span>
-                    </TiltCard>
-                  )}
-                </div>
-
-                <div className="mt-5 flex flex-1 flex-col">
-                  <div className="mb-3 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
-                    <span>{String(index + 1).padStart(2, '0')}</span>
-                    <span>{project.duration}</span>
-                  </div>
-
-                  <h3 className="mb-3 font-display text-2xl font-medium text-white">{project.title}</h3>
-                  {/* Clamped so every card's description occupies the same
-                      height and the rows below stay on a shared baseline. */}
-                  <p className="mb-6 line-clamp-4 font-sans text-sm leading-relaxed text-white/60">
-                    {project.description}
-                  </p>
-
-                  <div className="mt-auto flex flex-wrap gap-x-8 gap-y-3 border-y border-white/10 py-4">
-                    {[
-                      { v: project.metrics.accuracy, l: 'Key metric' },
-                      { v: project.metrics.impact, l: 'Impact' },
-                      { v: project.metrics.data, l: 'Built on' },
-                    ].map((m, i) => (
-                      <div key={i}>
-                        <div className="font-mono text-base text-white">{m.v}</div>
-                        <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
-                          {m.l}
+          {/* Every card stays mounted and filtering toggles `hidden`, so a
+              card keeps its entrance state instead of re-running it, and the
+              view transition can match each card across states by name. */}
+          {projects.map((project, i) => {
+            const shown = isShown(project.category);
+            const index = projects.slice(0, i).filter((p) => isShown(p.category)).length;
+            return (
+              <div
+                key={project.title}
+                hidden={!shown}
+                className="h-full"
+                style={{ viewTransitionName: `project-${i}` } as CSSProperties}
+              >
+                <AnimatedSection animation="fade-in" index={index % 3} className="h-full">
+                  <article className="group flex h-full flex-col">
+                    <div className="relative">
+                      {'model' in project && project.model && active3D === project.title ? (
+                        <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/10">
+                          <Suspense fallback={<ViewerSkeleton />}>
+                            <ModelViewer path={project.model} />
+                          </Suspense>
                         </div>
+                      ) : (
+                        <TiltCard className="aspect-[16/10] border border-white/10">
+                          <ProjectDiagram variant={project.diagram} />
+                          <span className="absolute left-3 top-3 z-10 rounded-full bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/80 backdrop-blur-sm">
+                            {project.category}
+                          </span>
+                        </TiltCard>
+                      )}
+                    </div>
+
+                    <div className="mt-5 flex flex-1 flex-col">
+                      <div className="mb-3 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
+                        <span>{String(index + 1).padStart(2, '0')}</span>
+                        <span>{project.duration}</span>
                       </div>
-                    ))}
-                  </div>
 
-                  <div className="mb-6 flex flex-wrap gap-2">
-                    {project.tech.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] tracking-wide text-white/50"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+                      <h3 className="mb-3 font-display text-2xl font-medium text-white">{project.title}</h3>
+                      {/* Clamped so every card's description occupies the same
+                          height and the rows below stay on a shared baseline. */}
+                      <p className="mb-6 line-clamp-4 font-sans text-sm leading-relaxed text-white/60">
+                        {project.description}
+                      </p>
 
-                  <div className="flex items-center gap-6">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
-                    >
-                      <Github className="h-4 w-4" /> Code
-                    </a>
-                    {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
-                      >
-                        Live demo <ArrowUpRight className="h-4 w-4" />
-                      </a>
-                    )}
-                    {'model' in project && project.model && (
-                      <button
-                        onClick={() =>
-                          setActive3D(active3D === project.title ? null : project.title)
-                        }
-                        className="inline-flex items-center gap-1.5 font-sans text-sm text-lime-400/80 transition-colors hover:text-lime-400"
-                      >
-                        <Box className="h-4 w-4" />
-                        {active3D === project.title ? 'View diagram' : 'View in 3D'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </article>
-            </AnimatedSection>
-          ))}
+                      <div className="mt-auto flex flex-wrap gap-x-8 gap-y-3 border-y border-white/10 py-4">
+                        {[
+                          { v: project.metrics.accuracy, l: 'Key metric' },
+                          { v: project.metrics.impact, l: 'Impact' },
+                          { v: project.metrics.data, l: 'Built on' },
+                        ].map((m, i) => (
+                          <div key={i}>
+                            <div className="font-mono text-base text-white">{m.v}</div>
+                            <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
+                              {m.l}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mb-6 flex flex-wrap gap-2">
+                        {project.tech.map((tech, i) => (
+                          <span
+                            key={i}
+                            className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] tracking-wide text-white/50"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center gap-6">
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
+                        >
+                          <Github className="h-4 w-4" /> Code
+                        </a>
+                        {project.demo && (
+                          <a
+                            href={project.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
+                          >
+                            Live demo <ArrowUpRight className="t-nudge h-4 w-4" />
+                          </a>
+                        )}
+                        {'model' in project && project.model && (
+                          <button
+                            onClick={() =>
+                              setActive3D(active3D === project.title ? null : project.title)
+                            }
+                            className="inline-flex items-center gap-1.5 font-sans text-sm text-lime-400/80 transition-colors hover:text-lime-400"
+                          >
+                            <Box className="h-4 w-4" />
+                            {active3D === project.title ? 'View diagram' : 'View in 3D'}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                </AnimatedSection>
+              </div>
+            );
+          })}
         </div>
 
         <AnimatedSection animation="fade-in">
@@ -289,7 +318,7 @@ export default function Projects() {
               href="#contact"
               className="inline-flex items-center gap-2 font-sans text-sm font-medium text-white/80 transition-colors hover:text-white"
             >
-              Discuss a project <ArrowUpRight className="h-4 w-4" />
+              Discuss a project <ArrowUpRight className="t-nudge h-4 w-4" />
             </a>
           </div>
         </AnimatedSection>

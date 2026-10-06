@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -7,6 +7,9 @@ interface AnimatedSectionProps {
   /** Kept for call-site compatibility; the entrance is now one shared behaviour. */
   animation?: 'fade-in' | 'slide-up' | 'scale-in' | 'slide-in-left' | 'slide-in-right' | 'float';
   delay?: boolean;
+  /** Position in a list: items cascade by this many --enter-stagger steps
+   *  (capped, so a long list never makes the last item wait). */
+  index?: number;
 }
 
 /**
@@ -24,6 +27,7 @@ export default function AnimatedSection({
   children,
   className = '',
   delay = false,
+  index = 0,
 }: AnimatedSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [shown, setShown] = useState(false);
@@ -70,6 +74,7 @@ export default function AnimatedSection({
     <div
       ref={ref}
       className={`${className} t-enter ${delay ? 't-enter--delay' : ''} ${shown ? 'is-in' : ''}`}
+      style={index ? ({ '--enter-i': Math.min(index, 4) } as CSSProperties) : undefined}
     >
       {children}
     </div>

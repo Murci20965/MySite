@@ -11,7 +11,8 @@ const MEDIA_SRC = '/media/vision.png';
 
 export default function ExpandMedia() {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const mediaRef = useRef<HTMLDivElement>(null);
+  const barTopRef = useRef<HTMLDivElement>(null);
+  const barBottomRef = useRef<HTMLDivElement>(null);
   const dimRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLHeadingElement>(null);
   const rightRef = useRef<HTMLHeadingElement>(null);
@@ -24,12 +25,16 @@ export default function ExpandMedia() {
     let raf = 0;
 
     const apply = (p: number) => {
-      if (mediaRef.current) {
-        // A letterbox opening vertically: full width throughout, so the
-        // section spans the page from the first frame and the reveal is the
-        // frame growing rather than a card zooming toward the viewer.
-        const inset = (1 - p) * 39;
-        mediaRef.current.style.clipPath = `inset(${inset}% 0% ${inset}% 0%)`;
+      // A letterbox opening vertically: full width throughout, so the section
+      // spans the page from the first frame and the reveal is the frame
+      // growing rather than a card zooming toward the viewer. Two page-black
+      // bars slide out (transform only) instead of a per-frame clip-path,
+      // which repainted the full-bleed image on every scroll frame.
+      if (barTopRef.current) {
+        barTopRef.current.style.transform = `translateY(${-p * 100}%)`;
+      }
+      if (barBottomRef.current) {
+        barBottomRef.current.style.transform = `translateY(${p * 100}%)`;
       }
       if (dimRef.current) {
         dimRef.current.style.opacity = String(0.55 - p * 0.35);
@@ -87,11 +92,7 @@ export default function ExpandMedia() {
             <span className="h-px w-10 bg-white/20" />
           </div>
 
-          <div
-            ref={mediaRef}
-            className="absolute inset-0 h-full w-full will-change-[clip-path]"
-            style={{ clipPath: 'inset(39% 0% 39% 0%)' }}
-          >
+          <div className="absolute inset-0 h-full w-full">
             <img
               src={MEDIA_SRC}
               alt="A dark planetary horizon with a constellation of connected learning nodes"
@@ -99,6 +100,19 @@ export default function ExpandMedia() {
               loading="lazy"
             />
             <div ref={dimRef} className="absolute inset-0 bg-black" style={{ opacity: 0.55 }} />
+            {/* Letterbox bars: each covers 39% at rest and slides fully out by
+                p = 1. Same black as the section, so they read as the frame
+                edge; the returning Earth (z-30) still paints above them. */}
+            <div
+              ref={barTopRef}
+              aria-hidden="true"
+              className="absolute inset-x-0 top-0 h-[39%] bg-black will-change-transform"
+            />
+            <div
+              ref={barBottomRef}
+              aria-hidden="true"
+              className="absolute inset-x-0 bottom-0 h-[39%] bg-black will-change-transform"
+            />
           </div>
 
           {/* Legibility scrim: sits above the returning Earth (z-30) and below

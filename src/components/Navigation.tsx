@@ -1,24 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
+
+// Real in-page links: the browser scrolls (smoothly, via `scroll-behavior` on
+// <html>, which the reduced-motion rule turns off), the URL hash updates so a
+// section can be shared, and Back works. No JS scrolling needed.
+const NAV_LINKS = [
+  { name: 'About', href: '#about' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Blog', href: '#blog' },
+  { name: 'Principles', href: '#reviews' },
+  { name: 'Contact', href: '#contact' },
+];
+
+const RESUME = { href: '/resume.pdf', filename: 'Nhlanhla_Mokoena_Resume.pdf' };
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
-
-  const navLinks = [
-    { name: 'About Me', href: '#about' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Blog', href: '#blog' },
-    { name: 'Principles', href: '#reviews' },
-    { name: 'Contact', href: '#contact' },
-  ];
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   // Scroll-spy: mark the nav link for whichever section sits near mid-viewport.
   useEffect(() => {
-    const sections = navLinks
-      .map((l) => document.getElementById(l.href.slice(1)))
-      .filter((el): el is HTMLElement => el !== null);
+    const sections = NAV_LINKS.map((l) => document.getElementById(l.href.slice(1))).filter(
+      (el): el is HTMLElement => el !== null
+    );
     if (!sections.length) return;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -30,77 +37,75 @@ export default function Navigation() {
     );
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMenuOpen(false);
-    }
-  };
+  // Mobile menu: Escape closes it and hands focus back to the toggle; the page
+  // behind stops scrolling while the full-screen menu is up.
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsMenuOpen(false);
+        toggleRef.current?.focus();
+      }
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isMenuOpen]);
 
-  const scrollToHero = () => {
-    const heroSection = document.getElementById('hero');
-    if (heroSection) {
-      heroSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    setIsMenuOpen(false);
-  };
-
-  const handleResumeDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/resume.pdf';
-    link.download = 'Nhlanhla_Mokoena_Resume.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md">
+      <nav aria-label="Primary" className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md">
         <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
           <div className="flex items-center justify-between h-20">
-            <button
-              onClick={scrollToHero}
-              className="font-display text-2xl font-medium text-white hover:opacity-80 transition-opacity duration-300 cursor-pointer"
-              aria-label="Go to top"
+            <a
+              href="#hero"
+              onClick={closeMenu}
+              className="font-display text-2xl font-medium text-white hover:opacity-80 transition-opacity duration-300"
+              aria-label="Murci, back to top"
             >
               Murci
-            </button>
+            </a>
 
             <div className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link) => {
+              {NAV_LINKS.map((link) => {
                 const isActive = activeSection === link.href.slice(1);
                 return (
-                  <button
+                  <a
                     key={link.name}
-                    onClick={() => scrollToSection(link.href)}
-                    aria-current={isActive ? 'true' : undefined}
-                    className={`font-sans text-sm transition-colors ${
+                    href={link.href}
+                    aria-current={isActive ? 'location' : undefined}
+                    className={`t-navlink font-sans text-sm transition-colors ${
                       isActive ? 'text-white' : 'text-white/60 hover:text-white'
                     }`}
                   >
                     {link.name}
-                  </button>
+                  </a>
                 );
               })}
-              <button
-                onClick={handleResumeDownload}
+              <a
+                href={RESUME.href}
+                download={RESUME.filename}
                 className="font-sans px-6 py-2.5 bg-lime-400 hover:bg-lime-500 text-black font-medium rounded-full transition duration-300 active:scale-[0.98] text-sm"
               >
                 Resume
-              </button>
+              </a>
             </div>
 
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              ref={toggleRef}
+              onClick={() => setIsMenuOpen((open) => !open)}
               className="lg:hidden text-white hover:text-gray-300 transition-colors"
-              aria-label="Toggle menu"
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -108,29 +113,40 @@ export default function Navigation() {
         </div>
       </nav>
 
-      <div
-        className={`fixed inset-0 bg-black z-40 transition-transform duration-300 ease-in-out lg:hidden ${
-          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+      {/* `invisible` (visibility: hidden) when closed takes the off-screen links
+          out of the tab order and the accessibility tree; visibility is in the
+          transition list so it only flips after the slide-out finishes.
+          z-[45]: above the floating chat launcher (z-40), below the nav bar
+          (z-50) so the close button stays on top. The list starts below the
+          80px bar and is sized so all eight items fit a 702px-tall phone. */}
+      <nav
+        id="mobile-menu"
+        aria-label="Mobile"
+        className={`fixed inset-0 bg-black z-[45] transition-[transform,visibility] duration-300 ease-in-out lg:hidden ${
+          isMenuOpen ? 'translate-x-0 visible' : 'translate-x-full invisible'
         }`}
       >
-        <div className="flex flex-col items-center justify-center h-full gap-8">
-          {navLinks.map((link) => (
-            <button
+        <div className="flex flex-col items-center justify-center h-full gap-5 pt-20 pb-6">
+          {NAV_LINKS.map((link) => (
+            <a
               key={link.name}
-              onClick={() => scrollToSection(link.href)}
-              className="font-display text-4xl font-medium text-white hover:text-white/70 transition-colors"
+              href={link.href}
+              onClick={closeMenu}
+              className="font-display text-3xl sm:text-4xl font-medium text-white hover:text-white/70 transition-colors"
             >
               {link.name}
-            </button>
+            </a>
           ))}
-          <button
-            onClick={handleResumeDownload}
-            className="font-sans px-10 py-4 bg-lime-400 hover:bg-lime-500 text-black font-medium rounded-full transition duration-300 active:scale-[0.98] text-2xl"
+          <a
+            href={RESUME.href}
+            download={RESUME.filename}
+            onClick={closeMenu}
+            className="mt-2 font-sans px-10 py-3.5 bg-lime-400 hover:bg-lime-500 text-black font-medium rounded-full transition duration-300 active:scale-[0.98] text-xl"
           >
             Resume
-          </button>
+          </a>
         </div>
-      </div>
+      </nav>
     </>
   );
 }

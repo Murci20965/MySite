@@ -7,6 +7,12 @@
     scroll-behavior: smooth;
   }
 
+  /* In-page links land below the fixed 80px nav (h-20) instead of under it:
+     Experience's 64px top padding left its kicker hidden behind the bar. */
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
   body {
     @apply bg-black text-white antialiased font-sans;
   }
@@ -43,59 +49,16 @@
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .fade-in {
-    animation: fadeInUp 0.8s ease-out forwards;
-  }
-
-  .fade-in-delayed {
-    animation: fadeInUp 0.8s ease-out 0.2s forwards;
-    opacity: 0;
-  }
-
-  .slide-up {
-    animation: slideUp 0.6s ease-out forwards;
-  }
-
-  .scale-in {
-    animation: scaleIn 0.5s ease-out forwards;
-  }
-}
-
+/* Hero stars: the glow is a static shadow; only opacity + scale animate,
+   so the twinkle never repaints (it used to animate box-shadow forever). */
 @keyframes radiate {
   0%, 100% {
     opacity: 0.3;
-    box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.3),
-                0 0 4px 2px rgba(255, 255, 255, 0.2),
-                0 0 6px 3px rgba(255, 255, 255, 0.1);
+    transform: scale(0.6);
   }
   50% {
     opacity: 1;
-    box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.8),
-                0 0 8px 4px rgba(255, 255, 255, 0.6),
-                0 0 12px 6px rgba(255, 255, 255, 0.4);
-  }
-}
-
-@keyframes waterRipple {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6),
-                0 0 0 0 rgba(255, 255, 255, 0.4),
-                0 0 0 0 rgba(255, 255, 255, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.2),
-                0 0 0 20px rgba(255, 255, 255, 0.1),
-                0 0 0 30px rgba(255, 255, 255, 0.05);
-  }
-  100% {
-    box-shadow: 0 0 0 20px rgba(255, 255, 255, 0),
-                0 0 0 40px rgba(255, 255, 255, 0),
-                0 0 0 60px rgba(255, 255, 255, 0);
+    transform: scale(1);
   }
 }
 
@@ -114,228 +77,14 @@
   height: 3px;
   background: white;
   border-radius: 50%;
+  box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.8),
+              0 0 8px 4px rgba(255, 255, 255, 0.6),
+              0 0 12px 6px rgba(255, 255, 255, 0.4);
   animation: radiate 3s ease-in-out infinite;
-}
-
-.water-ripple {
-  animation: waterRipple 2s ease-out infinite;
-  border-radius: 50%;
 }
 
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.2);
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.5;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  }
-  50% {
-    opacity: 1;
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
-  }
-}
-
-@keyframes orbit {
-  from {
-    transform: rotate(0deg) translateX(60px) rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg) translateX(60px) rotate(-360deg);
-  }
-}
-
-@keyframes scan-line {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
-@keyframes grid-fade {
-  0% {
-    opacity: 0.1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 0.1;
-  }
-}
-
-@keyframes neon-glow {
-  0%, 100% {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3);
-  }
-  50% {
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6);
-  }
-}
-
-@keyframes wave {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  25% {
-    transform: translateY(-5px);
-  }
-  75% {
-    transform: translateY(5px);
-  }
-}
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(100px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slide-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-100px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes rotate-360 {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes blink {
-  0%, 49%, 100% {
-    opacity: 1;
-  }
-  50%, 99% {
-    opacity: 0.4;
-  }
-}
-
-.float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.glow {
-  animation: glow 2s ease-in-out infinite;
-}
-
-.pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.orbit {
-  animation: orbit 8s linear infinite;
-}
-
-.scan-line {
-  animation: scan-line 3s linear infinite;
-}
-
-.shimmer {
-  background-size: 2000px 100%;
-  animation: shimmer 3s linear infinite;
-  background-image: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
-}
-
-.neon-glow {
-  animation: neon-glow 2s ease-in-out infinite;
-}
-
-.wave {
-  animation: wave 2s ease-in-out infinite;
-}
-
-.slide-in-right {
-  animation: slide-in-right 0.8s ease-out forwards;
-}
-
-.slide-in-left {
-  animation: slide-in-left 0.8s ease-out forwards;
-}
-
-.rotate-360 {
-  animation: rotate-360 4s linear infinite;
-}
-
-.blink {
-  animation: blink 3s ease-in-out infinite;
 }
 
 * {
@@ -352,7 +101,6 @@
   --stagger-dur: 500ms;
   --stagger-distance: 12px;
   --stagger-stagger: 40ms;
-  --stagger-blur: 3px;
   --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
   /* modal (06) */
   --modal-open-dur: 250ms;
@@ -367,12 +115,10 @@
 .t-stagger-line {
   opacity: 0;
   transform: translateY(var(--stagger-distance));
-  filter: blur(var(--stagger-blur));
   transition:
     opacity var(--stagger-dur) var(--stagger-ease),
-    transform var(--stagger-dur) var(--stagger-ease),
-    filter var(--stagger-dur) var(--stagger-ease);
-  will-change: transform, opacity, filter;
+    transform var(--stagger-dur) var(--stagger-ease);
+  will-change: transform, opacity;
 }
 .t-stagger-line--2 { transition-delay: var(--stagger-stagger); }
 .t-stagger-line--3 { transition-delay: calc(var(--stagger-stagger) * 2); }
@@ -380,7 +126,6 @@
 .t-stagger.is-shown .t-stagger-line {
   opacity: 1;
   transform: translateY(0);
-  filter: blur(0);
 }
 
 /* Modal open / close (transitions.dev 06) */
@@ -416,12 +161,9 @@
 }
 
 :root {
-  /* card tilt (19) — tuned smooth: gentle angle + long, floaty follow */
+  /* card tilt (19): motion comes from the spring in TiltCard.tsx, which
+     writes --tilt-rx/ry/lift/scale each frame; only the glare fades in CSS */
   --tilt-perspective: 1200px;
-  --tilt-return: 1400ms;
-  --tilt-return-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --tilt-follow: 600ms;
-  --tilt-follow-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --tilt-glare-opacity: 0.26;
   --tilt-glare-fade: 400ms;
   --tilt-glare-ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -430,24 +172,20 @@
   --tabs-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Card hover tilt (transitions.dev 19) */
-.t-tilt {
-  touch-action: none;
-}
+/* Card hover tilt (transitions.dev 19), spring-driven. No touch-action
+   override: touch never tilts, so a swipe that starts on a card scrolls. */
 .t-tilt-card {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
   transform:
     perspective(var(--tilt-perspective))
+    translate3d(0, var(--tilt-lift, 0px), 0)
     rotateX(var(--tilt-rx, 0deg))
-    rotateY(var(--tilt-ry, 0deg));
+    rotateY(var(--tilt-ry, 0deg))
+    scale(var(--tilt-scale, 1));
   transform-style: preserve-3d;
-  transition: transform var(--tilt-return) var(--tilt-return-ease);
   will-change: transform;
-}
-.t-tilt-card.is-tilting {
-  transition: transform var(--tilt-follow) var(--tilt-follow-ease);
 }
 .t-tilt-glare {
   position: absolute;
@@ -495,18 +233,19 @@
 }
 
 /* Sliding underline (transitions.dev 16, adapted to editorial text tabs) */
+/* A fixed 1px bar positioned and stretched by one transform
+   (translate + scaleX), so sliding between tabs never touches layout. */
 .t-underline {
   position: absolute;
   left: 0;
   top: 0;
   height: 2px;
-  width: 0;
+  width: 1px;
   background: #fff;
-  transform: translate(0, 0);
-  transition:
-    transform var(--tabs-dur) var(--tabs-ease),
-    width var(--tabs-dur) var(--tabs-ease);
-  will-change: transform, width;
+  transform-origin: 0 50%;
+  transform: translate(0, 0) scaleX(0);
+  transition: transform var(--tabs-dur) var(--tabs-ease);
+  will-change: transform;
   pointer-events: none;
 }
 
@@ -525,7 +264,6 @@
   --digit-dur: 500ms;
   --digit-distance: 8px;
   --digit-stagger: 70ms;
-  --digit-blur: 2px;
   --digit-ease: cubic-bezier(0.34, 1.45, 0.64, 1);
   --digit-dir-x: 0;
   --digit-dir-y: 1;
@@ -539,12 +277,10 @@
       calc(var(--digit-distance) * var(--digit-dir-y))
     );
     opacity: 0;
-    filter: blur(var(--digit-blur));
   }
   100% {
     transform: translate(0, 0);
     opacity: 1;
-    filter: blur(0);
   }
 }
 .t-digit-group {
@@ -553,7 +289,7 @@
 }
 .t-digit {
   display: inline-block;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
 }
 /* Held hidden until scrolled into view so the pop-in isn't missed above the fold. */
 .t-digit-group.is-pending .t-digit {
@@ -585,8 +321,6 @@
   --check-rotate-from: 80deg;
   --check-bob-dur: 500ms;
   --check-y-amount: 40px;
-  --check-blur-dur: 500ms;
-  --check-blur-from: 10px;
   --check-path-dur: 500ms;
   --check-path-delay: 80ms;
   --check-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -604,7 +338,7 @@
   display: inline-block;
   transform-origin: center;
   opacity: 0;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
 }
 .t-success-check svg {
   display: block;
@@ -618,7 +352,6 @@
   animation:
     t-check-fade var(--check-opacity-dur) var(--check-ease-out) forwards,
     t-check-rotate var(--check-rotate-dur) var(--check-ease-out) forwards,
-    t-check-blur var(--check-blur-dur) var(--check-ease-out) forwards,
     t-check-bob var(--check-bob-dur) var(--check-ease-bob) forwards;
 }
 .t-success-check[data-state='in'] svg path {
@@ -631,10 +364,6 @@
 @keyframes t-check-rotate {
   from { transform: rotate(var(--check-rotate-from)); }
   to { transform: rotate(0deg); }
-}
-@keyframes t-check-blur {
-  from { filter: blur(var(--check-blur-from)); }
-  to { filter: blur(0); }
 }
 @keyframes t-check-bob {
   from { translate: 0 var(--check-y-amount); }
@@ -712,7 +441,6 @@
   --chars-dur: 500ms;
   --chars-stagger: 18ms;
   --chars-rise: 0.35em;
-  --chars-blur: 6px;
   --chars-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -785,7 +513,7 @@
 @keyframes t-stack-back {
   to {
     transform: scale(0.94);
-    filter: brightness(0.6);
+    opacity: 0.6;
   }
 }
 
@@ -799,40 +527,39 @@
 }
 
 /* ---- Section entrance ------------------------------------------------------
-   Every section enters the same way: content wipes up from under a clip-path
-   with a small settle, instead of a flat opacity fade. One behaviour applied
-   everywhere is what makes a long page feel composed rather than assembled. */
+   Every section enters the same way: content rises into place with a small
+   settle as it fades in. One behaviour applied everywhere is what makes a
+   long page feel composed rather than assembled. Transform + opacity only, so
+   the browser runs it on the compositor (the earlier clip-path wipe repainted
+   every frame). No will-change: ~40 blocks wait below the fold, and the hint
+   would pin a GPU layer for each; transitions are promoted while they run. */
 :root {
   --enter-dur: 760ms;
   --enter-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --enter-rise: 22px;
   --enter-delay: 130ms;
+  --enter-stagger: 70ms;
 }
 
 .t-enter {
-  clip-path: inset(0 0 100% 0);
   opacity: 0;
   transform: translateY(var(--enter-rise));
   transition:
-    clip-path var(--enter-dur) var(--enter-ease),
     opacity calc(var(--enter-dur) * 0.7) var(--enter-ease),
     transform var(--enter-dur) var(--enter-ease);
-  will-change: clip-path, transform;
+  /* Items in a list cascade: --enter-i (set per item, capped) offsets each. */
+  transition-delay: calc(var(--enter-i, 0) * var(--enter-stagger));
 }
 .t-enter--delay {
-  transition-delay: var(--enter-delay);
+  transition-delay: calc(var(--enter-delay) + var(--enter-i, 0) * var(--enter-stagger));
 }
 .t-enter.is-in {
-  clip-path: inset(0 0 0 0);
   opacity: 1;
   transform: none;
-  /* released once the entrance is done so long pages don't keep layers alive */
-  will-change: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .t-enter {
-    clip-path: none !important;
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
@@ -940,18 +667,14 @@
   display: inline-block;
   opacity: 0;
   transform: translateY(var(--chars-rise));
-  filter: blur(var(--chars-blur));
   transition:
     opacity var(--chars-dur) var(--chars-ease),
-    transform var(--chars-dur) var(--chars-ease),
-    filter var(--chars-dur) var(--chars-ease);
+    transform var(--chars-dur) var(--chars-ease);
   transition-delay: calc(var(--chars-stagger) * var(--char-i, 0));
-  will-change: transform, filter;
 }
 .t-chars.is-shown .t-char {
   opacity: 1;
   transform: translateY(0);
-  filter: blur(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -961,7 +684,183 @@
   .t-chars .t-char {
     opacity: 1 !important;
     transform: none !important;
-    filter: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---- Skeleton loader (transitions.dev 14, transform/opacity variant) -------
+   The 3D viewer's placeholder. The orb pulses (opacity), a highlight band
+   sweeps across (transform), and the layer fades out once the model is
+   ready. The upstream snippet's cross-blur is dropped: filters are off the
+   animated path site-wide. */
+:root {
+  --skel-pulse-dur: 1000ms;
+  --skel-pulse-min: 0.5;
+  --skel-sweep-dur: 1400ms;
+  --skel-reveal-dur: 400ms;
+}
+.t-skel-viewer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  overflow: hidden;
+  background: #0b0b0b;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity var(--skel-reveal-dur) ease-in-out;
+}
+.t-skel-viewer.is-ready {
+  opacity: 0;
+}
+.t-skel-orb {
+  width: 34%;
+  max-width: 160px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02) 60%, transparent 70%);
+  animation: t-skel-pulse var(--skel-pulse-dur) ease-in-out infinite alternate;
+}
+/* 40% wide band; translateX is relative to its own width, so -100% -> 350%
+   carries it from fully off the left edge to fully off the right. */
+.t-skel-sweep {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  transform: translateX(-100%);
+  animation: t-skel-sweep var(--skel-sweep-dur) linear infinite;
+}
+@keyframes t-skel-pulse {
+  from { opacity: 1; }
+  to { opacity: var(--skel-pulse-min); }
+}
+@keyframes t-skel-sweep {
+  to { transform: translateX(350%); }
+}
+
+/* Typing indicator (chat): three dots rise and brighten in sequence. */
+.t-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 1.25em;
+}
+.t-typing span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  opacity: 0.35;
+  animation: t-typing 1100ms var(--stagger-ease) infinite;
+}
+.t-typing span:nth-child(2) { animation-delay: 140ms; }
+.t-typing span:nth-child(3) { animation-delay: 280ms; }
+@keyframes t-typing {
+  0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-skel-orb,
+  .t-typing span {
+    animation: none !important;
+  }
+  .t-skel-sweep {
+    display: none;
+  }
+  .t-skel-viewer {
+    transition: none !important;
+  }
+  .t-typing span {
+    opacity: 0.7;
+  }
+}
+
+/* ---- Project filter: same-document view transition ------------------------
+   Only the named project cards are captured. The root is opted out, so the
+   rest of the page (including the sliding filter underline, which runs its
+   own transition) stays live instead of being frozen into a snapshot.
+   Measured in the production build, 6 alternating runs each: capturing the
+   root (a 21k px page with two canvases) stalled 2 of 6 transitions for
+   1.1-1.4 s before any motion started; without it, all 6 started in
+   67-150 ms. Cards present in both states glide to their new slot (the
+   group animates transform); cards entering or leaving fade and scale. */
+:root {
+  view-transition-name: none;
+}
+::view-transition-group(*) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--stagger-ease);
+}
+::view-transition-new(*):only-child {
+  animation: t-vt-enter 360ms var(--stagger-ease) both;
+}
+::view-transition-old(*):only-child {
+  animation: t-vt-exit 200ms ease-in both;
+}
+@keyframes t-vt-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+@keyframes t-vt-exit {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ---- Micro-interactions ----------------------------------------------------
+   Nav links: a hairline draws in from the left on hover and stays under the
+   current section; it retracts toward the right, so the motion has a
+   direction. Outbound arrows: a 2px nudge toward where they point. Both are
+   transform-only. */
+.t-navlink {
+  position: relative;
+}
+.t-navlink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 320ms var(--stagger-ease);
+}
+.t-navlink:hover::after,
+.t-navlink:focus-visible::after,
+.t-navlink[aria-current]::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+.t-nudge {
+  transition: transform 240ms var(--stagger-ease);
+}
+:is(a, button):is(:hover, :focus-visible) .t-nudge {
+  transform: translate(2px, -2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-navlink::after,
+  .t-nudge {
     transition: none !important;
   }
 }

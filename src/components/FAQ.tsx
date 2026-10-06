@@ -10,12 +10,12 @@ export default function FAQ() {
     {
       question: 'What technologies do you specialize in?',
       answer:
-        'My core stack is Python and FastAPI on the backend, with LangChain, LangGraph and RAG pipelines for agentic AI, and PyTorch, scikit-learn and XGBoost for machine learning. On the frontend I work with Next.js, React and TypeScript, including React Three Fiber and WebXR for interactive 3D. Everything ships containerised with Docker through GitHub Actions CI/CD.',
+        'Agentic AI, RAG and MLOps. I build agentic workflows with LangChain, LangGraph and n8n, RAG pipelines over vector databases, and Python/FastAPI backends, with PyTorch and scikit-learn for machine learning. On the frontend I work with Next.js and React, including React Three Fiber and WebXR for interactive 3D. Everything ships containerised with Docker through GitHub Actions CI/CD.',
     },
     {
       question: 'What kind of work are you doing right now?',
       answer:
-        'I build the AI layer of an XR simulation-training platform at Nudle, creating pipelines that turn text and images into interactive 3D learning experiences. I also evaluate production model behaviour on reasoning, programming and agent tasks as a freelance AI trainer at Alignerr.',
+        'I engineer the AI layer of an XR simulation-training platform at Nudle: a headless Blender agent framework that builds 3D lesson environments, multimodal text/image-to-3D generation, text-to-video lesson animation, and the containerised GPU serving underneath. Before that I red-teamed and evaluated LLM responses for dialogue safety and alignment at Alignerr.',
     },
     {
       question: 'What is your experience with cloud platforms?',
@@ -30,12 +30,12 @@ export default function FAQ() {
     {
       question: 'What domains have you applied AI in?',
       answer:
-        'XR education and simulation training at Nudle; LLM evaluation at Alignerr; a no-code LLM fine-tuning platform at Artintel; and in my own projects: real-estate price prediction, medical image classification, resume-to-job matching and personal finance.',
+        'XR education and simulation training at Nudle; LLM safety and alignment evaluation at Alignerr; LLM training data, RAG and automated model evaluation at Artintel; and in my own projects: real-estate price prediction, medical image classification, resume-to-job matching and personal finance.',
     },
     {
       question: 'Where are you based, and how do you work?',
       answer:
-        'Johannesburg, South Africa. I work remotely and am used to collaborating across time zones. isiZulu is my first language, English is my working language, and I communicate progress honestly: if something failed or slipped, you hear it from me first.',
+        'Johannesburg, South Africa. I work on-site with the Nudle team and have worked remotely with distributed teams, so collaborating across time zones is familiar. isiZulu is my first language, English is my working language, and I communicate progress honestly: if something failed or slipped, you hear it from me first.',
     },
   ];
 
@@ -75,6 +75,7 @@ export default function FAQ() {
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
+                  aria-controls={`faq-panel-${index}`}
                   className="flex w-full items-center justify-between gap-6 py-6 text-left"
                 >
                   <span className="font-display text-lg font-medium text-white">{faq.question}</span>
@@ -84,13 +85,26 @@ export default function FAQ() {
                     }`}
                   />
                 </button>
+                {/* Accordion (transitions.dev 21). Height is the one property
+                    here that must animate layout: there is no transform that
+                    grows a box without distorting its text. It stays cheap:
+                    one short grid-rows tween on a small list. Padding lives on
+                    the inner block, never the 0fr track, or the panel cannot
+                    fully close; the answer itself only fades and rises. */}
                 <div
-                  className={`grid transition-all duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    isOpen ? 'grid-rows-[1fr] pb-6' : 'grid-rows-[0fr]'
+                  id={`faq-panel-${index}`}
+                  className={`grid transition-[grid-template-rows] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="max-w-2xl font-sans leading-relaxed text-white/60">{faq.answer}</p>
+                    <p
+                      className={`max-w-2xl pb-6 font-sans leading-relaxed text-white/60 transition-[opacity,transform,visibility] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                        isOpen ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-1 opacity-0'
+                      }`}
+                    >
+                      {faq.answer}
+                    </p>
                   </div>
                 </div>
               </div>

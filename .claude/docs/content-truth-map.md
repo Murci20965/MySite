@@ -1,4 +1,54 @@
-# Content Truth Map — 2026-08-01
+# Content Truth Map
+
+## Current source: Sep 2026 CV sync (2026-10-06)
+
+**Reference:** Murci's Sep 2026 CV export (`public/resume.pdf`), which he named as the CV to
+keep referencing. Dates, titles, bullets, skills, education and certifications on the site
+follow it, by his decision. The August map below stays as the record of the first truth pass;
+where the two differ, this section wins.
+
+**Rule:** a CV claim is published as written unless evidence contradicts it. Where evidence
+contradicts it, the site shows what the evidence supports and the CV is flagged for a fix.
+Employer internals beyond what the CV itself discloses never appear on the site (public repo).
+
+### Where the site deliberately differs from the CV
+
+| CV says | Site shows | Evidence |
+|---|---|---|
+| Avatar-3D: "24-dimensional kinematic skeletal animations" | 14 deterministic animation states | `avatar-pipeline` `backend/app/models/schemas.py` (14-name Literal); README |
+| Orbit-3D: "event-driven task system with FastAPI and Redis queues" | asyncio orchestration | `orbit-3d-pipeline` `backend/app/api/routes.py` (`asyncio.gather`); no redis/rq/celery/arq in code or requirements |
+| Real Estate: "RMSE of 1,141" | RMSE 0.1341, on log1p sale prices | `real_estate_price_predictor` README; `src/preprocessing.py` (`np.log1p`) |
+| Nudle: a named video-generation model | text-to-video, no model named | the named model is contradicted by the work itself |
+| Nudle: "sub-second cold starts" | omitted | not supportable for the GPU serving setup described |
+
+Also corrected against the repos: the Medical Image Classifier UI is **Gradio** (not Streamlit),
+and its pneumonia precision is **0.80** (the 0.91 in the repo README belongs to the NORMAL
+class). Real Estate's workflow tests, builds to Amazon ECR and deploys to Elastic Beanstalk.
+
+Published without independent evidence (CV claims, not contradicted): Nudle's "65%" cut in
+manual 3D modelling overhead, and the Alignerr and Artintel bullets.
+
+### `public/resume.pdf`
+
+The Sep 2026 CV export with two changes Murci approved (2026-10-06):
+- the phone number is **redacted** (removed from the text layer, not covered by a box);
+- two project links pointed at `github.com/Murci20965/<name>.vercel.app` (404). They now go to
+  `https://avatar-pipeline.vercel.app/` and `https://orbit-3d-pipeline.vercel.app/` (both 200).
+
+### Owed in the master CV (Murci)
+
+Fix the four contradicted claims above and the two broken links in the source document, then
+re-export. Swapping the new export in is a single file replace, re-applying the phone redaction
+if the number stays in the master.
+
+### Where each fact lives
+
+Page copy: `src/components/*.tsx`. Assistant: `api/_corpus.ts`, which must change in the same
+commit as the page. Resume download: `public/resume.pdf`. Meta description: `index.html`.
+
+---
+
+# August 2026 truth pass (historical) — 2026-08-01
 
 Replace every fabricated field in the site with verified truth. **The design does not change** —
 only data, plus three tiny code guards the data swap forces (listed at the bottom). Sources:

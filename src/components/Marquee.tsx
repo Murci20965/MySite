@@ -5,15 +5,17 @@
 
 const ITEMS = [
   'Agentic AI',
-  'RAG pipelines',
+  'RAG architectures',
   'MLOps',
-  'WebXR',
+  'LangGraph',
+  'Multi-agent workflows',
+  'Vector databases',
+  'Model evaluation',
   'Text-to-3D',
+  'WebXR',
   'FastAPI',
-  'LangChain',
-  'React Three Fiber',
   'Docker & CI/CD',
-  'Local LLMs',
+  'GPU model serving',
 ];
 
 export default function Marquee() {

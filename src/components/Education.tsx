@@ -8,20 +8,22 @@ export default function Education() {
   const scrollByCard = (dir: 1 | -1) => {
     trackRef.current?.scrollBy({ left: dir * 320, behavior: 'smooth' });
   };
+  // Mirrors the CV's Education section, newest first.
   const education: Array<{
     degree: string;
     specialization: string;
     institution: string;
     year: string;
+    status?: string;
     gpa?: string;
     thesis?: string;
     achievements: string[];
   }> = [
     {
-      degree: 'Data Science Programme',
+      degree: 'Data Science',
       specialization: 'Machine learning, statistics & data engineering',
       institution: 'ALX / ExploreAI Academy',
-      year: 'Certified',
+      year: 'Jun 2023 - Sep 2024',
       achievements: [
         'ALX/ExploreAI Certified Data Scientist',
         'AWS cloud coursework: IAM, networking, CloudFormation, cost management',
@@ -29,50 +31,54 @@ export default function Education() {
       ],
     },
     {
-      degree: 'System Development Programme',
+      degree: 'Systems Development',
       specialization: 'Software development foundations',
       institution: 'DynamicDNA ICT Academy',
-      year: 'Completed',
+      year: 'May 2023 - Aug 2024',
+      status: 'NQF Level 4',
       achievements: ['Full-time software development training: systems, databases and programming fundamentals'],
+    },
+    {
+      degree: 'BSc Biological Sciences · BSc Mechanical Engineering',
+      specialization: 'Two degree programmes, not completed',
+      institution: 'University of the Witwatersrand',
+      year: '2015 - 2019',
+      status: 'Incomplete',
+      achievements: [],
     },
   ];
 
+  // The CV's certification list, in its order.
   const courses = [
     {
-      title: 'Introducing Generative AI with AWS',
-      provider: 'Udacity',
-      completed: '',
-      skills: ['Generative AI', 'AWS'],
+      title: 'Associate AI Engineer for Developers',
+      provider: 'DataCamp',
+      skills: ['LLM applications', 'AI engineering'],
     },
     {
-      title: 'Microsoft Certified: Azure Fundamentals',
+      title: 'Microsoft Azure Fundamentals (AZ-900)',
       provider: 'Microsoft',
-      completed: '',
       skills: ['Azure', 'Cloud fundamentals'],
     },
     {
-      title: 'Credit Risk Modelling in Python',
+      title: 'Microsoft 365 Certified: Fundamentals',
+      provider: 'Microsoft',
+      skills: ['Microsoft 365', 'Cloud services'],
+    },
+    {
+      title: 'Introducing Generative AI with AWS',
+      provider: 'Udacity',
+      skills: ['Generative AI', 'AWS'],
+    },
+    {
+      title: 'AI Career Essentials',
+      provider: 'ALX / ExploreAI',
+      skills: ['AI foundations', 'Prompting'],
+    },
+    {
+      title: 'Credit Risk Modelling in Python & Machine Learning',
       provider: '365 Data Science',
-      completed: '',
       skills: ['Python', 'Risk modelling'],
-    },
-    {
-      title: 'Working with the OpenAI API',
-      provider: '',
-      completed: '',
-      skills: ['OpenAI API', 'LLM integration'],
-    },
-    {
-      title: 'Prompt Engineering with the OpenAI API',
-      provider: '',
-      completed: '',
-      skills: ['Prompt engineering', 'Structured outputs'],
-    },
-    {
-      title: 'Working with Hugging Face',
-      provider: '',
-      completed: '',
-      skills: ['Transformers', 'Model Hub'],
     },
   ];
 
@@ -122,6 +128,11 @@ export default function Education() {
                 <article className="grid gap-4 border-b border-white/10 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
                   <div>
                     <div className="font-mono text-sm text-white/80">{edu.year}</div>
+                    {edu.status && (
+                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+                        {edu.status}
+                      </div>
+                    )}
                     {edu.gpa && (
                       <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
                         GPA {edu.gpa}
@@ -140,14 +151,16 @@ export default function Education() {
                         {edu.thesis}
                       </p>
                     )}
-                    <ul className="space-y-2">
-                      {edu.achievements.map((achievement) => (
-                        <li key={achievement} className="flex gap-3 font-sans text-sm text-white/70">
-                          <span className="select-none text-white/30">&mdash;</span>
-                          <span>{achievement}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {edu.achievements.length > 0 && (
+                      <ul className="space-y-2">
+                        {edu.achievements.map((achievement) => (
+                          <li key={achievement} className="flex gap-3 font-sans text-sm text-white/70">
+                            <span className="select-none text-white/30">&mdash;</span>
+                            <span>{achievement}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </article>
               </AnimatedSection>

@@ -133,7 +133,7 @@ export default function OpenSource() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
                   >
-                    View repository <ArrowUpRight className="h-4 w-4" />
+                    View repository <ArrowUpRight className="t-nudge h-4 w-4" />
                   </a>
                 </div>
               </article>
@@ -149,7 +149,7 @@ export default function OpenSource() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 font-sans text-sm font-medium text-white/80 transition-colors hover:text-white"
             >
-              View full GitHub profile <ArrowUpRight className="h-4 w-4" />
+              View full GitHub profile <ArrowUpRight className="t-nudge h-4 w-4" />
             </a>
           </div>
         </AnimatedSection>

@@ -3,6 +3,7 @@ import { Linkedin, Github, Mail } from 'lucide-react';
 export default function Footer() {
   const navLinks = [
     { name: 'About', href: '#about' },
+    { name: 'Experience', href: '#experience' },
     { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' },
     { name: 'Principles', href: '#reviews' },
@@ -14,13 +15,6 @@ export default function Footer() {
     { icon: Github, href: 'https://github.com/Murci20965', label: 'GitHub' },
     { icon: Mail, href: 'mailto:nhlanhla18mokoena@gmail.com', label: 'Email' },
   ];
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <footer id="site-footer" className="border-t border-white/10 bg-black py-16">
@@ -36,23 +30,23 @@ export default function Footer() {
             </p>
           </div>
 
-          <div>
+          <nav aria-label="Footer">
             <div className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
               Navigation
             </div>
             <ul className="space-y-3">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <button
-                    onClick={() => scrollToSection(link.href)}
+                  <a
+                    href={link.href}
                     className="font-sans text-sm text-white/70 transition-colors hover:text-white"
                   >
                     {link.name}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           <div>
             <div className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
