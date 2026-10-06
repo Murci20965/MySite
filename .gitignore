@@ -25,4 +25,8 @@ dist-ssr
 # Large source GLB (optimized version is public/earth.opt.glb)
 earth.source.glb
 
+# Film masters from OpenArt (K0-K6 keyframes, M1-M6 clips). Only encoded,
+# budgeted outputs go in public/; the masters stay local.
+media-src/
+
 *.tsbuildinfo
