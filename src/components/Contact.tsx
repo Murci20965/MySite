@@ -74,7 +74,7 @@ export default function Contact() {
   ];
 
   const preferences = [
-    { label: 'Role', value: 'Junior AI Engineer, Nudle' },
+    { label: 'Role', value: 'AI Engineer, Nudle' },
     { label: 'Location', value: 'Johannesburg, South Africa' },
     { label: 'Working', value: 'Remote-friendly' },
     { label: 'Timezone', value: 'SAST (UTC+2)' },
