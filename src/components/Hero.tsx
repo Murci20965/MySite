@@ -6,13 +6,6 @@ export default function Hero() {
   const stageRef = useRef<HTMLDivElement>(null);
   const surfaceRef = useRef<HTMLDivElement>(null);
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   // Texts reveal: play the staggered entrance once on mount.
   useEffect(() => {
     const el = stageRef.current;
@@ -104,18 +97,18 @@ export default function Hero() {
               </p>
 
               <div className="t-stagger-line t-stagger-line--4 mt-9 flex flex-wrap gap-3">
-                <button
-                  onClick={() => scrollToSection('projects')}
+                <a
+                  href="#projects"
                   className="font-sans px-7 py-3 bg-white text-black text-sm font-medium rounded-full hover:bg-white/85 active:scale-[0.98] transition duration-300"
                 >
                   View Projects
-                </button>
-                <button
-                  onClick={() => scrollToSection('contact')}
+                </a>
+                <a
+                  href="#contact"
                   className="font-sans px-7 py-3 text-white text-sm font-medium border border-white/25 rounded-full hover:bg-white/10 hover:border-white/40 active:scale-[0.98] transition duration-300"
                 >
                   Get in Touch
-                </button>
+                </a>
               </div>
             </div>
           </div>
