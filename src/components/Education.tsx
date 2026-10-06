@@ -98,54 +98,54 @@ export default function Education() {
   ];
 
   return (
-    <section id="education" className="relative bg-black py-24 lg:py-32">
+    <section id="education" className="relative bg-bg py-24 lg:py-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <div className="mb-8 flex items-center gap-4">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/50">
               Education
             </span>
-            <span className="h-px flex-1 bg-white/15" />
-            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">05</span>
+            <span className="h-px flex-1 bg-fg/15" />
+            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">05</span>
           </div>
 
           <RevealHeading
             text="Education & learning"
-            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
+            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
           />
-          <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
+          <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg/70">
             Formal study paired with a continuous habit of learning.
           </p>
         </AnimatedSection>
 
         <div className="mt-16">
-          <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
+          <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
             Academic background
           </div>
-          <div className="border-t border-white/10">
+          <div className="border-t border-fg/10">
             {education.map((edu, index) => (
               <AnimatedSection key={edu.degree} animation="fade-in" delay={index > 0}>
-                <article className="grid gap-4 border-b border-white/10 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
+                <article className="grid gap-4 border-b border-fg/10 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
                   <div>
-                    <div className="font-mono text-sm text-white/80">{edu.year}</div>
+                    <div className="font-mono text-sm text-fg/80">{edu.year}</div>
                     {edu.status && (
-                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-fg/40">
                         {edu.status}
                       </div>
                     )}
                     {edu.gpa && (
-                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-fg/40">
                         GPA {edu.gpa}
                       </div>
                     )}
-                    <div className="mt-4 font-sans text-white/90">{edu.institution}</div>
+                    <div className="mt-4 font-sans text-fg/90">{edu.institution}</div>
                   </div>
                   <div>
-                    <h3 className="mb-1 font-display text-2xl font-medium text-white">{edu.degree}</h3>
-                    <p className="mb-4 font-sans text-white/60">{edu.specialization}</p>
+                    <h3 className="mb-1 font-display text-2xl font-medium text-fg">{edu.degree}</h3>
+                    <p className="mb-4 font-sans text-fg/60">{edu.specialization}</p>
                     {edu.thesis && (
-                      <p className="mb-5 font-sans text-sm leading-relaxed text-white/60">
-                        <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
+                      <p className="mb-5 font-sans text-sm leading-relaxed text-fg/60">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-fg/40">
                           Thesis&nbsp;
                         </span>
                         {edu.thesis}
@@ -154,8 +154,8 @@ export default function Education() {
                     {edu.achievements.length > 0 && (
                       <ul className="space-y-2">
                         {edu.achievements.map((achievement) => (
-                          <li key={achievement} className="flex gap-3 font-sans text-sm text-white/70">
-                            <span className="select-none text-white/30">&mdash;</span>
+                          <li key={achievement} className="flex gap-3 font-sans text-sm text-fg/70">
+                            <span className="select-none text-fg/30">&mdash;</span>
                             <span>{achievement}</span>
                           </li>
                         ))}
@@ -171,21 +171,21 @@ export default function Education() {
         <AnimatedSection animation="fade-in">
           <div className="mt-20">
             <div className="mb-6 flex items-center justify-between">
-              <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
+              <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
                 Certifications &amp; courses
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => scrollByCard(-1)}
                   aria-label="Previous certifications"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition-colors hover:border-white/40 hover:text-white"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 text-fg/60 transition-colors hover:border-fg/40 hover:text-fg"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => scrollByCard(1)}
                   aria-label="Next certifications"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition-colors hover:border-white/40 hover:text-white"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 text-fg/60 transition-colors hover:border-fg/40 hover:text-fg"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
@@ -193,22 +193,22 @@ export default function Education() {
             </div>
             <div
               ref={trackRef}
-              className="t-carousel flex gap-5 overflow-x-auto border-t border-white/10 pb-4 pt-8"
+              className="t-carousel flex gap-5 overflow-x-auto border-t border-fg/10 pb-4 pt-8"
             >
               {courses.map((course) => (
                 <div
                   key={course.title}
-                  className="flex w-[17rem] shrink-0 snap-start flex-col rounded-2xl border border-white/10 bg-[#0e0e0e] p-6 sm:w-[19rem]"
+                  className="flex w-[17rem] shrink-0 snap-start flex-col rounded-2xl border border-fg/10 bg-surface p-6 sm:w-[19rem]"
                 >
-                  <div className="font-display text-lg leading-snug text-white">{course.title}</div>
+                  <div className="font-display text-lg leading-snug text-fg">{course.title}</div>
                   {course.provider && (
-                    <div className="mt-1 font-sans text-sm text-white/50">{course.provider}</div>
+                    <div className="mt-1 font-sans text-sm text-fg/50">{course.provider}</div>
                   )}
                   <div className="mt-auto flex flex-wrap gap-2 pt-5">
                     {course.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] tracking-wide text-white/50"
+                        className="rounded-full border border-fg/10 px-3 py-1 font-mono text-[11px] tracking-wide text-fg/50"
                       >
                         {skill}
                       </span>
@@ -222,14 +222,14 @@ export default function Education() {
 
         <AnimatedSection animation="fade-in">
           <div className="mt-20">
-            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
+            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
               Currently learning
             </div>
-            <div className="grid gap-10 border-t border-white/10 pt-10 sm:grid-cols-3">
+            <div className="grid gap-10 border-t border-fg/10 pt-10 sm:grid-cols-3">
               {currentLearning.map((item) => (
                 <div key={item.topic}>
-                  <h4 className="mb-2 font-display text-xl font-medium text-white">{item.topic}</h4>
-                  <p className="font-sans text-sm leading-relaxed text-white/60">{item.focus}</p>
+                  <h4 className="mb-2 font-display text-xl font-medium text-fg">{item.topic}</h4>
+                  <p className="font-sans text-sm leading-relaxed text-fg/60">{item.focus}</p>
                 </div>
               ))}
             </div>

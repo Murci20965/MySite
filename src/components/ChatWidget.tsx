@@ -113,27 +113,27 @@ export default function ChatWidget() {
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-label="Ask the assistant about Murci"
-        className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5 rounded-full border border-white/20 bg-black/80 px-5 py-3 backdrop-blur-md transition-colors hover:border-white/40"
+        className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5 rounded-full border border-fg/20 bg-bg/80 px-5 py-3 backdrop-blur-md transition-colors hover:border-fg/40"
       >
         <span className="h-1.5 w-1.5 rounded-full bg-lime-400" />
-        <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/80">
+        <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-fg/80">
           Ask about me
         </span>
       </button>
 
       {open && (
-        <div className="fixed bottom-20 right-5 z-40 flex max-h-[70vh] w-[calc(100vw-2.5rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-white/15 bg-[#0e0e0e] shadow-2xl">
-          <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        <div className="fixed bottom-20 right-5 z-40 flex max-h-[70vh] w-[calc(100vw-2.5rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-fg/15 bg-surface shadow-2xl">
+          <div className="flex items-center justify-between border-b border-fg/10 px-5 py-4">
             <div>
-              <div className="font-display text-base font-medium text-white">Ask about Murci</div>
-              <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
+              <div className="font-display text-base font-medium text-fg">Ask about Murci</div>
+              <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-fg/40">
                 Answers from verified facts only
               </div>
             </div>
             <button
               onClick={() => setOpen(false)}
               aria-label="Close chat"
-              className="text-white/50 transition-colors hover:text-white"
+              className="text-fg/50 transition-colors hover:text-fg"
             >
               <X className="h-4 w-4" />
             </button>
@@ -142,7 +142,7 @@ export default function ChatWidget() {
           <div ref={listRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
             {messages.length === 0 && (
               <div className="space-y-2.5">
-                <p className="font-sans text-sm leading-relaxed text-white/60">
+                <p className="font-sans text-sm leading-relaxed text-fg/60">
                   I answer questions about Nhlanhla&rsquo;s work, skills and projects, grounded in
                   his real record, nothing invented.
                 </p>
@@ -150,7 +150,7 @@ export default function ChatWidget() {
                   <button
                     key={s}
                     onClick={() => send(s)}
-                    className="block w-full rounded-xl border border-white/10 px-4 py-2.5 text-left font-sans text-sm text-white/70 transition-colors hover:border-white/30 hover:text-white"
+                    className="block w-full rounded-xl border border-fg/10 px-4 py-2.5 text-left font-sans text-sm text-fg/70 transition-colors hover:border-fg/30 hover:text-fg"
                   >
                     {s}
                   </button>
@@ -162,8 +162,8 @@ export default function ChatWidget() {
                 <div
                   className={
                     m.role === 'user'
-                      ? 'max-w-[85%] rounded-2xl rounded-br-md bg-white/10 px-4 py-2.5 font-sans text-sm leading-relaxed text-white'
-                      : 'max-w-[92%] font-sans text-sm leading-relaxed text-white/80'
+                      ? 'max-w-[85%] rounded-2xl rounded-br-md bg-fg/10 px-4 py-2.5 font-sans text-sm leading-relaxed text-fg'
+                      : 'max-w-[92%] font-sans text-sm leading-relaxed text-fg/80'
                   }
                 >
                   {m.content ||
@@ -182,7 +182,7 @@ export default function ChatWidget() {
           </div>
 
           <form
-            className="flex items-center gap-2 border-t border-white/10 px-4 py-3"
+            className="flex items-center gap-2 border-t border-fg/10 px-4 py-3"
             onSubmit={(e) => {
               e.preventDefault();
               send(input);
@@ -194,13 +194,13 @@ export default function ChatWidget() {
               onChange={(e) => setInput(e.target.value)}
               maxLength={600}
               placeholder="Ask anything about his work"
-              className="t-input min-w-0 flex-1 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2.5 font-sans text-sm text-white placeholder-white/30 transition-colors focus:border-white/40 focus:outline-none"
+              className="t-input min-w-0 flex-1 rounded-full border border-fg/15 bg-fg/[0.03] px-4 py-2.5 font-sans text-sm text-fg placeholder-fg/30 transition-colors focus:border-fg/40 focus:outline-none"
             />
             <button
               type="submit"
               disabled={busy}
               aria-label="Send question"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-black transition duration-300 hover:bg-white/85 active:scale-[0.98] disabled:opacity-50"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-fg text-bg transition duration-300 hover:bg-fg/85 active:scale-[0.98] disabled:opacity-50"
             >
               <ArrowUpRight className="t-nudge h-4 w-4" />
             </button>

@@ -3,6 +3,46 @@
 @tailwind utilities;
 
 @layer base {
+  /* Theme tokens: RGB triplets so Tailwind opacity modifiers work. Dark is
+     the default; index.html sets data-theme before first paint (stored
+     choice, else the OS preference), so there is no flash.
+     Light = "Paper" (chosen 2026-10-06). Measured contrast on sand: ink
+     16.1:1, accent text #3f6212 6.2:1, 66% ink 5.6:1. Lime-400 as TEXT on
+     sand is 1.32:1, which is why the accent token changes per theme. */
+  :root,
+  [data-theme='dark'] {
+    --c-bg: 10 10 10;
+    --c-fg: 255 255 255;
+    --c-surface: 14 14 14;
+    --c-accent: 163 230 53;
+    color-scheme: dark;
+  }
+  [data-theme='light'] {
+    --c-bg: 244 239 230;
+    --c-fg: 23 19 14;
+    --c-surface: 235 228 215;
+    --c-accent: 63 98 18;
+    color-scheme: light;
+  }
+
+  /* Muted-text floor. Opacity costs contrast faster on paper than on black,
+     so each theme gets its own minimum (measured against bg AND surface):
+     dark needs 45% for 4.5:1, light needs 61%. The /30-/60 text utilities are
+     re-pointed at these steps, which keeps the hierarchy (faint < muted <
+     secondary) while every label passes AA. Borders and fills keep their
+     opacities; this applies to text only. */
+  :root,
+  [data-theme='dark'] {
+    --tx-faint: 0.48;
+    --tx-muted: 0.55;
+    --tx-soft: 0.6;
+  }
+  [data-theme='light'] {
+    --tx-faint: 0.62;
+    --tx-muted: 0.66;
+    --tx-soft: 0.7;
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -14,7 +54,7 @@
   }
 
   body {
-    @apply bg-black text-white antialiased font-sans;
+    @apply bg-bg text-fg antialiased font-sans;
   }
 
   h1,
@@ -32,7 +72,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.75);
+    outline: 2px solid rgb(var(--c-fg) / 0.75);
     outline-offset: 2px;
     border-radius: 3px;
   }
@@ -75,12 +115,16 @@
   position: absolute;
   width: 3px;
   height: 3px;
-  background: white;
+  background: rgb(var(--c-fg));
   border-radius: 50%;
   box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.8),
               0 0 8px 4px rgba(255, 255, 255, 0.6),
               0 0 12px 6px rgba(255, 255, 255, 0.4);
   animation: radiate 3s ease-in-out infinite;
+}
+/* A white glow reads as starlight on black and as a smudge on paper. */
+[data-theme='light'] .radiate-star {
+  box-shadow: none;
 }
 
 .animate-fadeIn {
@@ -607,7 +651,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgb(var(--c-fg) / 0.7);
   opacity: 0.35;
   animation: t-typing 1100ms var(--stagger-ease) infinite;
 }

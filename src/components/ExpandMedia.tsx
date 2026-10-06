@@ -81,7 +81,7 @@ export default function ExpandMedia() {
   }, []);
 
   return (
-    <section id="vision" className="relative bg-black">
+    <section id="vision" className="relative bg-bg">
       <div ref={wrapRef} className="relative h-[240vh]">
         <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden">
           <div className="pointer-events-none absolute top-24 z-40 flex items-center gap-4">
@@ -99,19 +99,19 @@ export default function ExpandMedia() {
               className="h-full w-full object-cover"
               loading="lazy"
             />
-            <div ref={dimRef} className="t-scroll-linked absolute inset-0 bg-black" style={{ opacity: 0.55 }} />
+            <div ref={dimRef} className="t-scroll-linked absolute inset-0 bg-bg" style={{ opacity: 0.55 }} />
             {/* Letterbox bars: each covers 39% at rest and slides fully out by
                 p = 1. Same black as the section, so they read as the frame
                 edge; the returning Earth (z-30) still paints above them. */}
             <div
               ref={barTopRef}
               aria-hidden="true"
-              className="t-scroll-linked absolute inset-x-0 top-0 h-[39%] bg-black will-change-transform"
+              className="t-scroll-linked absolute inset-x-0 top-0 h-[39%] bg-bg will-change-transform"
             />
             <div
               ref={barBottomRef}
               aria-hidden="true"
-              className="t-scroll-linked absolute inset-x-0 bottom-0 h-[39%] bg-black will-change-transform"
+              className="t-scroll-linked absolute inset-x-0 bottom-0 h-[39%] bg-bg will-change-transform"
             />
           </div>
 

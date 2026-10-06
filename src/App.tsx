@@ -23,7 +23,7 @@ function App() {
     // overflow-x-CLIP, never -hidden: `hidden` turns this into a scroll
     // container and silently breaks every position:sticky on the page
     // (the Vision expansion and the Principles card stack both depend on it).
-    <div className="min-h-screen bg-black overflow-x-clip">
+    <div className="min-h-screen bg-bg overflow-x-clip">
       <FutureticParticles />
       <div className="grain-overlay" aria-hidden="true" />
       <div className="relative z-10">

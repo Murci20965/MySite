@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { THEME_EVENT, fgColor } from '../lib/theme';
 
 export default function FutureticParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -43,6 +44,14 @@ export default function FutureticParticles() {
     // it runs at ~30fps and stops entirely when the tab is hidden.
     const FRAME_MS = 1000 / 30;
     let last = 0;
+    // Canvas cannot read CSS variables per draw call: cache the theme
+    // foreground and refresh it when the theme changes.
+    let dot = fgColor(0.8);
+    let link = fgColor(0.3);
+    const onTheme = () => {
+      dot = fgColor(0.8);
+      link = fgColor(0.3);
+    };
 
     const animate = (now = 0) => {
       if (now - last < FRAME_MS) {
@@ -51,7 +60,7 @@ export default function FutureticParticles() {
       }
       last = now;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.fillStyle = dot;
 
       particles.forEach((p, i) => {
         p.x += p.vx;
@@ -72,7 +81,7 @@ export default function FutureticParticles() {
 
           if (dist < 100) {
             ctx.globalAlpha = (1 - dist / 100) * 0.2;
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.strokeStyle = link;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
@@ -102,10 +111,12 @@ export default function FutureticParticles() {
     };
 
     window.addEventListener('resize', handleResize);
+    window.addEventListener(THEME_EVENT, onTheme);
     document.addEventListener('visibilitychange', onVisibility);
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener(THEME_EVENT, onTheme);
       document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);

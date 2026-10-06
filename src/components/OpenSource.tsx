@@ -246,7 +246,7 @@ export default function OpenSource() {
   const gutter = 'px-6 sm:px-10 lg:px-16 xl:px-24';
 
   return (
-    <section id="opensource" className="relative bg-black">
+    <section id="opensource" className="relative bg-bg">
       <div ref={wrapRef} className="relative">
         <div
           ref={stageRef}
@@ -259,39 +259,39 @@ export default function OpenSource() {
           <div className={`mx-auto w-full max-w-[1760px] ${gutter}`}>
             <AnimatedSection animation="fade-in">
               <div className={`flex items-center gap-4 ${pinned ? 'mb-6' : 'mb-8'}`}>
-                <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/50">
+                <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/50">
                   Open source
                 </span>
-                <span className="h-px flex-1 bg-white/15" />
-                <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">03</span>
+                <span className="h-px flex-1 bg-fg/15" />
+                <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">03</span>
               </div>
 
               <div className="flex items-end justify-between gap-6">
                 <div>
                   <RevealHeading
                     text="Open-source work"
-                    className="mb-4 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-white sm:text-5xl lg:text-6xl"
+                    className="mb-4 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
                   />
-                  <p className="max-w-2xl font-sans text-lg leading-relaxed text-white/70">
+                  <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg/70">
                     Every project, public from the first commit. Two are live.
                   </p>
                   <a
                     href="https://github.com/Murci20965"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-2 font-sans text-sm font-medium text-white/80 transition-colors hover:text-white"
+                    className="mt-3 inline-flex items-center gap-2 font-sans text-sm font-medium text-fg/80 transition-colors hover:text-fg"
                   >
                     Full GitHub profile <ArrowUpRight className="t-nudge h-4 w-4" />
                   </a>
                 </div>
                 <div className="shrink-0 text-right" aria-hidden="true">
-                  <span ref={countRef} className="block font-display text-4xl leading-none text-white lg:text-5xl">
+                  <span ref={countRef} className="block font-display text-4xl leading-none text-fg lg:text-5xl">
                     01
                   </span>
-                  <span className="mt-2 block font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+                  <span className="mt-2 block font-mono text-[11px] uppercase tracking-[0.2em] text-fg/40">
                     of {pad(WORK.length)}
                   </span>
-                  <div className="ml-auto mt-3 h-0.5 w-24 overflow-hidden rounded-full bg-white/10">
+                  <div className="ml-auto mt-3 h-0.5 w-24 overflow-hidden rounded-full bg-fg/10">
                     <div ref={barRef} className="t-film-bar h-full w-full bg-lime-400" />
                   </div>
                 </div>
@@ -311,7 +311,7 @@ export default function OpenSource() {
             {WORK.map((w) => (
               <li
                 key={w.repo}
-                className={`group relative flex shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0e0e0e] ${
+                className={`group relative flex shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-fg/10 bg-surface ${
                   pinned ? 'w-[min(440px,36vw)]' : 'w-[82vw] sm:w-[400px]'
                 }`}
               >
@@ -327,19 +327,19 @@ export default function OpenSource() {
 
                 <div className="flex flex-1 flex-col p-6">
                   <div className="mb-3 flex items-center justify-between gap-3">
-                    <span className="truncate font-mono text-[11px] uppercase tracking-[0.15em] text-white/40">
+                    <span className="truncate font-mono text-[11px] uppercase tracking-[0.15em] text-fg/40">
                       {w.repo}
                     </span>
                     {w.live && (
-                      <span className="t-live font-mono text-[11px] uppercase tracking-[0.2em] text-lime-400">
+                      <span className="t-live font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
                         Live
                       </span>
                     )}
                   </div>
-                  <h3 className="mb-2 font-display text-2xl font-medium text-white">{w.title}</h3>
-                  <div className="mb-3 font-mono text-sm text-white">{w.metric}</div>
+                  <h3 className="mb-2 font-display text-2xl font-medium text-fg">{w.title}</h3>
+                  <div className="mb-3 font-mono text-sm text-fg">{w.metric}</div>
                   <p
-                    className={`mb-4 font-sans text-sm leading-relaxed text-white/60 ${pinned ? 'line-clamp-2' : 'line-clamp-3'}`}
+                    className={`mb-4 font-sans text-sm leading-relaxed text-fg/60 ${pinned ? 'line-clamp-2' : 'line-clamp-3'}`}
                   >
                     {w.summary}
                   </p>
@@ -347,7 +347,7 @@ export default function OpenSource() {
                     {w.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] tracking-wide text-white/50"
+                        className="rounded-full border border-fg/10 px-3 py-1 font-mono text-[11px] tracking-wide text-fg/50"
                       >
                         {tag}
                       </span>
@@ -359,7 +359,7 @@ export default function OpenSource() {
                         href={w.live}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-lime-400 transition-colors hover:text-lime-300"
+                        className="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-accent transition-colors hover:text-accent"
                       >
                         Live demo <ArrowUpRight className="t-nudge h-4 w-4" />
                       </a>
@@ -368,7 +368,7 @@ export default function OpenSource() {
                       href={w.code}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 font-sans text-sm text-white/70 transition-colors hover:text-white"
+                      className="inline-flex items-center gap-1.5 font-sans text-sm text-fg/70 transition-colors hover:text-fg"
                     >
                       Code <ArrowUpRight className="t-nudge h-4 w-4" />
                     </a>
@@ -385,14 +385,14 @@ export default function OpenSource() {
               <button
                 onClick={() => step(-1)}
                 aria-label="Previous project"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition-colors hover:border-white/40 hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 text-fg/60 transition-colors hover:border-fg/40 hover:text-fg"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 onClick={() => step(1)}
                 aria-label="Next project"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition-colors hover:border-white/40 hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 text-fg/60 transition-colors hover:border-fg/40 hover:text-fg"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>

@@ -25,7 +25,7 @@ export default function Marquee() {
       <div className="t-marquee-track">
         {track.map((item, i) => (
           <span key={i} className="flex shrink-0 items-center gap-8 pr-8">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/30">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">
               {item}
             </span>
             <span className="h-1 w-1 rounded-full bg-lime-400/40" />

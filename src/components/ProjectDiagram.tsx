@@ -245,7 +245,7 @@ const VARIANTS: Record<DiagramVariant, () => JSX.Element> = {
 export default function ProjectDiagram({ variant }: { variant: DiagramVariant }) {
   const Shape = VARIANTS[variant];
   return (
-    <div className="flex h-full w-full items-center justify-center bg-[#0e0e0e]">
+    <div className="flex h-full w-full items-center justify-center bg-screen">
       <svg viewBox="0 0 320 200" className="h-full w-full" aria-hidden="true">
         <Shape />
       </svg>
