@@ -21,8 +21,9 @@ Employer internals beyond what the CV itself discloses never appear on the site 
 | Nudle: a named video-generation model | text-to-video, no model named | the named model is contradicted by the work itself |
 | Nudle: "sub-second cold starts" | omitted | not supportable for the GPU serving setup described |
 
-**One work section (2026-10-06).** Every project is open source, so "Selected work" was removed
-and the open-source section became the single place for all seven repos (Murci's decision). Two
+**One work section, no blog (2026-10-06).** Every project is open source, so "Selected work"
+was removed and the open-source section became the single place for all seven repos. The Blog
+section was removed too; its four posts stay in `content/blog/` (Murci's decisions). Two
 more facts were corrected on the way: **Smart-Spend** is a Python app (FastAPI, PostgreSQL, Redis,
 Hugging Face models per its README; GitHub reports ~90% Python), not "full-stack TS"; and the
 **Cat vs Dog Classifier** card states only what its README does (FastAI CNN, Oxford-IIIT Pet,

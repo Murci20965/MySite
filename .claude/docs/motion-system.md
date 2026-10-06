@@ -11,7 +11,7 @@ breaking them. Last updated 2026-10-06.
    `box-shadow` and colour tweens all repaint or re-layout every frame.
 2. **Reduced motion is honoured twice.** Every effect ships a `@media (prefers-reduced-motion:
    reduce)` block, and a global rule in `src/index.css` zeroes all durations as a backstop. JS
-   effects (spring hover, view transition, scroll-linked Vision band, number pop-in) also check
+   effects (filmstrip, scroll-linked Vision band, number pop-in) also check
    `matchMedia` and skip the motion entirely.
 3. **Fail open.** Nothing may stay invisible because an observer missed. `AnimatedSection`
    reveals by IntersectionObserver, by a geometry check on mount and by a 2.5 s timer.
@@ -19,7 +19,7 @@ breaking them. Last updated 2026-10-06.
    `src/index.css` (the transitions.dev naming: `--enter-*`, `--stagger-*`, `--tilt-*`,
    `--skel-*`, ...). The shared ease is `cubic-bezier(0.22, 1, 0.36, 1)`.
 5. **No `will-change` on large things that wait.** The hint pins a GPU layer for as long as it
-   is set. It is used on elements that move continuously (marquee, orbit, tilt card, progress
+   is set. It is used on elements that move continuously (marquee, orbit, progress
    bar, filmstrip) and on a few tiny one-shot elements (hero lines, digits, the success check), never on
    section-sized blocks waiting below the fold. Transitions are promoted automatically while
    they run.
@@ -42,8 +42,6 @@ breaking them. Last updated 2026-10-06.
 | Open-source filmstrip | `OpenSource.tsx`, `.t-film-*` | transform, opacity | pinned horizontal strip, see below; carousel on phones and under reduced motion |
 | Live badge | `.t-live` | transform, opacity | ring expands and fades; marks projects with a live demo |
 | Principles stack | `.t-stack-card` | transform, opacity | scroll-driven; opacity 0.6 renders like brightness 0.6 on black |
-| Blog card hover | `TiltCard.tsx` | transform (via CSS vars) | spring physics, see below; mouse only |
-| Blog filter underline | `.t-underline` | transform (`translate` + `scaleX` of a 1px bar) | never tweens `width` |
 | Number pop-in | `PopNumber.tsx`, `.t-digit` | opacity, transform | |
 | Chat typing dots | `ChatWidget.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" |
 | Nav underline, arrow nudge | `.t-navlink`, `.t-nudge` | transform | |
@@ -59,23 +57,12 @@ breaking them. Last updated 2026-10-06.
 - **Hover colour changes**: the global `*` transition rule eases colour and border changes on
   hover. They are single-element, user-triggered, and not animations in the sense above.
 
-## Spring hover (TiltCard)
+## Removed effects (2026-10-06)
 
-One damped spring per axis (tilt X, tilt Y, lift), integrated with semi-implicit Euler in a rAF
-loop that runs only while a spring is moving.
-
-| Constant | Value | Why |
-|---|---|---|
-| `STIFFNESS` | 170 | |
-| `DAMPING` | 16 | ratio 16 / (2 * sqrt(170)) = 0.61, under-damped |
-| `MAX_TILT` | 5 deg | a lean, not a flip |
-| `LIFT_PX` / `LIFT_SCALE` | -6 px / +1.5% | |
-| dt clamp | 1/30 s | a long frame must not make the integration explode |
-
-Simulated at 30 / 60 / 144 fps: 4-8% overshoot (about 0.4 deg on a 5 deg lean), settled in
-under 0.9 s at every rate. Damping 20 was tried first and rejected: overshoot under 2% is
-invisible, so the physics would not read. Touch never tilts, and the card sets no
-`touch-action`, so a swipe that starts on a card scrolls the page.
+The spring-physics card hover (`TiltCard`: stiffness 170, damping 16, ratio 0.61, 4-8%
+overshoot, settled under 0.9 s at 30/60/144 fps), the sliding filter underline, the
+view-transition project filter and the 3D viewer skeleton went out with the Selected work and
+Blog sections. They are in git history (merge `2a92464`) if a future section needs them.
 
 ## Open-source filmstrip
 
