@@ -89,48 +89,6 @@
   }
 }
 
-/* Hero stars: the glow is a static shadow; only opacity + scale animate,
-   so the twinkle never repaints (it used to animate box-shadow forever). */
-@keyframes radiate {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(0.6);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.radiate-star {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  background: rgb(var(--c-fg));
-  border-radius: 50%;
-  box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.8),
-              0 0 8px 4px rgba(255, 255, 255, 0.6),
-              0 0 12px 6px rgba(255, 255, 255, 0.4);
-  animation: radiate 3s ease-in-out infinite;
-}
-/* A white glow reads as starlight on black and as a smudge on paper. */
-[data-theme='light'] .radiate-star {
-  box-shadow: none;
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
 * {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -146,12 +104,6 @@
   --stagger-distance: 12px;
   --stagger-stagger: 40ms;
   --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  /* modal (06) */
-  --modal-open-dur: 250ms;
-  --modal-close-dur: 150ms;
-  --modal-scale: 0.96;
-  --modal-scale-close: 0.96;
-  --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Texts reveal (transitions.dev 18) — display omitted so flex/block
@@ -172,34 +124,8 @@
   transform: translateY(0);
 }
 
-/* Modal open / close (transitions.dev 06) */
-.t-modal {
-  transform-origin: center;
-  transform: scale(var(--modal-scale));
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    transform var(--modal-open-dur) var(--modal-ease),
-    opacity var(--modal-open-dur) var(--modal-ease);
-  will-change: transform, opacity;
-}
-.t-modal.is-open {
-  transform: scale(1);
-  opacity: 1;
-  pointer-events: auto;
-}
-.t-modal.is-closing {
-  transform: scale(var(--modal-scale-close));
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    transform var(--modal-close-dur) var(--modal-ease),
-    opacity var(--modal-close-dur) var(--modal-ease);
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .t-stagger-line,
-  .t-modal {
+  .t-stagger-line {
     transition: none !important;
   }
 }
@@ -784,6 +710,115 @@
 @media (prefers-reduced-motion: reduce) {
   .t-theme svg {
     transition: none !important;
+  }
+}
+
+/* ---- Studio laptop (chapter 01) --------------------------------------------
+   The bezel and deck follow the theme (graphite on black, warm stone on
+   paper); the screen is always dark because it is a screen. Shadows are
+   static; the only motion is the placeholder's transform/opacity. */
+:root,
+[data-theme='dark'] {
+  --studio-bezel: 28 28 28;
+  --studio-deck: 42 42 42;
+  --studio-shadow: 0 0 0 / 0.55;
+}
+[data-theme='light'] {
+  --studio-bezel: 217 211 199;
+  --studio-deck: 198 191 177;
+  --studio-shadow: 60 45 20 / 0.22;
+}
+.t-studio {
+  margin: 0;
+}
+.t-studio-bezel {
+  padding: 2.2% 2.2% 2.6%;
+  border-radius: 18px 18px 8px 8px;
+  background: rgb(var(--studio-bezel));
+  box-shadow:
+    inset 0 0 0 1px rgb(var(--c-fg) / 0.08),
+    0 40px 80px -36px rgb(var(--studio-shadow));
+}
+.t-studio-screen {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+}
+/* A phone-width laptop is short; a squarer screen leaves the terminal room
+   for an answer without covering the whole picture. */
+@media (max-width: 639px) {
+  .t-studio-screen {
+    aspect-ratio: 4 / 3;
+  }
+}
+.t-studio-deck {
+  position: relative;
+  height: 14px;
+  margin: 0 -4%;
+  border-radius: 2px 2px 14px 14px;
+  background: linear-gradient(rgb(var(--studio-deck)), rgb(var(--studio-deck) / 0.8));
+}
+/* The thumb notch that opens the lid. */
+.t-studio-deck::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 42%;
+  width: 16%;
+  height: 5px;
+  border-radius: 0 0 6px 6px;
+  background: rgb(0 0 0 / 0.16);
+}
+
+/* Placeholder until the film arrives: a desk at night. Bokeh drift and
+   glyph streams are transform/opacity loops; under reduced motion they are
+   switched off, which leaves the bokeh still and the streams out of frame. */
+.t-screen-ph {
+  background:
+    radial-gradient(120% 80% at 75% 0%, rgb(163 230 53 / 0.1), transparent 60%),
+    radial-gradient(90% 70% at 12% 18%, rgb(90 120 170 / 0.18), transparent 65%),
+    linear-gradient(#0d0f12, #070707);
+}
+.t-bokeh {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(255 255 255 / 0.22), transparent 70%);
+  animation: t-bokeh-drift 9s ease-in-out infinite alternate;
+}
+.t-bokeh--lime {
+  background: radial-gradient(circle, rgb(163 230 53 / 0.3), transparent 70%);
+}
+.t-bokeh:nth-child(2) { animation-delay: -3s; animation-duration: 11s; }
+.t-bokeh:nth-child(3) { animation-delay: -6s; }
+.t-bokeh:nth-child(4) { animation-delay: -1.5s; animation-duration: 13s; }
+@keyframes t-bokeh-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.6;
+  }
+  to {
+    transform: translate3d(8px, -10px, 0) scale(1.1);
+    opacity: 1;
+  }
+}
+.t-glyphs {
+  position: absolute;
+  top: -40%;
+  width: 1px;
+  height: 40%;
+  background: linear-gradient(transparent, rgb(163 230 53 / 0.35), transparent);
+  animation: t-glyph-fall 12s linear infinite;
+}
+@keyframes t-glyph-fall {
+  to {
+    transform: translate3d(0, 360%, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-bokeh,
+  .t-glyphs {
+    animation: none !important;
   }
 }
 

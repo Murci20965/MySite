@@ -43,9 +43,9 @@ breaking them. Last updated 2026-10-06.
 | Live badge | `.t-live` | transform, opacity | ring expands and fades; marks projects with a live demo |
 | Principles stack | `.t-stack-card` | transform, opacity | scroll-driven; opacity 0.6 renders like brightness 0.6 on black |
 | Number pop-in | `PopNumber.tsx`, `.t-digit` | opacity, transform | |
-| Chat typing dots | `ChatWidget.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" |
+| Chat typing dots | `ChatWidget.tsx`, `HeroTerminal.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" / "Thinking" |
+| Studio screen placeholder | `ScreenPlaceholder.tsx`, `.t-bokeh`, `.t-glyphs` | transform, opacity | bokeh drift + falling glyph streams until the film lands; `animation: none` under reduced motion |
 | Nav underline, arrow nudge | `.t-navlink`, `.t-nudge` | transform | |
-| Hero stars | `.radiate-star` | opacity, transform | glow is a static shadow |
 | Marquee, tech orbit | `.t-marquee-track`, `.t-orbit-*` | transform | infinite; frozen by the reduced-motion rule |
 
 ### Deliberate exceptions
@@ -63,6 +63,8 @@ The spring-physics card hover (`TiltCard`: stiffness 170, damping 16, ratio 0.61
 overshoot, settled under 0.9 s at 30/60/144 fps), the sliding filter underline, the
 view-transition project filter and the 3D viewer skeleton went out with the Selected work and
 Blog sections. They are in git history (merge `2a92464`) if a future section needs them.
+The hero's twinkling stars (`.radiate-star`) and the intro-video modal (`.t-modal`) went out
+with the Studio hero on branch `feat/v3`.
 
 ## Open-source filmstrip
 
