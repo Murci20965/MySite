@@ -36,9 +36,9 @@ const experiences: ExperienceData[] = [
     ],
     technologies: ['Python', 'FastAPI', 'Agentic AI', 'Blender', 'TRELLIS', 'Text-to-video', 'Docker'],
     metrics: [
-      { label: '3D Modelling Overhead', value: '-65%' },
-      { label: 'Generation', value: '3D + video' },
-      { label: 'Serving', value: 'GPU / Docker' },
+      { label: 'Manual 3D modelling', value: '-65%' },
+      { label: 'Generation', value: '3D+video' },
+      { label: 'GPU serving', value: 'Docker' },
     ],
   },
   {
