@@ -168,7 +168,7 @@ export default function Experience() {
                     step: '02',
                     title: 'RAG & knowledge systems',
                     text: 'Retrieval that grounds answers in your own data, with honest failure modes instead of confident invention.',
-                    proof: 'Applied at Nudle and Alignerr',
+                    proof: 'Applied at Artintel (LLM training and RAG data)',
                     href: '',
                   },
                   {
