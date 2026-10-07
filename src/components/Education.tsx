@@ -44,7 +44,7 @@ export default function Education() {
               text="Education & learning"
               className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
             />
-            <p className="mt-6 font-sans text-lg leading-relaxed text-fg/90">
+            <p className="mt-6 font-sans text-lg leading-relaxed text-fg">
               Formal study paired with a continuous habit of learning.
             </p>
           </AnimatedSection>
@@ -57,7 +57,7 @@ export default function Education() {
                   <h3 className="mt-3 font-display text-2xl font-medium text-fg lg:text-3xl">{edu.institution}</h3>
                   <ul className="mt-2 space-y-1">
                     {edu.programmes.map((p) => (
-                      <li key={p} className="font-sans text-base text-fg/90 lg:text-lg">
+                      <li key={p} className="font-sans text-base text-fg lg:text-lg">
                         {p}
                       </li>
                     ))}

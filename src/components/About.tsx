@@ -30,7 +30,7 @@ export default function About() {
             shouldn&rsquo;t depend on where you were born.
           </p>
 
-          <div data-beat="m1:0.92" className="mt-8 space-y-6 font-sans text-base leading-relaxed text-fg/90 lg:text-lg">
+          <div data-beat="m1:0.92" className="mt-8 space-y-6 font-sans text-base leading-relaxed text-fg lg:text-lg">
             <p>
               I design agentic workflows with LangChain, LangGraph and n8n, RAG architectures over vector
               databases, and the end-to-end MLOps that keeps them honest: Python and FastAPI backends,

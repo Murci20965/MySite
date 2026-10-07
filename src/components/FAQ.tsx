@@ -53,7 +53,7 @@ export default function FAQ() {
               text="Common questions"
               className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
             />
-            <p className="mt-6 font-sans text-lg leading-relaxed text-fg/90">
+            <p className="mt-6 font-sans text-lg leading-relaxed text-fg">
               How I work, and what to expect from a project.
             </p>
           </AnimatedSection>

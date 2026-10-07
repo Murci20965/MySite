@@ -104,7 +104,7 @@ export default function Experience() {
                 className="font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
               />
             </div>
-            <p className="mt-6 font-sans text-lg leading-relaxed text-fg/90 lg:text-xl">
+            <p className="mt-6 font-sans text-lg leading-relaxed text-fg lg:text-xl">
               From ML foundations to production AI systems, and now the AI layer of XR education.
             </p>
           </AnimatedSection>
@@ -114,13 +114,13 @@ export default function Experience() {
               <AnimatedSection key={exp.id} animation="fade-in" delay={index > 0}>
                 <article className="border-t border-fg/20 py-12">
                   <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
-                    {exp.duration} · {exp.type}
+                    {`${exp.duration} · ${exp.type}`}
                   </div>
                   <h3 className="mt-4 font-display text-3xl font-medium text-fg lg:text-4xl">{exp.role}</h3>
                   <div className="mt-2 font-sans text-base text-fg/90">
-                    {exp.company} <span className="text-fg/70">· {exp.location}</span>
+                    {exp.company} <span className="text-fg/80">{`· ${exp.location}`}</span>
                   </div>
-                  <p className="mt-5 font-sans text-base leading-relaxed text-fg/90 lg:text-lg">{exp.description}</p>
+                  <p className="mt-5 font-sans text-base leading-relaxed text-fg lg:text-lg">{exp.description}</p>
 
                   <div className="mt-7 flex flex-wrap gap-x-10 gap-y-4">
                     {exp.metrics.map((metric, i) => (

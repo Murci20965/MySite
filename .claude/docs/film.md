@@ -105,8 +105,11 @@ Long sections need a side grade, not a band: their text travels the whole screen
 Lettering does the rest, with no text boxes:
 - cream text (`--c-fg` 244 239 230) with `.t-ink`: a tight shadow plus a soft 26 px one; small and
   mono text gets a denser halo; dark text on light buttons gets none;
-- faint text raised to 76-92% (hierarchy comes from size, weight and face), and a lighter text
-  lime (`--c-accent` 200 242 107);
+- running text (leads, paragraphs, the Stats notes) is full cream: on a moving film every bit of
+  alpha lets the frame through the letters. Hierarchy comes from size, weight and face. The faint
+  tiers (raised to 76-92%) are only for small metadata. Text lime is lighter (`--c-accent`
+  200 242 107) but still about 11% darker than the cream, so small lime text needs its section's
+  shade;
 - a feathered radial "pool" under chapter kickers and the Open-source header, and Vision's pool
   behind its title and floor under its copy (soft shade, no edges).
 

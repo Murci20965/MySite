@@ -25,7 +25,7 @@ function Figure({ value, label, note, align }: { value: string; label: string; n
         <PopNumber value={value} beat="m4:0.6" />
       </div>
       <div className="mt-4 font-sans text-lg font-medium text-fg">{label}</div>
-      <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-fg/80">{note}</div>
+      <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-fg">{note}</div>
     </div>
   );
 }

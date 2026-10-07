@@ -51,7 +51,7 @@ export default function Principles() {
               text="How I work"
               className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
             />
-            <p className="mt-6 font-sans text-lg leading-relaxed text-fg/90">
+            <p className="mt-6 font-sans text-lg leading-relaxed text-fg">
               The standards behind everything I ship, and the same ones you&rsquo;ll find in my commits.
             </p>
           </AnimatedSection>
@@ -64,7 +64,7 @@ export default function Principles() {
                   <div>
                     <h3 className="font-display text-2xl font-medium text-fg lg:text-3xl">{p.title}</h3>
                     <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-fg/80">{p.area}</div>
-                    <p className="mt-4 font-sans text-base leading-relaxed text-fg/90 lg:text-lg">{p.text}</p>
+                    <p className="mt-4 font-sans text-base leading-relaxed text-fg lg:text-lg">{p.text}</p>
                   </div>
                 </li>
               </AnimatedSection>

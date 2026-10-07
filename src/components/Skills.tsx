@@ -64,7 +64,7 @@ export default function Skills() {
               text="From model to classroom"
               className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
             />
-            <p className="mt-6 font-sans text-lg leading-relaxed text-fg/90">
+            <p className="mt-6 font-sans text-lg leading-relaxed text-fg">
               The stack I own end to end, layer by layer. Pick one to see the projects built on it.
             </p>
           </AnimatedSection>
@@ -118,7 +118,7 @@ export default function Skills() {
           <AnimatedSection animation="fade-in">
             <div className="mt-10 border-t border-fg/20 pt-8">
               <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Currently exploring</div>
-              <p className="mt-3 font-sans text-lg leading-relaxed text-fg/90">
+              <p className="mt-3 font-sans text-lg leading-relaxed text-fg">
                 Multi-agent orchestration, WebXR interaction patterns, and self-hosted model serving.
               </p>
             </div>

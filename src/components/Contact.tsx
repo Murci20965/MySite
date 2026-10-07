@@ -134,7 +134,8 @@ export default function Contact() {
               className="max-w-5xl font-display text-[clamp(3.2rem,12vw,4.75rem)] font-medium leading-[0.98] tracking-[-0.03em] text-fg lg:text-[clamp(5rem,8vw,8rem)]"
             />
           </div>
-          <p className="mt-6 max-w-2xl font-sans text-lg leading-relaxed text-fg/90 lg:text-xl">
+          {/* Full cream, not /90: on phones this crosses the arcs' bright hub. */}
+          <p className="mt-6 max-w-2xl font-sans text-lg leading-relaxed text-fg lg:text-xl">
             A role, a collaboration, or a question about my work: my inbox is open, and I typically reply within 24
             hours.
           </p>

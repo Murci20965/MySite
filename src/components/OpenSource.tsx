@@ -276,7 +276,7 @@ export default function OpenSource() {
                     text="Open-source work"
                     className="mb-4 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
                   />
-                  <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg/70">
+                  <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg">
                     Every project, public from the first commit. Two are live.
                   </p>
                   <a

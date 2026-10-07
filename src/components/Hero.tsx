@@ -40,7 +40,7 @@ export default function Hero() {
             <span className="font-normal italic">Mokoena</span>
           </h1>
 
-          <p className="t-stagger-line t-stagger-line--3 mt-7 max-w-[30rem] font-sans text-lg leading-relaxed text-fg/90 lg:text-xl">
+          <p className="t-stagger-line t-stagger-line--3 mt-7 max-w-[30rem] font-sans text-lg leading-relaxed text-fg lg:text-xl">
             I build production AI systems: agentic workflows, RAG architectures and end-to-end MLOps.
             At Nudle I engineer the generative pipelines behind XR simulation learning.
           </p>
