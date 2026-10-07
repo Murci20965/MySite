@@ -1,240 +1,103 @@
-import { useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
+import Kicker from './Kicker';
+
+/* Chapter 08, Education. Word for word from the CV (Sep 2026): its education
+ * entries, statuses and six certifications, nothing added. Set as one column
+ * on the frame's dark right edge (measured), with no cards: the film behind it
+ * (the night room, the skylight) stays in full view on the left.
+ */
+const EDUCATION = [
+  { institution: 'ALX / ExploreAI Academy', years: 'Jun 2023 - Sep 2024', programmes: ['Data Science'] },
+  { institution: 'DynamicDNA ICT Academy', years: 'May 2023 - Aug 2024', programmes: ['Systems Development, NQF Level 4'] },
+  {
+    institution: 'University of the Witwatersrand',
+    years: '2015 - 2019',
+    programmes: ['BSc in Biological Science (incomplete)', 'BSc in Mechanical Engineering (incomplete)'],
+  },
+];
+
+// The CV's certification list, in its order.
+const CERTIFICATIONS = [
+  { issuer: 'DataCamp', title: 'Associate AI Engineer for Developers' },
+  { issuer: 'Microsoft', title: 'Azure Fundamentals (AZ-900)' },
+  { issuer: 'Microsoft', title: 'Microsoft 365 Certified' },
+  { issuer: 'Udacity', title: 'Introducing Generative AI with AWS' },
+  { issuer: 'ALX / ExploreAI', title: 'AI Career Essentials' },
+  { issuer: '365 Data Science', title: 'Credit Risk Modelling in Python & Machine Learning' },
+];
+
+const CURRENTLY_LEARNING = [
+  { topic: 'XR & WebXR', focus: 'Interactive 3D learning experiences with React Three Fiber and WebXR' },
+  { topic: 'Agentic AI systems', focus: 'Multi-agent orchestration, tool use and evaluation for production reliability' },
+  { topic: 'Local model serving', focus: 'Self-hosted LLMs and image models for cost-free, offline-tolerant inference' },
+];
 
 export default function Education() {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const scrollByCard = (dir: 1 | -1) => {
-    trackRef.current?.scrollBy({ left: dir * 320, behavior: 'smooth' });
-  };
-  // Mirrors the CV's Education section, newest first.
-  const education: Array<{
-    degree: string;
-    specialization: string;
-    institution: string;
-    year: string;
-    status?: string;
-    gpa?: string;
-    thesis?: string;
-    achievements: string[];
-  }> = [
-    {
-      degree: 'Data Science',
-      specialization: 'Machine learning, statistics & data engineering',
-      institution: 'ALX / ExploreAI Academy',
-      year: 'Jun 2023 - Sep 2024',
-      achievements: [
-        'ALX/ExploreAI Certified Data Scientist',
-        'AWS cloud coursework: IAM, networking, CloudFormation, cost management',
-        'Portfolio of end-to-end ML projects across regression, classification and recommenders',
-      ],
-    },
-    {
-      degree: 'Systems Development',
-      specialization: 'Software development foundations',
-      institution: 'DynamicDNA ICT Academy',
-      year: 'May 2023 - Aug 2024',
-      status: 'NQF Level 4',
-      achievements: ['Full-time software development training: systems, databases and programming fundamentals'],
-    },
-    {
-      degree: 'BSc Biological Sciences · BSc Mechanical Engineering',
-      specialization: 'Two degree programmes, not completed',
-      institution: 'University of the Witwatersrand',
-      year: '2015 - 2019',
-      status: 'Incomplete',
-      achievements: [],
-    },
-  ];
-
-  // The CV's certification list, in its order.
-  const courses = [
-    {
-      title: 'Associate AI Engineer for Developers',
-      provider: 'DataCamp',
-      skills: ['LLM applications', 'AI engineering'],
-    },
-    {
-      title: 'Microsoft Azure Fundamentals (AZ-900)',
-      provider: 'Microsoft',
-      skills: ['Azure', 'Cloud fundamentals'],
-    },
-    {
-      title: 'Microsoft 365 Certified: Fundamentals',
-      provider: 'Microsoft',
-      skills: ['Microsoft 365', 'Cloud services'],
-    },
-    {
-      title: 'Introducing Generative AI with AWS',
-      provider: 'Udacity',
-      skills: ['Generative AI', 'AWS'],
-    },
-    {
-      title: 'AI Career Essentials',
-      provider: 'ALX / ExploreAI',
-      skills: ['AI foundations', 'Prompting'],
-    },
-    {
-      title: 'Credit Risk Modelling in Python & Machine Learning',
-      provider: '365 Data Science',
-      skills: ['Python', 'Risk modelling'],
-    },
-  ];
-
-  const currentLearning = [
-    {
-      topic: 'XR & WebXR',
-      focus: 'Interactive 3D learning experiences with React Three Fiber and WebXR',
-    },
-    {
-      topic: 'Agentic AI Systems',
-      focus: 'Multi-agent orchestration, tool use and evaluation for production reliability',
-    },
-    {
-      topic: 'Local Model Serving',
-      focus: 'Self-hosted LLMs and image models for cost-free, offline-tolerant inference',
-    },
-  ];
-
   return (
-    <section id="education" className="relative py-24 lg:py-32">
+    <section id="education" className="t-ink relative py-24 lg:py-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
-        <AnimatedSection animation="fade-in">
-          <div className="mb-8 flex items-center gap-4">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/50">
-              Education
-            </span>
-            <span className="h-px flex-1 bg-fg/15" />
-            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">05</span>
-          </div>
+        <div className="lg:ml-auto lg:w-[min(42rem,52%)]">
+          <AnimatedSection animation="fade-in">
+            <Kicker n="08" name="Education" />
+            <RevealHeading
+              text="Education & learning"
+              className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
+            />
+            <p className="mt-6 font-sans text-lg leading-relaxed text-fg/90">
+              Formal study paired with a continuous habit of learning.
+            </p>
+          </AnimatedSection>
 
-          <RevealHeading
-            text="Education & learning"
-            className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
-          />
-          <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg/70">
-            Formal study paired with a continuous habit of learning.
-          </p>
-        </AnimatedSection>
-
-        <div className="mt-16">
-          <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
-            Academic background
-          </div>
-          <div className="border-t border-fg/10">
-            {education.map((edu, index) => (
-              <AnimatedSection key={edu.degree} animation="fade-in" delay={index > 0}>
-                <article className="grid gap-4 border-b border-fg/10 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
-                  <div>
-                    <div className="font-mono text-sm text-fg/80">{edu.year}</div>
-                    {edu.status && (
-                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-fg/40">
-                        {edu.status}
-                      </div>
-                    )}
-                    {edu.gpa && (
-                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-fg/40">
-                        GPA {edu.gpa}
-                      </div>
-                    )}
-                    <div className="mt-4 font-sans text-fg/90">{edu.institution}</div>
-                  </div>
-                  <div>
-                    <h3 className="mb-1 font-display text-2xl font-medium text-fg">{edu.degree}</h3>
-                    <p className="mb-4 font-sans text-fg/60">{edu.specialization}</p>
-                    {edu.thesis && (
-                      <p className="mb-5 font-sans text-sm leading-relaxed text-fg/60">
-                        <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-fg/40">
-                          Thesis&nbsp;
-                        </span>
-                        {edu.thesis}
-                      </p>
-                    )}
-                    {edu.achievements.length > 0 && (
-                      <ul className="space-y-2">
-                        {edu.achievements.map((achievement) => (
-                          <li key={achievement} className="flex gap-3 font-sans text-sm text-fg/70">
-                            <span className="select-none text-fg/30">&mdash;</span>
-                            <span>{achievement}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
+          <div className="mt-12">
+            {EDUCATION.map((edu, index) => (
+              <AnimatedSection key={edu.institution} animation="fade-in" delay={index > 0}>
+                <article className="border-t border-fg/20 py-8">
+                  <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">{edu.years}</div>
+                  <h3 className="mt-3 font-display text-2xl font-medium text-fg lg:text-3xl">{edu.institution}</h3>
+                  <ul className="mt-2 space-y-1">
+                    {edu.programmes.map((p) => (
+                      <li key={p} className="font-sans text-base text-fg/90 lg:text-lg">
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
                 </article>
               </AnimatedSection>
             ))}
           </div>
-        </div>
 
-        <AnimatedSection animation="fade-in">
-          <div className="mt-20">
-            <div className="mb-6 flex items-center justify-between">
-              <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
-                Certifications &amp; courses
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => scrollByCard(-1)}
-                  aria-label="Previous certifications"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 text-fg/60 transition-colors hover:border-fg/40 hover:text-fg"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => scrollByCard(1)}
-                  aria-label="Next certifications"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 text-fg/60 transition-colors hover:border-fg/40 hover:text-fg"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
+          <AnimatedSection animation="fade-in">
+            <div className="mt-10 border-t border-fg/20 pt-8">
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Certifications</div>
+              <ol className="mt-6 space-y-4">
+                {CERTIFICATIONS.map((c, i) => (
+                  <li key={c.title} className="grid grid-cols-[2.5rem_minmax(0,1fr)]">
+                    <span className="pt-1 font-mono text-[11px] text-accent">{String(i + 1).padStart(2, '0')}</span>
+                    <div>
+                      <div className="font-display text-lg font-medium leading-snug text-fg lg:text-xl">{c.title}</div>
+                      <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-fg/80">{c.issuer}</div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
-            <div
-              ref={trackRef}
-              className="t-carousel flex gap-5 overflow-x-auto border-t border-fg/10 pb-4 pt-8"
-            >
-              {courses.map((course) => (
-                <div
-                  key={course.title}
-                  className="flex w-[17rem] shrink-0 snap-start flex-col rounded-2xl border border-fg/10 bg-surface p-6 sm:w-[19rem]"
-                >
-                  <div className="font-display text-lg leading-snug text-fg">{course.title}</div>
-                  {course.provider && (
-                    <div className="mt-1 font-sans text-sm text-fg/50">{course.provider}</div>
-                  )}
-                  <div className="mt-auto flex flex-wrap gap-2 pt-5">
-                    {course.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="rounded-full border border-fg/10 px-3 py-1 font-mono text-[11px] tracking-wide text-fg/50"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+          </AnimatedSection>
+
+          <AnimatedSection animation="fade-in">
+            <div className="mt-10 border-t border-fg/20 pt-8">
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Currently learning</div>
+              <div className="mt-6 space-y-6">
+                {CURRENTLY_LEARNING.map((item) => (
+                  <div key={item.topic}>
+                    <h4 className="font-display text-xl font-medium text-fg">{item.topic}</h4>
+                    <p className="mt-1 font-sans text-base leading-relaxed text-fg/90">{item.focus}</p>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </AnimatedSection>
-
-        <AnimatedSection animation="fade-in">
-          <div className="mt-20">
-            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
-              Currently learning
-            </div>
-            <div className="grid gap-10 border-t border-fg/10 pt-10 sm:grid-cols-3">
-              {currentLearning.map((item) => (
-                <div key={item.topic}>
-                  <h4 className="mb-2 font-display text-xl font-medium text-fg">{item.topic}</h4>
-                  <p className="font-sans text-sm leading-relaxed text-fg/60">{item.focus}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </AnimatedSection>
+          </AnimatedSection>
+        </div>
       </div>
     </section>
   );
