@@ -23,8 +23,11 @@ export default function ExpandMedia() {
 
   useEffect(() => {
     const apply = (T: number) => {
-      const open = filmClock.on ? ramp(T, DOOR_OPEN) : 1;
-      const copy = filmClock.on ? ramp(T, CLASSROOM) : 1;
+      // Final state until the film is live (reduced motion, or before the first
+      // scroll, which is also what crawlers see).
+      const live = filmClock.on && document.documentElement.dataset.film === 'on';
+      const open = live ? ramp(T, DOOR_OPEN) : 1;
+      const copy = live ? ramp(T, CLASSROOM) : 1;
       // Clamped so the words separate dramatically but never leave the viewport.
       const spread = Math.min(26, (window.innerWidth * 0.26) / 16);
       if (leftRef.current) leftRef.current.style.transform = `translateX(${-open * spread}vw)`;

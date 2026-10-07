@@ -1,9 +1,16 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+// A mouse-only flourish: on touch screens it would sit wherever you last
+// tapped, and its blend mode costs an extra full-screen compositing pass on
+// phone GPUs, so it renders only with a hovering, fine pointer.
+const MOUSE_QUERY = '(hover: hover) and (pointer: fine)';
 
 export default function SimpleCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const [mouse] = useState(() => typeof window !== 'undefined' && window.matchMedia(MOUSE_QUERY).matches);
 
   useEffect(() => {
+    if (!mouse) return;
     const handleMouseMove = (e: MouseEvent) => {
       if (cursorRef.current) {
         cursorRef.current.style.transform = `translate(${e.clientX - 6}px, ${e.clientY - 6}px)`;
@@ -15,8 +22,9 @@ export default function SimpleCursor() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [mouse]);
 
+  if (!mouse) return null;
   return (
     <div
       ref={cursorRef}

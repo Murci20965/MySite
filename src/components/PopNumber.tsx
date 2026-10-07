@@ -35,6 +35,9 @@ export default function PopNumber({ value, className = '', beat }: Props) {
 
     const at = beat ? parseBeat(beat) : NaN;
     if (filmClock.on && !Number.isNaN(at)) {
+      // Digits stay visible until the visitor's first scroll (see the CSS for
+      // [data-popbeat]); crawlers never scroll, so they always read the number.
+      group.dataset.popbeat = '';
       let done = false;
       const unsubscribe = filmClock.subscribe((T) => {
         if (done || T < at) return;

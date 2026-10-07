@@ -89,11 +89,6 @@
   }
 }
 
-* {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
-}
 
 /* ─────────────────────────────────────────────────────────────
    transitions.dev — motion tokens (shared) + per-transition CSS
@@ -162,8 +157,11 @@
   display: inline-block;
   will-change: transform, opacity;
 }
-/* Held hidden until scrolled into view so the pop-in isn't missed above the fold. */
-.t-digit-group.is-pending .t-digit {
+/* Held hidden until scrolled into view so the pop-in isn't missed above the fold.
+   Film-cued numbers ([data-popbeat]) hide only once the film is live (after the
+   first scroll), so crawlers and unscrolled visitors read them. */
+.t-digit-group.is-pending:not([data-popbeat]) .t-digit,
+html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   opacity: 0;
 }
 .t-digit-group.is-animating .t-digit {
@@ -299,6 +297,13 @@
   pointer-events: none;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* Phones: the grain is one more full-screen layer to blend every frame on a
+   small GPU, and the film already carries its own grain. */
+@media (pointer: coarse) {
+  .grain-overlay {
+    display: none;
+  }
 }
 
 /* ---- Scroll choreography ---- */
