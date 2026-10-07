@@ -241,8 +241,8 @@ export default function FilmStage() {
 
     // Grades: full-strength gradients, cached per size; drawn with globalAlpha = strength.
     const gradients = new Map<string, CanvasGradient[]>();
-    const gradesFor = (side: GradeSide): CanvasGradient[] => {
-      const key = `${side}|${canvas.width}x${canvas.height}`;
+    const gradesFor = (side: GradeSide, span: number): CanvasGradient[] => {
+      const key = `${side}|${span}|${canvas.width}x${canvas.height}`;
       const hit = gradients.get(key);
       if (hit) return hit;
       const w = canvas.width;
@@ -254,7 +254,7 @@ export default function FilmStage() {
         g.addColorStop(1, `rgba(${bg},0)`);
         return g;
       };
-      const reach = { x: w * 0.62, y: h * 0.62 };
+      const reach = { x: w * span, y: h * span };
       const list: CanvasGradient[] = [];
       if (side === 'left' || side === 'sides') list.push(make(0, 0, side === 'sides' ? w * 0.38 : reach.x, 0));
       if (side === 'right' || side === 'sides') list.push(make(w, 0, w - (side === 'sides' ? w * 0.38 : reach.x), 0));
@@ -272,7 +272,7 @@ export default function FilmStage() {
       }
       if (look.grade !== 'none' && look.strength > 0.005) {
         ctx.globalAlpha = look.strength * weight;
-        for (const g of gradesFor(look.grade)) {
+        for (const g of gradesFor(look.grade, look.reach ?? 0.62)) {
           ctx.fillStyle = g;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }

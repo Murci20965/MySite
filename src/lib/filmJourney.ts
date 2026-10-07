@@ -26,6 +26,9 @@ export interface Look {
   grade: GradeSide;
   /** opacity of the grade at the frame edge (it fades to 0 toward the subject) */
   strength: number;
+  /** how far a one-sided grade reaches across the frame (fraction, default 0.62). A text column
+   *  that starts near the middle (the right-column sections) needs a longer reach to be covered. */
+  reach?: number;
 }
 
 export interface FilmKnot {
@@ -43,11 +46,12 @@ export interface FilmKnot {
 
 export const FOCUS = 0.5;
 
-const L = (dim: number, grade: GradeSide, strength: number): Look => ({ dim, grade, strength });
+const L = (dim: number, grade: GradeSide, strength: number, reach?: number): Look =>
+  reach === undefined ? { dim, grade, strength } : { dim, grade, strength, reach };
 
 export const KNOTS: FilmKnot[] = [
   // M1 0 s: the night desk. Copy on the dark window side, the laptop in full light.
-  { at: 'start', T: 0.0, wide: L(0.04, 'left', 0.78), tall: L(0.2, 'ends', 0.62) },
+  { at: 'start', T: 0.0, wide: L(0.04, 'left', 0.78), tall: L(0.26, 'ends', 0.62) },
   // M1 5 s: glyphs start on the laptop screen. Left third measured darkest.
   { at: 'about', T: 0.5, wide: L(0.1, 'left', 0.74), tall: L(0.38, 'ends', 0.55) },
   // M2 5.6 s: the light, just before it bursts. The network fills the frame,
@@ -60,23 +64,29 @@ export const KNOTS: FilmKnot[] = [
   { at: 'experience', f: 0.9, T: 1.97, wide: L(0.44, 'left', 0.88), tall: L(0.66, 'ends', 0.6) },
   // M3 0 s: the network crystallises into cubes. Header top-left, cards below.
   { at: 'opensource', T: 2.0, wide: L(0.3, 'top', 0.9), tall: L(0.34, 'top', 0.75) },
-  // M4 4 s: through the gate. Numbers flank the bright aisle.
-  { at: 'stats', T: 3.4, wide: L(0.06, 'sides', 0.58), tall: L(0.26, 'ends', 0.6) },
-  // M5 0 s: the bright aisle; the title sits on its own pool (ExpandMedia).
-  { at: 'vision', T: 4.0, wide: L(0.1, 'sides', 0.55), tall: L(0.24, 'none', 0) },
+  // M4 4 s: through the gate. Numbers flank the bright aisle. On phones the numbers and labels
+  // fill the width over the lit racks, so they take a reading veil.
+  { at: 'stats', T: 3.4, wide: L(0.06, 'sides', 0.58), tall: L(0.56, 'ends', 0.6) },
+  // M5 0 s: the bright aisle; the title sits on its own pool (ExpandMedia). Stats' last row is
+  // still leaving at the top of the screen, under the ceiling lights: a short top shade there,
+  // the doorway and the title stay fully lit.
+  { at: 'vision', T: 4.0, wide: L(0.1, 'top', 0.75, 0.35), tall: L(0.24, 'top', 1) },
   // M5 8.5 s: the classroom, held to the end. The mission copy sits low.
   { at: 'vision', f: 0.62, T: 4.85, wide: L(0.06, 'bottom', 0.6), tall: L(0.2, 'bottom', 0.62) },
-  // M6 0 s: a room at night. The right edge measured darkest: the stack goes there.
-  { at: 'skills', T: 5.0, wide: L(0.28, 'right', 0.88), tall: L(0.62, 'ends', 0.55) },
-  { at: 'skills', f: 0.85, T: 5.18, wide: L(0.28, 'right', 0.88), tall: L(0.62, 'ends', 0.55) }, // hold
-  { at: 'education', T: 5.2, wide: L(0.18, 'right', 0.84), tall: L(0.52, 'ends', 0.55) }, // M6 2 s: the skylight
+  // M6 0 s: a room at night. The right edge measured darkest: the stack goes there. The
+  // right-column sections' text starts near the middle, so their grade reaches 0.85 across.
+  { at: 'skills', T: 5.0, wide: L(0.28, 'right', 0.88, 0.85), tall: L(0.62, 'ends', 0.55) },
+  { at: 'skills', f: 0.85, T: 5.18, wide: L(0.28, 'right', 0.88, 0.85), tall: L(0.62, 'ends', 0.55) }, // hold
+  { at: 'education', T: 5.2, wide: L(0.18, 'right', 0.84, 0.85), tall: L(0.52, 'ends', 0.55) }, // M6 2 s: the skylight
   // Principles is long, so its text scrolls through the whole height: a side grade, not a band.
-  { at: 'principles', T: 5.38, wide: L(0.26, 'right', 0.88), tall: L(0.52, 'ends', 0.55) }, // M6 3.8 s: dusk
-  { at: 'faq', T: 5.55, wide: L(0.33, 'right', 0.9), tall: L(0.66, 'ends', 0.55) }, // M6 5.5 s: city lights
-  { at: 'faq', f: 0.85, T: 5.69, wide: L(0.33, 'right', 0.9), tall: L(0.66, 'ends', 0.55) }, // hold
-  // M6 7 s: rising into orbit. Heading in the space above, the form below.
-  { at: 'contact', T: 5.72, wide: L(0.38, 'ends', 0.84), tall: L(0.34, 'ends', 0.65) },
-  { at: 'end', T: 6.0, wide: L(0.38, 'ends', 0.84), tall: L(0.34, 'ends', 0.65) }, // M6 10 s: arcs over the globe
+  { at: 'principles', T: 5.38, wide: L(0.26, 'right', 0.88, 0.85), tall: L(0.52, 'ends', 0.55) }, // M6 3.8 s: dusk
+  { at: 'faq', T: 5.55, wide: L(0.33, 'right', 0.9, 0.85), tall: L(0.66, 'ends', 0.55) }, // M6 5.5 s: city lights
+  { at: 'faq', f: 0.85, T: 5.69, wide: L(0.33, 'right', 0.9, 0.85), tall: L(0.66, 'ends', 0.55) }, // hold
+  // M6 7 s: rising into orbit. Heading in the space above, the form below. On phones Contact is
+  // a long reading section whose text crosses the arcs' bright hub mid-screen, so it takes a
+  // reading veil like Skills' (0.34 and 0.5 failed AA there in a 28 px-step scan).
+  { at: 'contact', T: 5.72, wide: L(0.46, 'ends', 0.84), tall: L(0.6, 'ends', 0.65) },
+  { at: 'end', T: 6.0, wide: L(0.46, 'ends', 0.84), tall: L(0.6, 'ends', 0.65) }, // M6 10 s: arcs over the globe
 ];
 
 type Listener = (T: number) => void;

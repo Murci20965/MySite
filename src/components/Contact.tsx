@@ -248,7 +248,13 @@ export default function Contact() {
             )}
           </div>
 
-          <aside className="space-y-12">
+          <aside className="relative space-y-12">
+            {/* A soft pool under the link list (desktop): the globe's lime arcs cross it, and
+                lime headings on lime arcs lose their edge. Phones take the section's veil. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-x-12 -bottom-10 -top-20 -z-10 hidden bg-[radial-gradient(farthest-side,rgb(0_0_0/0.5),rgb(0_0_0/0.4)_60%,transparent)] lg:block"
+            />
             <div>
               <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Direct</div>
               <ul className="mt-6 space-y-5">

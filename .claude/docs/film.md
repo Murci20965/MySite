@@ -58,8 +58,9 @@ the fractional position, so 81 frames per clip still move smoothly.
 ## Contracts
 
 **Knot** `{ at: sectionId | 'start' | 'end', f?: number, T: number, wide: Look, tall: Look }`,
-where `Look = { dim, grade, strength }` and `grade` is one of none, left, right, top, bottom,
-sides (both walls) or ends (top and bottom). A knot pins film time T to the scroll position where
+where `Look = { dim, grade, strength, reach? }` and `grade` is one of none, left, right, top, bottom,
+sides (both walls) or ends (top and bottom); `reach` is how far a one-sided grade extends across the
+frame (default 0.62). A knot pins film time T to the scroll position where
 section `at`'s top plus `f` of its height reaches the focus line (the middle of the viewport).
 Between knots, T moves linearly and the two looks cross-fade. Positions are measured on resize,
 font load and body size changes (not every frame), so the timeline holds at any screen size. Extra
@@ -98,9 +99,14 @@ where its text sits. The sides come from a **frame map**: for each section, the 
 behind it were measured on a grid for brightness (p90) and busyness, and the text was moved to the
 darkest, calmest zone. Desktop: left for the hero, About and Experience; right for Skills,
 Education, Principles and FAQ; both rack walls for Stats; top for the Open-source header; top and
-bottom for Contact. Phones (a centre crop) use the top and bottom bands, with a stronger uniform
-veil in long reading sections because their text spans the width and scrolls through the middle.
-Long sections need a side grade, not a band: their text travels the whole screen height.
+bottom for Contact. The right-column sections (Skills, Education, Principles, FAQ) start their text
+near the middle of the frame, so their grade reaches 0.85 across; at the default 0.62 it faded out
+before the text column began. As Vision opens, Stats' last row leaves under the aisle's ceiling
+lights, so Vision starts with a short top shade (reach 0.35) instead of wall shades. Phones (a
+centre crop) use the top and bottom bands, with a reading veil (0.46-0.66) in long reading sections
+(Experience, Stats, Skills, Education, Principles, FAQ, Contact) because their text spans the width
+and scrolls through the middle. Long sections need a side grade, not a band: their text travels the
+whole screen height.
 
 Lettering does the rest, with no text boxes:
 - cream text (`--c-fg` 244 239 230) with `.t-ink`: a tight shadow plus a soft 26 px one; small and
@@ -110,15 +116,21 @@ Lettering does the rest, with no text boxes:
   tiers (raised to 76-92%) are only for small metadata. Text lime is lighter (`--c-accent`
   200 242 107) but still about 11% darker than the cream, so small lime text needs its section's
   shade;
-- a feathered radial "pool" under chapter kickers and the Open-source header, and Vision's pool
-  behind its title and floor under its copy (soft shade, no edges).
+- a feathered radial "pool" under chapter kickers, the Open-source header and Contact's link list
+  (desktop: the globe's lime arcs cross it, and lime headings on lime arcs lose their edge), and
+  Vision's pool behind its title and floor under its copy (soft shade, no edges).
 
 Verified with a **pixel contrast scan**: every visible text box is measured against the real
 screenshot pixels under it (film + lighting + shadows; text made transparent), using the brightest
-decile under light text, at every 0.75 viewport of the page. Final: **0 failures** at 1280x800 (311
-text boxes) and 360x702 (283). The scan script lives in the session scratchpad
-(`film_bg_check.cjs`); it skips text under the fixed nav or chat button, clips text to its scroll
-containers, and treats blended text separately.
+decile under light text. The film changes with scroll, so the scan steps every 0.1 viewport over the
+whole page, and every 28-32 px over any section that failed or sits on a bright moment. Final
+(2026-10-07): **0 failures** at 1280x800 (2,198 text-box checks over the page) and 360x702 (2,104
+over the page, then each re-tuned stretch again at 28 px: hero, Experience, Stats into Vision,
+Contact and the footer). Later tuning only added shade, so it cannot undo a pass elsewhere. An
+earlier scan at 0.75-viewport steps had reported 0 failures where the fine scan found 25: a coarse
+scan is a sample. The scan script lives in the session scratchpad (`film_bg_check.cjs`;
+`CFROM`/`CTO`/`CSTEP` narrow a re-scan); it skips text under the fixed nav, the chat button and the
+progress hairline, clips text to its scroll containers, and treats blended text separately.
 
 ## Loading and budgets
 - Rendition by viewport shape: `wide` if width ≥ height, else `tall`. Canvas backing store is
@@ -155,6 +167,8 @@ Static, same-origin public assets only (the canvas is never tainted). No user da
 - **Move a cue:** pick the film moment from the events list, set `data-beat`, then verify the
   element is on screen when it fires (walk the page, record T and the element's rect per step).
 - **Change a section's height:** knots follow the layout automatically; re-check its cues.
-- **Tune readability:** first move the text to its section's dark side (the frame map); then raise
-  that knot's grade `strength` or `dim` for the rendition that failed; re-run the pixel contrast
-  scan at both sizes. No panels behind text (Murci's brief).
+- **Tune readability:** first move the text to its section's dark side (the frame map) and make sure
+  it is full cream; then extend that knot's grade `reach` (if the grade fades out before the text
+  column), or raise its `strength` or `dim`, for the rendition that failed; re-run the pixel contrast
+  scan at both sizes, at 0.1 viewport steps or finer (the film changes between samples; a 0.75-step
+  scan once reported 0 failures where a fine one found 25). No panels behind text (Murci's brief).
