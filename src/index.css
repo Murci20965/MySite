@@ -2,7 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+/* The first screen's faces, self-hosted under stable names so index.html can
+   preload them (Vite hashes anything imported, which a preload link cannot
+   name). swap: text paints at once in the fallback, then swaps. */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/fraunces-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/fraunces-400-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/hanken-400.woff2') format('woff2');
+}
+
 @layer base {
+  @layer base {
   /* Theme tokens: RGB triplets so Tailwind opacity modifiers work. Dark is
      the default; index.html sets data-theme before first paint (stored
      choice, else the OS preference), so there is no flash.
