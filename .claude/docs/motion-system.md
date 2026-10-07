@@ -23,11 +23,11 @@ breaking them. Last updated 2026-10-07.
    bar, filmstrip) and on a few tiny one-shot elements (hero lines, digits, the success check), never on
    section-sized blocks waiting below the fold. Transitions are promoted automatically while
    they run.
-6. **Scroll-linked layers take no CSS transition.** A legacy global rule
-   (`* { transition-property: ...transform, opacity...; 200ms }`) eases every style change.
-   Anything JS writes from scroll position every frame must opt out (`t-scroll-linked`, or
-   `transition: none` in its own rule), or it trails the scrollbar by 200 ms. Check with
-   `getComputedStyle(el).transitionDuration`: it must read `0s`.
+6. **Scroll-linked layers take no CSS transition.** Anything JS writes from scroll or film
+   position every frame must carry no transition (`t-scroll-linked`, or `transition: none`), or it
+   trails the scrollbar. The legacy global `* { transition: 200ms }` rule was removed on
+   2026-10-07 (it restyled every element on every change); hover effects now declare their own
+   `transition-*` class. Check with `getComputedStyle(el).transitionDuration`: it must read `0s`.
 
 ## Inventory
 
@@ -38,26 +38,27 @@ breaking them. Last updated 2026-10-07.
 | Heading reveal | `RevealHeading.tsx`, `.t-chars` | opacity, transform | per character; no `will-change` (it held a layer per character) |
 | Section numeral drift | `.t-drift` | transform | CSS scroll-driven (`animation-timeline: view()`), static where unsupported |
 | Reading progress | `ScrollProgress.tsx` | transform (`scaleX`) | rAF-throttled; `t-scroll-linked` |
-| Film background | `FilmStage.tsx`, `lib/filmJourney.ts` | canvas frames (2 blended) + veil | the whole site's background, scrubbed by scroll; clips dissolve; see `film.md` |
+| Film | `FilmStage.tsx`, `lib/filmJourney.ts` | canvas frames (2 blended) + lighting | the front of the site, scrubbed by scroll, eased (70/110 ms), off-thread decode; see `film.md` |
 | Film text cues | `[data-beat]`, `.is-beat` | opacity, transform | text lands on a film moment; hidden only while `html[data-film="on"]` |
 | Vision title and copy | `ExpandMedia.tsx` | transform, opacity | driven by the film clock (doorway opens, classroom appears), not their own scroll; `t-scroll-linked` |
 | Open-source filmstrip | `OpenSource.tsx`, `.t-film-*` | transform, opacity | pinned horizontal strip, see below; carousel on phones and under reduced motion |
 | Live badge | `.t-live` | transform, opacity | ring expands and fades; marks projects with a live demo |
-| Principles stack | `.t-stack-card` | transform, opacity | scroll-driven; opacity 0.6 renders like brightness 0.6 on black |
 | Number pop-in | `PopNumber.tsx`, `.t-digit` | opacity, transform | Stats counters pop on a film moment (`beat="m4:0.6"`) |
-| Chat typing dots | `ChatWidget.tsx`, `HeroTerminal.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" / "Thinking" |
-| Chat launcher stow | `ChatWidget.tsx` | opacity, transform | hides (and leaves the tab order) while the hero terminal is in view |
-| Nav underline, arrow nudge | `.t-navlink`, `.t-nudge` | transform | |
-| Marquee, tech orbit | `.t-marquee-track`, `.t-orbit-*` | transform | infinite; frozen by the reduced-motion rule |
+| Chat typing dots | `ChatWidget.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" |
+| Assistant's point of light | `ChatWidget.tsx`, `.t-light-ping` | transform, opacity | a slow ring on the launcher (2.8 s); off under reduced motion |
+| Navbar hide and return | `Navigation.tsx` | transform | slides up on scroll down, back on scroll up (6 px of intent); active link dot fades |
+| Stack layers | `Skills.tsx` | opacity, colour on pick | still otherwise: the film is the motion in that section |
+| Arrow nudge | `.t-nudge` | transform | |
+| Marquee | `.t-marquee-track` | transform | infinite; frozen by the reduced-motion rule |
 
 ### Deliberate exceptions
 
 - **FAQ accordion height** (`FAQ.tsx`): `grid-template-rows` 0fr to 1fr. There is no transform
   that grows a box without distorting its text. It is one 250 ms tween on a small list; the
   answer itself only fades and rises, and padding sits on the inner block, never the track.
-- **Success check stroke** (`Contact.tsx`): `stroke-dashoffset` on a 60 px SVG path, once.
-- **Hover colour changes**: the global `*` transition rule eases colour and border changes on
-  hover. They are single-element, user-triggered, and not animations in the sense above.
+- **Hover colour changes**: explicit `transition-colors` (or `transition-opacity`) classes ease
+  colour and border changes on hover. They are single-element, user-triggered, and not animations
+  in the sense above.
 
 ## Removed effects (2026-10-06)
 
@@ -69,7 +70,11 @@ The hero's twinkling stars (`.radiate-star`) and the intro-video modal (`.t-moda
 with the Studio hero on branch `feat/v3`. On 2026-10-07 the film became the full-screen
 background, which retired the Studio laptop frame (`StudioScreen`, `FilmScrub`), the WebGL Earth
 journey (`HeroEarth`, `HeroBackdrop`, `earthJourney`, three.js) and the particle canvas
-(`FutureticParticles`); the Vision band lost its still image and letterbox bars.
+(`FutureticParticles`); the Vision band lost its still image and letterbox bars. With the
+film-forward redesign the same day: the Skills tech orbit (32 always-running animations and a
+canvas), the Principles sticky card stack (`.t-stack-card`), the contact success check (the form
+no longer claims a success it cannot know), the hero terminal and the launcher stow, the theme
+toggle morph, the nav underline (`.t-navlink`) and the global `*` transition rule.
 
 ## Open-source filmstrip
 

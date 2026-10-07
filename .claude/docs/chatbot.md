@@ -1,17 +1,19 @@
-# Portfolio assistant ("Ask about me") — 2026-08-01
+# Portfolio assistant ("Ask Murci") · 2026-08-01, redesigned 2026-10-07
 
 ## What it is
 A chat on the site answering visitor questions about Murci, grounded EXCLUSIVELY in his verified
-facts. It has two faces sharing one client (`src/hooks/useChat.ts`): the terminal inside the
-hero, under the call-to-action buttons (`HeroTerminal.tsx`, shows the latest exchange) and the floating
-"Ask about me" chat (`ChatWidget.tsx`, keeps the conversation). The floating launcher steps aside
-while the hero terminal is on screen, so only one is offered at a time. It exists to position him well for employers — and to itself be proof he
-ships LLM systems.
+facts. It exists to position him well for employers, and to itself be proof he ships LLM systems.
+
+One face (2026-10-07: the hero terminal was removed at Murci's request, back to the floating chat):
+`ChatWidget.tsx`, "Ask Murci", on the shared client `src/hooks/useChat.ts`. Its look is the film's
+"point of light" (the light that forms on the laptop screen in chapter 02): a lime orb on the
+launcher (with a slow ring) and beside every answer. The panel is a dialog with a labelled input
+(16 px, so iOS does not zoom), a polite live region for answers, Escape closing it and returning
+focus to the launcher; on phones it is a bottom sheet.
 
 ## Architecture & data flow
 ```
-HeroTerminal.tsx ─┐
-ChatWidget.tsx ───┴ useChat() ── POST {messages} ──> /api/chat (Vercel Edge Function)
+ChatWidget.tsx ── useChat() ── POST {messages} ──> /api/chat (Vercel Edge Function)
                                           │  prepends SYSTEM_PROMPT (api/_corpus.ts)
                                           ▼
                              Groq chat completions (OpenAI-compatible)
