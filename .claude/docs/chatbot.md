@@ -9,7 +9,9 @@ One face (2026-10-07: the hero terminal was removed at Murci's request, back to 
 "point of light" (the light that forms on the laptop screen in chapter 02): a lime orb on the
 launcher (with a slow ring) and beside every answer. The panel is a dialog with a labelled input
 (16 px, so iOS does not zoom), a polite live region for answers, Escape closing it and returning
-focus to the launcher; on phones it is a bottom sheet.
+focus to the launcher; on phones it is a bottom sheet. The launcher pill is near-opaque
+(`rgb(10 10 10 / 0.88)`) because page text scrolls under it: at 50% the two read through each other.
+No backdrop blur: it would re-blur a film that redraws every frame.
 
 ## Architecture & data flow
 ```

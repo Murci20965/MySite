@@ -82,7 +82,7 @@ export default function ChatWidget() {
         aria-expanded={open}
         aria-controls="ask-murci"
         aria-label={open ? 'Close the assistant' : 'Ask the assistant about Murci'}
-        className={`t-ink fixed bottom-5 right-5 z-40 flex items-center gap-3 rounded-full border border-fg/20 bg-black/50 py-2.5 pl-3.5 pr-5 transition-[opacity,transform,border-color] duration-300 hover:border-accent/60 ${
+        className={`t-ink fixed bottom-5 right-5 z-40 flex items-center gap-3 rounded-full border border-fg/20 bg-[rgb(10_10_10/0.88)] py-2.5 pl-3.5 pr-5 transition-[opacity,transform,border-color] duration-300 hover:border-accent/60 ${
           open ? 'pointer-events-none translate-y-2 opacity-0 sm:pointer-events-auto sm:translate-y-0 sm:opacity-100' : ''
         }`}
       >
