@@ -295,41 +295,6 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   will-change: transform;
 }
 
-/* Orbiting tech stack (Skills): spokes rotate around the ring's center while
-   each chip counter-rotates to stay upright. The global reduced-motion rule
-   freezes both at their start angles. */
-.t-orbit-spoke {
-  will-change: transform;
-}
-.t-orbit-cw {
-  animation: t-orbit-rot-cw var(--orbit-dur) linear infinite;
-}
-.t-orbit-ccw {
-  animation: t-orbit-rot-ccw var(--orbit-dur) linear infinite;
-}
-.t-orbit-counter-cw {
-  animation: t-orbit-counter-cw var(--orbit-dur) linear infinite;
-}
-.t-orbit-counter-ccw {
-  animation: t-orbit-counter-ccw var(--orbit-dur) linear infinite;
-}
-@keyframes t-orbit-rot-cw {
-  from { transform: rotate(var(--start-angle)); }
-  to { transform: rotate(calc(var(--start-angle) + 360deg)); }
-}
-@keyframes t-orbit-rot-ccw {
-  from { transform: rotate(var(--start-angle)); }
-  to { transform: rotate(calc(var(--start-angle) - 360deg)); }
-}
-@keyframes t-orbit-counter-cw {
-  from { transform: rotate(var(--counter-offset, 0deg)); }
-  to { transform: rotate(calc(var(--counter-offset, 0deg) - 360deg)); }
-}
-@keyframes t-orbit-counter-ccw {
-  from { transform: rotate(var(--counter-offset, 0deg)); }
-  to { transform: rotate(calc(var(--counter-offset, 0deg) + 360deg)); }
-}
-
 /* ---- Section entrance ------------------------------------------------------
    Every section enters the same way: content rises into place with a small
    settle as it fades in. One behaviour applied everywhere is what makes a
