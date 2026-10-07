@@ -2,6 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* The first screen's faces, self-hosted under stable names so index.html can
+   preload them (Vite hashes anything imported, which a preload link cannot
+   name). swap: text paints at once in the fallback, then swaps. */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/fraunces-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/fraunces-400-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/hanken-400.woff2') format('woff2');
+}
+
 @layer base {
   /* Theme tokens: RGB triplets so Tailwind opacity modifiers work. Dark is
      the default; index.html sets data-theme before first paint (stored
@@ -12,9 +37,12 @@
   :root,
   [data-theme='dark'] {
     --c-bg: 10 10 10;
-    --c-fg: 255 255 255;
+    /* Warm cream, not pure white: it sits on the film like title lettering. */
+    --c-fg: 244 239 230;
     --c-surface: 14 14 14;
-    --c-accent: 163 230 53;
+    /* A lighter lime than lime-400: small lime labels sit straight on the film,
+       and a brighter lime holds contrast over more of its frames (measured). */
+    --c-accent: 200 242 107;
     color-scheme: dark;
   }
   [data-theme='light'] {
@@ -33,9 +61,13 @@
      their opacities; this applies to text only. */
   :root,
   [data-theme='dark'] {
-    --tx-faint: 0.62;
-    --tx-muted: 0.66;
-    --tx-soft: 0.7;
+    /* Over the film at near full brightness there is no box behind the text,
+       so faint text is not faint: hierarchy comes from size, weight and face. */
+    --tx-faint: 0.76;
+    --tx-muted: 0.8;
+    --tx-soft: 0.84;
+    --tx-body: 0.88;
+    --tx-strong: 0.92;
   }
   [data-theme='light'] {
     --tx-faint: 0.67;
@@ -89,11 +121,6 @@
   }
 }
 
-* {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
-}
 
 /* ─────────────────────────────────────────────────────────────
    transitions.dev — motion tokens (shared) + per-transition CSS
@@ -162,8 +189,11 @@
   display: inline-block;
   will-change: transform, opacity;
 }
-/* Held hidden until scrolled into view so the pop-in isn't missed above the fold. */
-.t-digit-group.is-pending .t-digit {
+/* Held hidden until scrolled into view so the pop-in isn't missed above the fold.
+   Film-cued numbers ([data-popbeat]) hide only once the film is live (after the
+   first scroll), so crawlers and unscrolled visitors read them. */
+.t-digit-group.is-pending:not([data-popbeat]) .t-digit,
+html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   opacity: 0;
 }
 .t-digit-group.is-animating .t-digit {
@@ -186,62 +216,12 @@
 }
 
 :root {
-  /* success check (10) */
-  --check-opacity-dur: 500ms;
-  --check-rotate-dur: 500ms;
-  --check-rotate-from: 80deg;
-  --check-bob-dur: 500ms;
-  --check-y-amount: 40px;
-  --check-path-dur: 500ms;
-  --check-path-delay: 80ms;
-  --check-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --check-ease-bob: cubic-bezier(0.34, 1.35, 0.64, 1);
   /* error shake (12) */
   --shake-distance: 6px;
   --shake-overshoot: 4px;
   --shake-dur-a: 80ms;
   --shake-dur-b: 60ms;
   --shake-ease: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Success check (transitions.dev 10) */
-.t-success-check {
-  display: inline-block;
-  transform-origin: center;
-  opacity: 0;
-  will-change: transform, opacity;
-}
-.t-success-check svg {
-  display: block;
-  overflow: visible;
-}
-.t-success-check svg path {
-  stroke-dasharray: 30;
-  stroke-dashoffset: 30;
-}
-.t-success-check[data-state='in'] {
-  animation:
-    t-check-fade var(--check-opacity-dur) var(--check-ease-out) forwards,
-    t-check-rotate var(--check-rotate-dur) var(--check-ease-out) forwards,
-    t-check-bob var(--check-bob-dur) var(--check-ease-bob) forwards;
-}
-.t-success-check[data-state='in'] svg path {
-  animation: t-check-draw var(--check-path-dur) var(--check-ease-out) var(--check-path-delay) forwards;
-}
-@keyframes t-check-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes t-check-rotate {
-  from { transform: rotate(var(--check-rotate-from)); }
-  to { transform: rotate(0deg); }
-}
-@keyframes t-check-bob {
-  from { translate: 0 var(--check-y-amount); }
-  to { translate: 0 0; }
-}
-@keyframes t-check-draw {
-  to { stroke-dashoffset: 0; }
 }
 
 /* Error state shake (transitions.dev 12) */
@@ -277,14 +257,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .t-success-check {
-    animation: none !important;
-    opacity: 1;
-  }
-  .t-success-check svg path {
-    animation: none !important;
-    stroke-dashoffset: 0 !important;
-  }
   .t-input {
     animation: none !important;
     transform: none !important;
@@ -299,6 +271,13 @@
   pointer-events: none;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* Phones: the grain is one more full-screen layer to blend every frame on a
+   small GPU, and the film already carries its own grain. */
+@media (pointer: coarse) {
+  .grain-overlay {
+    display: none;
+  }
 }
 
 /* ---- Scroll choreography ---- */
@@ -315,9 +294,9 @@
   --chars-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Scroll-linked layers (progress bar, Vision band) are written from scroll
-   position every frame; they opt out of the global `*` transition rule, which
-   would otherwise ease each write over 200ms and make them trail the scroll. */
+/* Scroll-linked layers (progress bar, Vision title, filmstrip) are written from
+   scroll or film position every frame; they must never carry a transition, or
+   each write eases and the layer trails the scroll. */
 .t-scroll-linked {
   transition: none;
 }
@@ -339,60 +318,6 @@
   transform-origin: 0 50%;
   transform: scaleX(0);
   will-change: transform;
-}
-
-/* Orbiting tech stack (Skills): spokes rotate around the ring's center while
-   each chip counter-rotates to stay upright. The global reduced-motion rule
-   freezes both at their start angles. */
-.t-orbit-spoke {
-  will-change: transform;
-}
-.t-orbit-cw {
-  animation: t-orbit-rot-cw var(--orbit-dur) linear infinite;
-}
-.t-orbit-ccw {
-  animation: t-orbit-rot-ccw var(--orbit-dur) linear infinite;
-}
-.t-orbit-counter-cw {
-  animation: t-orbit-counter-cw var(--orbit-dur) linear infinite;
-}
-.t-orbit-counter-ccw {
-  animation: t-orbit-counter-ccw var(--orbit-dur) linear infinite;
-}
-@keyframes t-orbit-rot-cw {
-  from { transform: rotate(var(--start-angle)); }
-  to { transform: rotate(calc(var(--start-angle) + 360deg)); }
-}
-@keyframes t-orbit-rot-ccw {
-  from { transform: rotate(var(--start-angle)); }
-  to { transform: rotate(calc(var(--start-angle) - 360deg)); }
-}
-@keyframes t-orbit-counter-cw {
-  from { transform: rotate(var(--counter-offset, 0deg)); }
-  to { transform: rotate(calc(var(--counter-offset, 0deg) - 360deg)); }
-}
-@keyframes t-orbit-counter-ccw {
-  from { transform: rotate(var(--counter-offset, 0deg)); }
-  to { transform: rotate(calc(var(--counter-offset, 0deg) + 360deg)); }
-}
-
-/* Stacked scroll cards (Principles): each sticky card scales back and dims
-   slightly as the next one slides over it. Scroll-driven where supported;
-   elsewhere the cards simply stack cleanly. */
-@supports (animation-timeline: view()) {
-  .t-stack-card {
-    animation: t-stack-back linear both;
-    animation-timeline: view();
-    animation-range: exit 0% exit 100%;
-    transform-origin: 50% 0%;
-    will-change: transform;
-  }
-}
-@keyframes t-stack-back {
-  to {
-    transform: scale(0.94);
-    opacity: 0.6;
-  }
 }
 
 /* ---- Section entrance ------------------------------------------------------
@@ -565,31 +490,7 @@
 }
 
 /* ---- Micro-interactions ----------------------------------------------------
-   Nav links: a hairline draws in from the left on hover and stays under the
-   current section; it retracts toward the right, so the motion has a
-   direction. Outbound arrows: a 2px nudge toward where they point. Both are
-   transform-only. */
-.t-navlink {
-  position: relative;
-}
-.t-navlink::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 320ms var(--stagger-ease);
-}
-.t-navlink:hover::after,
-.t-navlink:focus-visible::after,
-.t-navlink[aria-current]::after {
-  transform: scaleX(1);
-  transform-origin: left center;
-}
+   Outbound arrows: a 2px nudge toward where they point (transform-only). */
 .t-nudge {
   transition: transform 240ms var(--stagger-ease);
 }
@@ -597,7 +498,6 @@
   transform: translate(2px, -2px);
 }
 @media (prefers-reduced-motion: reduce) {
-  .t-navlink::after,
   .t-nudge {
     transition: none !important;
   }
@@ -663,22 +563,25 @@
   }
 }
 
-/* ---- Theme toggle ----------------------------------------------------------
-   Sun and moon share one slot; the inactive one turns away and shrinks.
-   The icon shows the destination (sun while dark). Transform + opacity. */
-.t-theme svg {
-  transition:
-    transform 420ms var(--stagger-ease),
-    opacity 260ms ease;
+/* The assistant's point of light: a slow ring that expands and fades
+   (transform + opacity), the same light that forms in the film's chapter 02. */
+.t-light-ping {
+  animation: t-light-ping 2.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
-.t-theme[data-current='light'] .t-theme-sun,
-.t-theme[data-current='dark'] .t-theme-moon {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.6);
+@keyframes t-light-ping {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(3.4);
+    opacity: 0;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .t-theme svg {
-    transition: none !important;
+  .t-light-ping {
+    animation: none;
+    opacity: 0;
   }
 }
 
@@ -700,6 +603,32 @@ html[data-film='on'] [data-beat].is-beat {
   transform: none;
 }
 
+/* ---- Print --------------------------------------------------------------------
+   Paper, not the film: dark ink on white, no canvas, no fixed chrome. */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  .t-film-stage,
+  .grain-overlay,
+  nav,
+  #ask-murci,
+  button[aria-label='Ask the assistant about Murci'] {
+    display: none !important;
+  }
+  .t-ink,
+  .t-ink * {
+    text-shadow: none !important;
+    color: #111 !important;
+  }
+  [data-beat] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* ---- Muted-text floor (see the --tx-* tokens in the base layer) ----------- */
 .text-fg\/30,
 .text-fg\/35,
@@ -713,6 +642,38 @@ html[data-film='on'] [data-beat].is-beat {
 }
 .text-fg\/60 {
   color: rgb(var(--c-fg) / var(--tx-soft));
+}
+.text-fg\/65,
+.text-fg\/70,
+.text-fg\/75 {
+  color: rgb(var(--c-fg) / var(--tx-body, 0.88));
+}
+.text-fg\/80 {
+  color: rgb(var(--c-fg) / var(--tx-strong, 0.92));
+}
+
+/* Title lettering over the film: a tight shadow for edge definition and a wide
+   soft one that darkens just the air around the words. Inherited, so set once
+   per section. Painted with the text (never per scroll frame). */
+.t-ink {
+  text-shadow:
+    0 1px 2px rgb(0 0 0 / 0.55),
+    0 0 26px rgb(0 0 0 / 0.42);
+}
+/* Small text has fewer pixels of its own to hold contrast, so it gets a denser
+   halo: a tight dark ring that darkens only the air right around each letter. */
+.t-ink .font-mono,
+.t-ink .text-sm,
+.t-ink .text-xs {
+  text-shadow:
+    0 1px 2px rgb(0 0 0 / 0.75),
+    0 0 8px rgb(0 0 0 / 0.65),
+    0 0 20px rgb(0 0 0 / 0.45);
+}
+/* Dark text on a light fill (cream buttons) must not carry the dark halo. */
+.t-ink .bg-fg,
+.t-ink .bg-accent {
+  text-shadow: none;
 }
 /* Accent text at reduced opacity drops below AA on paper. */
 [data-theme='light'] .text-accent\/80 {

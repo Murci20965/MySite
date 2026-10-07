@@ -1,93 +1,87 @@
-import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
+import Kicker from './Kicker';
 import { Github, Linkedin, Twitter } from 'lucide-react';
 
+/**
+ * Chapter 02, About. Behind it the camera reaches the laptop screen and the
+ * code becomes a glyph waterfall, bright in the centre of the frame and dark
+ * at the edges (measured), so the copy is one column on the left. The film
+ * cues land on its moments: glyphs start, the screen fills, a point of light.
+ */
 export default function About() {
   return (
-    <section id="about" className="relative pt-32 pb-12 lg:pt-40 lg:pb-16 overflow-hidden">
+    <section id="about" className="t-ink relative overflow-hidden pb-16 pt-32 lg:pb-24 lg:pt-44">
       <div className="relative z-10 mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
-        <AnimatedSection animation="fade-in" delay>
-          <div className="flex items-center gap-4 mb-8">
-            <span className="font-mono text-[11px] tracking-[0.28em] uppercase text-fg/50">
-              Profile
-            </span>
-            <span className="h-px flex-1 bg-fg/15" />
-            <span className="t-drift font-mono text-[11px] tracking-[0.28em] uppercase text-fg/30">01</span>
-          </div>
+        <div className="max-w-[38rem]">
+          <Kicker n="02" name="About" />
 
-          {/* Film cues (FilmStage): glyphs start on the laptop screen, the
-              screen fills the frame, then a point of light forms. */}
-          <div data-beat="m1:0.55">
+          <div data-beat="m1:0.55" className="mt-6">
             <RevealHeading
               text="Who am I?"
-              className="font-display text-4xl sm:text-5xl lg:text-6xl font-medium text-fg leading-[1.05] tracking-[-0.01em] mb-10 max-w-3xl"
+              className="max-w-3xl font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
             />
           </div>
 
-          <p data-beat="m1:0.7" className="font-sans text-xl lg:text-2xl text-fg/80 leading-relaxed max-w-3xl mb-10">
-            I'm a production-focused AI engineer who owns systems end to end: from{' '}
-            <span className="text-fg">data pipeline</span> through{' '}
-            <span className="text-fg">model training and inference</span> to deployment,
-            translating mathematical concepts into production-grade systems. I also believe
-            learning real skills shouldn't depend on where you were born.
+          <p data-beat="m1:0.7" className="mt-8 font-sans text-xl leading-relaxed text-fg lg:text-2xl">
+            I&rsquo;m a production-focused AI engineer who owns systems end to end: from{' '}
+            <span className="text-accent">data pipeline</span> through{' '}
+            <span className="text-accent">model training and inference</span> to deployment, translating
+            mathematical concepts into production-grade systems. I also believe learning real skills
+            shouldn&rsquo;t depend on where you were born.
           </p>
 
-          <div data-beat="m1:0.92" className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl font-sans text-fg/60">
-            <p className="text-base lg:text-lg leading-relaxed">
-              I design <span className="text-fg/90">agentic workflows</span> with LangChain,
-              LangGraph and n8n, <span className="text-fg/90">RAG architectures</span> over vector
-              databases, and the <span className="text-fg/90">end-to-end MLOps</span> that keeps
-              them honest: Python and FastAPI backends, Dockerised deployments, CI/CD and automated
-              model evaluation. At Nudle I'm engineering XR simulation platforms with that stack.
+          <div data-beat="m1:0.92" className="mt-8 space-y-6 font-sans text-base leading-relaxed text-fg lg:text-lg">
+            <p>
+              I design agentic workflows with LangChain, LangGraph and n8n, RAG architectures over vector
+              databases, and the end-to-end MLOps that keeps them honest: Python and FastAPI backends,
+              Dockerised deployments, CI/CD and automated model evaluation. At Nudle I&rsquo;m engineering
+              XR simulation platforms with that stack.
             </p>
-            <p className="text-base lg:text-lg leading-relaxed">
-              What drives me: traditional education gates real skills behind resources and rigid
-              methods. I'm building toward seamless XR learning, where anyone, from any background,
-              can practise real skills interactively. From Johannesburg, working with teams anywhere.
+            <p>
+              What drives me: traditional education gates real skills behind resources and rigid methods.
+              I&rsquo;m building toward seamless XR learning, where anyone, from any background, can
+              practise real skills interactively. From Johannesburg, working with teams anywhere.
             </p>
           </div>
 
-          <div className="h-px bg-fg/10 my-10 max-w-4xl" />
-
-          <div className="flex flex-wrap items-center justify-between gap-6 max-w-4xl">
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
             <div className="flex items-center gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-accent">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
                 Open to conversations
               </span>
             </div>
-
             <div className="flex items-center gap-5">
               <a
                 href="https://github.com/Murci20965"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-fg/50 hover:text-fg transition-colors"
+                className="text-fg/80 transition-colors hover:text-fg"
                 aria-label="GitHub"
               >
-                <Github className="w-5 h-5" />
+                <Github className="h-5 w-5" />
               </a>
               <a
                 href="https://twitter.com/960918mokoena"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-fg/50 hover:text-fg transition-colors"
+                className="text-fg/80 transition-colors hover:text-fg"
                 aria-label="Twitter"
               >
-                <Twitter className="w-5 h-5" />
+                <Twitter className="h-5 w-5" />
               </a>
               <a
                 href="https://www.linkedin.com/in/nhlanhla-mokoena-32b22b174/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-fg/50 hover:text-fg transition-colors"
+                className="text-fg/80 transition-colors hover:text-fg"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="w-5 h-5" />
+                <Linkedin className="h-5 w-5" />
               </a>
             </div>
           </div>
-        </AnimatedSection>
+        </div>
       </div>
     </section>
   );

@@ -1,5 +1,30 @@
 # Content Truth Map
 
+
+## Current state of the claims (2026-10-07)
+
+The sections further down are the August plan, kept as history. This is what the site says now,
+and where each claim comes from (source of truth: the Sep 2026 CV, then the public repos).
+
+| Claim on the site | Source |
+|---|---|
+| Stats: 7 open-source projects | the seven cards in `OpenSource.tsx` (all public repos) |
+| Stats: 3 AI roles; 6 certifications | the CV (Nudle, Alignerr, Artintel; its certifications list) |
+| Stats: 2 live AI demos | the avatar and orbit Vercel apps (see open items: their HF backends) |
+| Education: ALX/ExploreAI Data Science; DynamicDNA Systems Development NQF 4; Wits, two BSc programmes incomplete | the CV, word for word (extra bullets the CV does not make were removed) |
+| Skills ("From model to classroom"): seven categories | the CV's "Core technical skills", word for word (plus XR & 3D from its experience and project lines) |
+| "What I can build" RAG proof: Artintel | the CV ("clean tokens for LLM training / RAG applications"); "Nudle and Alignerr" was not backed by the CV |
+| Principles (#principles, was #reviews) | Murci's own standards, shown as numbered type, not as quotes or testimonials |
+
+Open items (Murci's decisions or actions):
+- The two live demos call retired Groq models on their HF Spaces until the `fix/limits-and-models`
+  branches are deployed (needs `hf auth login`); the project cards still name "Groq
+  Llama-3.3-70b" and "Llama-4 Vision", which stays true to the repos' main branches until merged.
+- The Twitter/X link (`About.tsx`) has never been confirmed.
+- `FIRST_BOOT.md` in this public repo is another project's internal setup guide (agent names and
+  Nexera repo env var names); `NexaOS` and `nexera-3d-studio` are public on his GitHub.
+- LinkedIn dates and titles still differ from the CV dates used here.
+
 ## Current source: Sep 2026 CV sync (2026-10-06)
 
 **Reference:** Murci's Sep 2026 CV export (`public/resume.pdf`), which he named as the CV to

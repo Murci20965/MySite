@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
+import Kicker from './Kicker';
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -40,76 +41,66 @@ export default function FAQ() {
   ];
 
   return (
-    <section id="faq" className="relative py-24 lg:py-32">
+    // Chapter 10. Behind it the camera rises over the city at dusk; the right
+    // edge measured darkest, so the heading and the questions share one column
+    // there and the film keeps the rest of the frame.
+    <section id="faq" className="t-ink relative py-24 lg:py-32">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
-        <AnimatedSection animation="fade-in">
-          <div className="mb-8 flex items-center gap-4">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/50">
-              FAQ
-            </span>
-            <span className="h-px flex-1 bg-fg/15" />
-            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">07</span>
-          </div>
-        </AnimatedSection>
-
-        {/* Two columns so the answers keep a readable measure while the
-            section still spans the page. */}
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)] lg:gap-24">
+        <div className="lg:ml-auto lg:w-[min(42rem,52%)]">
           <AnimatedSection animation="fade-in">
-            <div className="lg:sticky lg:top-32">
-              <RevealHeading
-                text="Common questions"
-                className="mb-6 font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl"
-              />
-              <p className="max-w-md font-sans text-lg leading-relaxed text-fg/70">
-                How I work, and what to expect from a project.
-              </p>
-            </div>
+            <Kicker n="10" name="Questions" />
+            <RevealHeading
+              text="Common questions"
+              className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
+            />
+            <p className="mt-6 font-sans text-lg leading-relaxed text-fg">
+              How I work, and what to expect from a project.
+            </p>
           </AnimatedSection>
 
-          <div className="border-t border-fg/10">
-          {faqs.map((faq, index) => {
-            const isOpen = openIndex === index;
-            return (
-              <div key={faq.question} className="border-b border-fg/10">
-                <button
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  aria-expanded={isOpen}
-                  aria-controls={`faq-panel-${index}`}
-                  className="flex w-full items-center justify-between gap-6 py-6 text-left"
-                >
-                  <span className="font-display text-lg font-medium text-fg">{faq.question}</span>
-                  <ChevronDown
-                    className={`h-5 w-5 flex-shrink-0 text-fg/50 transition-transform duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                      isOpen ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                {/* Accordion (transitions.dev 21). Height is the one property
-                    here that must animate layout: there is no transform that
-                    grows a box without distorting its text. It stays cheap:
-                    one short grid-rows tween on a small list. Padding lives on
-                    the inner block, never the 0fr track, or the panel cannot
-                    fully close; the answer itself only fades and rises. */}
-                <div
-                  id={`faq-panel-${index}`}
-                  className={`grid transition-[grid-template-rows] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <p
-                      className={`max-w-2xl pb-6 font-sans leading-relaxed text-fg/60 transition-[opacity,transform,visibility] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                        isOpen ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-1 opacity-0'
+          <div className="mt-10 border-t border-fg/20">
+            {faqs.map((faq, index) => {
+              const isOpen = openIndex === index;
+              return (
+                <div key={faq.question} className="border-b border-fg/20">
+                  <button
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-panel-${index}`}
+                    className="flex w-full items-center justify-between gap-6 py-6 text-left"
+                  >
+                    <span className="font-display text-xl font-medium text-fg">{faq.question}</span>
+                    <ChevronDown
+                      className={`h-5 w-5 flex-shrink-0 text-accent transition-transform duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                        isOpen ? 'rotate-180' : ''
                       }`}
-                    >
-                      {faq.answer}
-                    </p>
+                    />
+                  </button>
+                  {/* Accordion (transitions.dev 21). Height is the one property
+                      here that must animate layout: there is no transform that
+                      grows a box without distorting its text. It stays cheap:
+                      one short grid-rows tween on a small list. Padding lives on
+                      the inner block, never the 0fr track, or the panel cannot
+                      fully close; the answer itself only fades and rises. */}
+                  <div
+                    id={`faq-panel-${index}`}
+                    className={`grid transition-[grid-template-rows] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p
+                        className={`pb-6 font-sans text-base leading-relaxed text-fg transition-[opacity,transform,visibility] duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:text-lg ${
+                          isOpen ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-1 opacity-0'
+                        }`}
+                      >
+                        {faq.answer}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
           </div>
         </div>
       </div>

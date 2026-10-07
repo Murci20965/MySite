@@ -1,53 +1,71 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- The first screen's type (src/index.css): fetched with the HTML, not after the app renders. -->
+    <link rel="preload" href="/fonts/fraunces-500.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/fraunces-400-italic.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/hanken-400.woff2" as="font" type="font/woff2" crossorigin />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0a0a0a" />
-    <!-- Theme before first paint (no flash): the stored choice, else the OS
-         preference. Kept tiny and inline on purpose; src/lib/theme.ts owns
-         runtime changes. -->
-    <script>
-      (function () {
-        var t = 'dark';
-        try {
-          var s = localStorage.getItem('theme');
-          t = s === 'light' || s === 'dark' ? s : matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-        } catch (e) {}
-        document.documentElement.dataset.theme = t;
-        if (t === 'light') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f4efe6');
-      })();
-    </script>
+    <title>Nhlanhla Mokoena · AI Engineer</title>
     <meta
       name="description"
-      content="Nhlanhla &quot;Murci&quot; Mokoena — AI Engineer building production AI systems: agentic workflows, RAG architectures and end-to-end MLOps with LangChain, LangGraph and n8n, applied to XR simulation learning."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Nhlanhla Mokoena — AI Engineer" />
-    <meta
-      property="og:description"
-      content="Agentic AI, RAG & MLOps — shipped to production. Portfolio of Nhlanhla &quot;Murci&quot; Mokoena."
+      content="AI engineer building production AI: agentic workflows, RAG and end-to-end MLOps, applied to XR learning anyone can reach. Johannesburg, working with teams anywhere."
     />
     <!-- Absolute URLs required: crawlers do not resolve relative og:image
-         paths, so link previews render blank without these. Update all four
-         if the Vercel project is ever renamed (the subdomain follows it). -->
+         paths, so link previews render blank without these. Update them all
+         (and robots.txt, sitemap.xml, the JSON-LD below) if the domain changes. -->
+    <link rel="canonical" href="https://my-site-six-rose.vercel.app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nhlanhla Mokoena" />
+    <meta property="og:title" content="Nhlanhla Mokoena · AI Engineer" />
+    <meta property="og:description" content="Agentic AI, RAG and MLOps, shipped to production. The portfolio of Nhlanhla &quot;Murci&quot; Mokoena." />
     <meta property="og:url" content="https://my-site-six-rose.vercel.app/" />
     <meta property="og:image" content="https://my-site-six-rose.vercel.app/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Nhlanhla Mokoena, AI Engineer: agentic AI, RAG and MLOps" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Nhlanhla Mokoena — AI Engineer" />
-    <meta
-      name="twitter:description"
-      content="Agentic AI, RAG & MLOps — shipped to production. Portfolio of Nhlanhla &quot;Murci&quot; Mokoena."
-    />
+    <meta name="twitter:title" content="Nhlanhla Mokoena · AI Engineer" />
+    <meta name="twitter:description" content="Agentic AI, RAG and MLOps, shipped to production. The portfolio of Nhlanhla &quot;Murci&quot; Mokoena." />
     <meta name="twitter:image" content="https://my-site-six-rose.vercel.app/og.png" />
-    <link rel="canonical" href="https://my-site-six-rose.vercel.app/" />
-    <title>Nhlanhla Mokoena — AI Engineer</title>
+    <!-- Who this site is about, for search engines (structured data, not executed). -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Nhlanhla Mokoena",
+        "alternateName": "Murci",
+        "jobTitle": "AI Engineer",
+        "worksFor": { "@type": "Organization", "name": "Nudle" },
+        "address": { "@type": "PostalAddress", "addressLocality": "Johannesburg", "addressCountry": "ZA" },
+        "url": "https://my-site-six-rose.vercel.app/",
+        "email": "mailto:nhlanhla18mokoena@gmail.com",
+        "sameAs": ["https://github.com/Murci20965", "https://www.linkedin.com/in/nhlanhla-mokoena-32b22b174/"],
+        "knowsAbout": ["Agentic AI", "Retrieval-augmented generation", "MLOps", "WebXR", "LangGraph", "FastAPI"]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <!-- Without JavaScript (and for crawlers that do not run it): the essentials. -->
+    <noscript>
+      <main style="max-width: 40rem; margin: 4rem auto; padding: 0 1.5rem; color: #f4efe6; background: #0a0a0a; font-family: system-ui, sans-serif; line-height: 1.6">
+        <h1>Nhlanhla Mokoena, AI Engineer</h1>
+        <p>
+          I build production AI systems: agentic workflows, RAG architectures and end-to-end MLOps. At Nudle I engineer
+          the generative pipelines behind XR simulation learning.
+        </p>
+        <p>
+          <a href="/resume.pdf" style="color: #c8f26b">Resume (PDF)</a> ·
+          <a href="https://github.com/Murci20965" style="color: #c8f26b">GitHub</a> ·
+          <a href="https://www.linkedin.com/in/nhlanhla-mokoena-32b22b174/" style="color: #c8f26b">LinkedIn</a> ·
+          <a href="mailto:nhlanhla18mokoena@gmail.com" style="color: #c8f26b">nhlanhla18mokoena@gmail.com</a>
+        </p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
