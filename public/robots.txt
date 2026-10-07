@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://my-site-six-rose.vercel.app/sitemap.xml
