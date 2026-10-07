@@ -28,7 +28,6 @@
 }
 
 @layer base {
-  @layer base {
   /* Theme tokens: RGB triplets so Tailwind opacity modifiers work. Dark is
      the default; index.html sets data-theme before first paint (stored
      choice, else the OS preference), so there is no flash.
@@ -491,31 +490,7 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
 }
 
 /* ---- Micro-interactions ----------------------------------------------------
-   Nav links: a hairline draws in from the left on hover and stays under the
-   current section; it retracts toward the right, so the motion has a
-   direction. Outbound arrows: a 2px nudge toward where they point. Both are
-   transform-only. */
-.t-navlink {
-  position: relative;
-}
-.t-navlink::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 320ms var(--stagger-ease);
-}
-.t-navlink:hover::after,
-.t-navlink:focus-visible::after,
-.t-navlink[aria-current]::after {
-  transform: scaleX(1);
-  transform-origin: left center;
-}
+   Outbound arrows: a 2px nudge toward where they point (transform-only). */
 .t-nudge {
   transition: transform 240ms var(--stagger-ease);
 }
@@ -523,7 +498,6 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   transform: translate(2px, -2px);
 }
 @media (prefers-reduced-motion: reduce) {
-  .t-navlink::after,
   .t-nudge {
     transition: none !important;
   }
