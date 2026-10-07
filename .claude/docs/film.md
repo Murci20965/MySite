@@ -118,7 +118,9 @@ Lettering does the rest, with no text boxes:
   shade;
 - a feathered radial "pool" under chapter kickers, the Open-source header and Contact's link list
   (desktop: the globe's lime arcs cross it, and lime headings on lime arcs lose their edge), and
-  Vision's pool behind its title and floor under its copy (soft shade, no edges).
+  Vision's pool behind its title and floor under its copy (soft shade, no edges);
+- the footer is type on the film's last frame (the arcs over the globe), not a slab: the end
+  knot's bottom band shades it, and it follows the same lettering rules.
 
 Verified with a **pixel contrast scan**: every visible text box is measured against the real
 screenshot pixels under it (film + lighting + shadows; text made transparent), using the brightest
