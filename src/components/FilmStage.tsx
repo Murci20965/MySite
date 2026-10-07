@@ -18,16 +18,60 @@ const PRE_SCROLL_FRAMES = 24;
 
 type Beat = { el: Element; T: number; on: boolean };
 type Frame = ImageBitmap | HTMLImageElement;
-type Slot = { blob?: Blob; frame?: Frame; fetching?: boolean; decoding?: boolean };
+/** `fails` counts failed fetches and decodes; a frame gets MAX_TRIES, then it is skipped. */
+type Slot = { blob?: Blob; frame?: Frame; fetching?: boolean; decoding?: boolean; fails?: number };
+const MAX_TRIES = 2;
 
-const canBitmap = typeof window !== 'undefined' && 'createImageBitmap' in window;
+/** What the film is doing, readable from the console (`__filmStatus`) when it does not show. */
+const status = {
+  decoder: 'bitmap' as 'bitmap' | 'img',
+  fetched: 0,
+  decoded: 0,
+  failedFetches: 0,
+  failedDecodes: 0,
+  lastError: '',
+  contextLost: 0,
+};
+const warned = new Set<string>();
+function fail(kind: string, message: string) {
+  status.lastError = message;
+  if (warned.has(kind)) return;
+  warned.add(kind);
+  console.warn(`[film] ${message}`);
+}
+const errorText = (err: unknown) => (err instanceof Error ? `${err.name}: ${err.message}` : String(err));
 
-async function decode(blob: Blob): Promise<Frame> {
-  if (canBitmap) return createImageBitmap(blob); // decodes off the main thread
+let useBitmap = typeof window !== 'undefined' && 'createImageBitmap' in window;
+if (!useBitmap) status.decoder = 'img';
+
+async function decodeImg(blob: Blob): Promise<HTMLImageElement> {
   const img = new Image();
   img.src = URL.createObjectURL(blob);
-  await img.decode();
+  try {
+    await img.decode();
+  } catch (err) {
+    URL.revokeObjectURL(img.src);
+    throw err;
+  }
   return img;
+}
+
+/**
+ * createImageBitmap decodes off the main thread. It can fail where <img> works (memory
+ * pressure, some GPU setups): if <img> then decodes the same file, the file is fine and
+ * the decoder is not, so every later frame uses <img>. If both fail, the file is bad.
+ */
+async function decode(blob: Blob): Promise<Frame> {
+  if (!useBitmap) return decodeImg(blob);
+  try {
+    return await createImageBitmap(blob);
+  } catch (bitmapErr) {
+    const img = await decodeImg(blob);
+    useBitmap = false;
+    status.decoder = 'img';
+    fail('bitmap', `createImageBitmap failed (${errorText(bitmapErr)}); frames now decode with <img>`);
+    return img;
+  }
 }
 
 function release(frame: Frame) {
@@ -186,10 +230,17 @@ export default function FilmStage() {
           .then((frame) => {
             if (disposed || forRendition !== rendition || !keep(k, j)) return release(frame);
             s.frame = frame;
+            status.decoded++;
             dirty = true;
             schedule();
           })
-          .catch(() => undefined)
+          .catch((err) => {
+            // A file no decoder can read: drop it so it is fetched again, within the budget.
+            s.blob = undefined;
+            s.fails = (s.fails ?? 0) + 1;
+            status.failedDecodes++;
+            fail('decode', `a frame could not be decoded (${errorText(err)})`);
+          })
           .finally(() => {
             s.decoding = false;
             decodes--;
@@ -200,16 +251,24 @@ export default function FilmStage() {
       for (const [k, j] of fetchOrder()) {
         if (fetches >= (started ? MAX_FETCHES : 1)) break;
         const s = slots[k][j];
-        if (s.blob || s.fetching) continue;
+        // A frame that failed MAX_TRIES times is skipped; the nearest decoded one is drawn.
+        if (s.blob || s.fetching || (s.fails ?? 0) >= MAX_TRIES) continue;
         s.fetching = true;
         fetches++;
         const forRendition = rendition;
-        fetch(frameUrl(CLIPS[k], rendition, j))
-          .then((r) => (r.ok ? r.blob() : Promise.reject(new Error(String(r.status)))))
+        const url = frameUrl(CLIPS[k], rendition, j);
+        fetch(url)
+          .then((r) => (r.ok ? r.blob() : Promise.reject(new Error(`HTTP ${r.status}`))))
           .then((blob) => {
-            if (!disposed && forRendition === rendition) s.blob = blob;
+            if (disposed || forRendition !== rendition) return;
+            s.blob = blob;
+            status.fetched++;
           })
-          .catch(() => undefined) // a missing frame is skipped; the nearest one is drawn
+          .catch((err) => {
+            s.fails = (s.fails ?? 0) + 1;
+            status.failedFetches++;
+            fail('fetch', `a frame could not be fetched: ${url} (${errorText(err)})`);
+          })
           .finally(() => {
             s.fetching = false;
             fetches--;
@@ -423,12 +482,27 @@ export default function FilmStage() {
     });
     ro.observe(document.body);
     document.fonts?.ready.then(() => !disposed && onResize());
+    // If the browser's graphics process resets, the canvas comes back blank: redraw it.
+    const onContextLost = () => {
+      status.contextLost++;
+      fail('context', 'the film canvas lost its graphics context');
+    };
+    const onContextRestored = () => {
+      gradients.clear();
+      dirty = true;
+      schedule();
+    };
+    canvas.addEventListener('contextlost', onContextLost);
+    canvas.addEventListener('contextrestored', onContextRestored);
+    (window as Window & { __filmStatus?: typeof status }).__filmStatus = status;
 
     return () => {
       disposed = true;
       filmClock.on = false;
       delete root.dataset.film;
       ro.disconnect();
+      canvas.removeEventListener('contextlost', onContextLost);
+      canvas.removeEventListener('contextrestored', onContextRestored);
       window.removeEventListener('load', onLoad);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);

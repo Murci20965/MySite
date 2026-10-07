@@ -154,15 +154,33 @@ progress hairline, clips text to its scroll containers, and treats blended text 
   Measured: 9 frame requests for the whole page.
 
 ## Error handling
-A frame that fails to load is skipped and the nearest loaded frame is drawn; with none loaded the
-canvas shows the theme background. Nothing throws into React. If FilmStage does not start,
-`data-film` is never set and all cued text is visible.
+Every frame gets 2 tries across fetching and decoding (`MAX_TRIES`); after that it is skipped and
+the nearest decoded frame is drawn, and with none decoded the canvas shows the theme background.
+If `createImageBitmap` fails on a file that `<img>` can decode (memory pressure, some GPU setups),
+the decoder is at fault, not the file: every later frame decodes through `<img>`. If the browser's
+graphics process resets, the canvas redraws on `contextrestored`. Nothing throws into React. If
+FilmStage does not start, `data-film` is never set and all cued text is visible.
+
+Before 2026-10-07 (PR #2) a failed fetch or decode was swallowed and retried at once, forever: with
+`createImageBitmap` failing, the live site made 180,000 decode calls in 13 s, froze the tab and
+showed only black. Measured on Chrome 154 by fault injection (scratchpad `fault_check.cjs`,
+`lock_check.cjs`): with the fix, a broken decoder still draws the film through `<img>`, and blocked
+or non-image frames stop after 2 tries each.
+
+**Observability:** each kind of failure logs one `[film] ...` console warning, and
+`window.__filmStatus` reports the decoder in use, frames fetched and decoded, failures and the last
+error. It holds no user data.
 
 ## Security
 Static, same-origin public assets only (the canvas is never tainted). No user data. The dev-only
 `window.__filmClock` hook is stripped from production builds (`import.meta.env.DEV`).
 
 ## Runbook
+- **The film is black for someone:** in their browser console, look for `[film]` warnings and read
+  `__filmStatus`. `failedFetches` points at the network (an extension, a firewall, a wrong path);
+  `failedDecodes` at the files; `decoder: 'img'` with frames drawing means the fallback worked;
+  `contextLost` at the graphics process. Zero everywhere with a black canvas: check
+  `prefers-reduced-motion` and Save-Data (still mode) and whether anything paints over the canvas.
 - **Re-encode a clip:** `bash scripts/encode-film.sh m3 media-src/M3.mp4` and check the printed
   sizes against the budgets. To cut size, raise the frame step (third argument) before lowering
   quality, and update `count` in `CLIPS`.
