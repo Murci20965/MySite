@@ -629,6 +629,32 @@ html[data-film='on'] [data-beat].is-beat {
   transform: none;
 }
 
+/* ---- Print --------------------------------------------------------------------
+   Paper, not the film: dark ink on white, no canvas, no fixed chrome. */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  .t-film-stage,
+  .grain-overlay,
+  nav,
+  #ask-murci,
+  button[aria-label='Ask the assistant about Murci'] {
+    display: none !important;
+  }
+  .t-ink,
+  .t-ink * {
+    text-shadow: none !important;
+    color: #111 !important;
+  }
+  [data-beat] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* ---- Muted-text floor (see the --tx-* tokens in the base layer) ----------- */
 .text-fg\/30,
 .text-fg\/35,
