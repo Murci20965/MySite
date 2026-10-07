@@ -9,6 +9,7 @@ import { createRoot } from 'react-dom/client';
 import '@fontsource/fraunces/latin-400.css';
 import '@fontsource/fraunces/latin-500.css';
 import '@fontsource/fraunces/latin-600.css';
+import '@fontsource/fraunces/latin-400-italic.css';
 import '@fontsource/hanken-grotesk/latin-400.css';
 import '@fontsource/hanken-grotesk/latin-500.css';
 import '@fontsource/space-mono/latin-400.css';

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
+import Kicker from './Kicker';
 import ProjectDiagram from './ProjectDiagram';
 import type { DiagramVariant } from './ProjectDiagram';
 
@@ -246,7 +247,7 @@ export default function OpenSource() {
   const gutter = 'px-6 sm:px-10 lg:px-16 xl:px-24';
 
   return (
-    <section id="opensource" className="relative">
+    <section id="opensource" className="t-ink relative">
       <div ref={wrapRef} className="relative">
         <div
           ref={stageRef}
@@ -258,18 +259,17 @@ export default function OpenSource() {
         >
           <div className={`mx-auto w-full max-w-[1760px] ${gutter}`}>
             <AnimatedSection animation="fade-in">
-              <div className={`flex items-center gap-4 ${pinned ? 'mb-6' : 'mb-8'}`}>
-                <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/50">
-                  Open source
-                </span>
-                <span className="h-px flex-1 bg-fg/15" />
-                <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">03</span>
-              </div>
+              <Kicker n="04" name="Open source" className={pinned ? 'mb-6' : 'mb-8'} />
 
               {/* gap-4 + a 64 px bar on phones: the heading's min-content
                   ("Open-source" never breaks) is 226 px, and 226 + 24 + 96
                   overflowed the 312 px row and clipped the counter. */}
-              <div className="flex items-end justify-between gap-4 lg:gap-6">
+              <div className="relative flex items-end justify-between gap-4 lg:gap-6">
+                {/* A soft pool under the header: the glass cubes run brightest up here. */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-x-10 -inset-y-8 -z-10 bg-[radial-gradient(ellipse_at_25%_50%,rgb(0_0_0/0.55),transparent_70%)]"
+                />
                 {/* Film cue: the network crystallises into glass cubes (M3, 2 s). */}
                 <div data-beat="m3:0.2">
                   <RevealHeading

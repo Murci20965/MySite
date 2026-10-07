@@ -254,7 +254,7 @@ export default function FilmStage() {
         g.addColorStop(1, `rgba(${bg},0)`);
         return g;
       };
-      const reach = { x: w * 0.62, y: h * 0.5 };
+      const reach = { x: w * 0.62, y: h * 0.62 };
       const list: CanvasGradient[] = [];
       if (side === 'left' || side === 'sides') list.push(make(0, 0, side === 'sides' ? w * 0.38 : reach.x, 0));
       if (side === 'right' || side === 'sides') list.push(make(w, 0, w - (side === 'sides' ? w * 0.38 : reach.x), 0));

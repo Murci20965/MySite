@@ -1,5 +1,6 @@
 import AnimatedSection from './AnimatedSection';
 import RevealHeading from './RevealHeading';
+import Kicker from './Kicker';
 
 interface ExperienceData {
   id: string;
@@ -87,149 +88,130 @@ const experiences: ExperienceData[] = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="relative pt-12 pb-24 lg:pt-16 lg:pb-32">
+    // Chapter 03. Behind it the light bursts into an agent network that fills
+    // the frame (the brightest stretch the text crosses), so everything reads
+    // from one left-hand column over the graded side, and the network keeps the
+    // right of the frame.
+    <section id="experience" className="t-ink relative pb-24 pt-16 lg:pb-32 lg:pt-24">
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
-        <AnimatedSection animation="fade-in">
-          <div className="mb-8 flex items-center gap-4">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-fg/50">
-              Experience
-            </span>
-            <span className="h-px flex-1 bg-fg/15" />
-            <span className="t-drift font-mono text-[11px] uppercase tracking-[0.28em] text-fg/30">02</span>
-          </div>
+        <div className="max-w-[44rem]">
+          <AnimatedSection animation="fade-in">
+            <Kicker n="03" name="Experience" />
+            {/* Film cue: the light bursts into the agent network (M2, 6 s). */}
+            <div data-beat="m2:0.6" className="mt-6">
+              <RevealHeading
+                text="Professional experience"
+                className="font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
+              />
+            </div>
+            <p className="mt-6 font-sans text-lg leading-relaxed text-fg/90 lg:text-xl">
+              From ML foundations to production AI systems, and now the AI layer of XR education.
+            </p>
+          </AnimatedSection>
 
-          {/* Film cue: the light bursts into the agent network (M2, 6 s). */}
-          <div data-beat="m2:0.6">
-            <RevealHeading
-              text="Professional experience"
-              className="mb-6 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
-            />
-          </div>
-          <p className="max-w-2xl font-sans text-lg leading-relaxed text-fg/70 lg:text-xl">
-            From ML foundations to production AI systems, and now the AI layer of XR education.
-          </p>
-        </AnimatedSection>
-
-        <div className="mt-16 border-t border-fg/10">
-          {experiences.map((exp, index) => (
-            <AnimatedSection key={exp.id} animation="fade-in" delay={index > 0}>
-              <article className="grid gap-6 border-b border-fg/10 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
-                <div>
-                  <div className="font-mono text-sm text-fg/80">{exp.duration}</div>
-                  <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-fg/40">
-                    {exp.type}
+          <div className="mt-14">
+            {experiences.map((exp, index) => (
+              <AnimatedSection key={exp.id} animation="fade-in" delay={index > 0}>
+                <article className="border-t border-fg/20 py-12">
+                  <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+                    {exp.duration} · {exp.type}
                   </div>
-                  <div className="mt-5 font-sans text-fg/90">{exp.company}</div>
-                  <div className="font-sans text-sm text-fg/50">{exp.location}</div>
-                </div>
+                  <h3 className="mt-4 font-display text-3xl font-medium text-fg lg:text-4xl">{exp.role}</h3>
+                  <div className="mt-2 font-sans text-base text-fg/90">
+                    {exp.company} <span className="text-fg/70">· {exp.location}</span>
+                  </div>
+                  <p className="mt-5 font-sans text-base leading-relaxed text-fg/90 lg:text-lg">{exp.description}</p>
 
-                <div>
-                  <h3 className="mb-3 font-display text-2xl font-medium text-fg sm:text-3xl">
-                    {exp.role}
-                  </h3>
-                  <p className="mb-8 max-w-2xl font-sans leading-relaxed text-fg/60">
-                    {exp.description}
-                  </p>
-
-                  <div className="mb-8 flex flex-wrap gap-x-10 gap-y-4">
+                  <div className="mt-7 flex flex-wrap gap-x-10 gap-y-4">
                     {exp.metrics.map((metric, i) => (
                       <div key={i}>
-                        <div className="font-mono text-2xl text-fg">{metric.value}</div>
-                        <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.15em] text-fg/40">
+                        <div className="font-display text-3xl text-fg">{metric.value}</div>
+                        <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.15em] text-fg/80">
                           {metric.label}
                         </div>
                       </div>
                     ))}
                   </div>
 
-                  <ul className="mb-8 space-y-2.5">
+                  <ul className="mt-7 space-y-2.5">
                     {exp.achievements.map((achievement, i) => (
-                      <li key={i} className="flex gap-3 font-sans text-sm text-fg/70">
-                        <span className="select-none text-fg/30">&mdash;</span>
+                      <li key={i} className="flex gap-3 font-sans text-[15px] leading-relaxed text-fg/90">
+                        <span aria-hidden="true" className="mt-[0.7em] h-px w-3 shrink-0 bg-accent" />
                         <span>{achievement}</span>
                       </li>
                     ))}
                   </ul>
 
-                  <div className="flex flex-wrap gap-2">
-                    {exp.technologies.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="rounded-full border border-fg/10 px-3 py-1 font-mono text-[11px] tracking-wide text-fg/50"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            </AnimatedSection>
-          ))}
-        </div>
-
-        {/* What I can build: the answer to "what would I hire him to do?".
-            Principles covers HOW I work; this covers WHAT you get. */}
-        <AnimatedSection animation="fade-in">
-          <div className="mt-20">
-            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-fg/40">
-              What I can build
-            </div>
-            <div className="grid gap-5 border-t border-fg/10 pt-8 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                {
-                  step: '01',
-                  title: 'Agentic AI systems',
-                  text: 'LLMs that take actions reliably: tool use, structured outputs under strict schemas, and evaluation loops that catch drift.',
-                  proof: 'Avatar-3D Pipeline',
-                  href: 'https://github.com/Murci20965/avatar-pipeline',
-                },
-                {
-                  step: '02',
-                  title: 'RAG & knowledge systems',
-                  text: 'Retrieval that grounds answers in your own data, with honest failure modes instead of confident invention.',
-                  proof: 'Applied at Nudle and Alignerr',
-                  href: '',
-                },
-                {
-                  step: '03',
-                  title: 'XR & 3D pipelines',
-                  text: 'Text or images into web-ready 3D: generation, headless normalisation and delivery into the browser via WebXR.',
-                  proof: 'Orbit-3D Asset Pipeline',
-                  href: 'https://github.com/Murci20965/orbit-3d-pipeline',
-                },
-                {
-                  step: '04',
-                  title: 'MLOps delivery',
-                  text: 'Models that survive contact with production: containerised services, CI/CD, and metrics measured on unseen data.',
-                  proof: 'Real Estate Predictor',
-                  href: 'https://github.com/Murci20965/real_estate_price_predictor',
-                },
-              ].map((s) => (
-                // A translucent surface: these sit over the brightest frames of the
-                // agent network, so the text gets a panel, not just a border.
-                <div key={s.step} className="flex flex-col rounded-2xl border border-fg/10 bg-bg/55 p-6">
-                  <div className="font-mono text-[11px] text-accent/80">{s.step}</div>
-                  <h3 className="mt-3 font-display text-lg font-medium text-fg">{s.title}</h3>
-                  <p className="mt-2 font-sans text-sm leading-relaxed text-fg/55">{s.text}</p>
-                  <div className="mt-auto pt-5 font-mono text-[10px] uppercase tracking-[0.15em] text-fg/35">
-                    {s.href ? (
-                      <a
-                        href={s.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-colors hover:text-accent"
-                      >
-                        Proof: {s.proof}
-                      </a>
-                    ) : (
-                      <span>{s.proof}</span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+                  <p className="mt-6 font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-fg">
+                    {exp.technologies.join(' · ')}
+                  </p>
+                </article>
+              </AnimatedSection>
+            ))}
           </div>
-        </AnimatedSection>
+
+          {/* What I can build: the answer to "what would I hire him to do?".
+              Principles covers HOW I work; this covers WHAT you get. */}
+          <AnimatedSection animation="fade-in">
+            <div className="mt-12 border-t border-fg/20 pt-12">
+              <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">What I can build</div>
+              <ol className="mt-8 space-y-9">
+                {[
+                  {
+                    step: '01',
+                    title: 'Agentic AI systems',
+                    text: 'LLMs that take actions reliably: tool use, structured outputs under strict schemas, and evaluation loops that catch drift.',
+                    proof: 'Avatar-3D Pipeline',
+                    href: 'https://github.com/Murci20965/avatar-pipeline',
+                  },
+                  {
+                    step: '02',
+                    title: 'RAG & knowledge systems',
+                    text: 'Retrieval that grounds answers in your own data, with honest failure modes instead of confident invention.',
+                    proof: 'Applied at Nudle and Alignerr',
+                    href: '',
+                  },
+                  {
+                    step: '03',
+                    title: 'XR & 3D pipelines',
+                    text: 'Text or images into web-ready 3D: generation, headless normalisation and delivery into the browser via WebXR.',
+                    proof: 'Orbit-3D Asset Pipeline',
+                    href: 'https://github.com/Murci20965/orbit-3d-pipeline',
+                  },
+                  {
+                    step: '04',
+                    title: 'MLOps delivery',
+                    text: 'Models that survive contact with production: containerised services, CI/CD, and metrics measured on unseen data.',
+                    proof: 'Real Estate Predictor',
+                    href: 'https://github.com/Murci20965/real_estate_price_predictor',
+                  },
+                ].map((s) => (
+                  <li key={s.step} className="grid grid-cols-[2.5rem_minmax(0,1fr)]">
+                    <span className="pt-2 font-mono text-[11px] text-accent">{s.step}</span>
+                    <div>
+                      <h3 className="font-display text-2xl font-medium text-fg">{s.title}</h3>
+                      <p className="mt-2 font-sans text-base leading-relaxed text-fg/90">{s.text}</p>
+                      <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.15em] text-fg/80">
+                        {s.href ? (
+                          <a
+                            href={s.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline-offset-4 transition-colors hover:text-accent hover:underline"
+                          >
+                            Proof: {s.proof} ↗
+                          </a>
+                        ) : (
+                          <span>{s.proof}</span>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </AnimatedSection>
+        </div>
       </div>
     </section>
   );

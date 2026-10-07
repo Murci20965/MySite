@@ -12,9 +12,12 @@
   :root,
   [data-theme='dark'] {
     --c-bg: 10 10 10;
-    --c-fg: 255 255 255;
+    /* Warm cream, not pure white: it sits on the film like title lettering. */
+    --c-fg: 244 239 230;
     --c-surface: 14 14 14;
-    --c-accent: 163 230 53;
+    /* A lighter lime than lime-400: small lime labels sit straight on the film,
+       and a brighter lime holds contrast over more of its frames (measured). */
+    --c-accent: 200 242 107;
     color-scheme: dark;
   }
   [data-theme='light'] {
@@ -33,9 +36,13 @@
      their opacities; this applies to text only. */
   :root,
   [data-theme='dark'] {
-    --tx-faint: 0.62;
-    --tx-muted: 0.66;
-    --tx-soft: 0.7;
+    /* Over the film at near full brightness there is no box behind the text,
+       so faint text is not faint: hierarchy comes from size, weight and face. */
+    --tx-faint: 0.76;
+    --tx-muted: 0.8;
+    --tx-soft: 0.84;
+    --tx-body: 0.88;
+    --tx-strong: 0.92;
   }
   [data-theme='light'] {
     --tx-faint: 0.67;
@@ -184,62 +191,12 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
 }
 
 :root {
-  /* success check (10) */
-  --check-opacity-dur: 500ms;
-  --check-rotate-dur: 500ms;
-  --check-rotate-from: 80deg;
-  --check-bob-dur: 500ms;
-  --check-y-amount: 40px;
-  --check-path-dur: 500ms;
-  --check-path-delay: 80ms;
-  --check-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --check-ease-bob: cubic-bezier(0.34, 1.35, 0.64, 1);
   /* error shake (12) */
   --shake-distance: 6px;
   --shake-overshoot: 4px;
   --shake-dur-a: 80ms;
   --shake-dur-b: 60ms;
   --shake-ease: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Success check (transitions.dev 10) */
-.t-success-check {
-  display: inline-block;
-  transform-origin: center;
-  opacity: 0;
-  will-change: transform, opacity;
-}
-.t-success-check svg {
-  display: block;
-  overflow: visible;
-}
-.t-success-check svg path {
-  stroke-dasharray: 30;
-  stroke-dashoffset: 30;
-}
-.t-success-check[data-state='in'] {
-  animation:
-    t-check-fade var(--check-opacity-dur) var(--check-ease-out) forwards,
-    t-check-rotate var(--check-rotate-dur) var(--check-ease-out) forwards,
-    t-check-bob var(--check-bob-dur) var(--check-ease-bob) forwards;
-}
-.t-success-check[data-state='in'] svg path {
-  animation: t-check-draw var(--check-path-dur) var(--check-ease-out) var(--check-path-delay) forwards;
-}
-@keyframes t-check-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes t-check-rotate {
-  from { transform: rotate(var(--check-rotate-from)); }
-  to { transform: rotate(0deg); }
-}
-@keyframes t-check-bob {
-  from { translate: 0 var(--check-y-amount); }
-  to { translate: 0 0; }
-}
-@keyframes t-check-draw {
-  to { stroke-dashoffset: 0; }
 }
 
 /* Error state shake (transitions.dev 12) */
@@ -275,14 +232,6 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .t-success-check {
-    animation: none !important;
-    opacity: 1;
-  }
-  .t-success-check svg path {
-    animation: none !important;
-    stroke-dashoffset: 0 !important;
-  }
   .t-input {
     animation: none !important;
     transform: none !important;
@@ -320,9 +269,9 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   --chars-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Scroll-linked layers (progress bar, Vision band) are written from scroll
-   position every frame; they opt out of the global `*` transition rule, which
-   would otherwise ease each write over 200ms and make them trail the scroll. */
+/* Scroll-linked layers (progress bar, Vision title, filmstrip) are written from
+   scroll or film position every frame; they must never carry a transition, or
+   each write eases and the layer trails the scroll. */
 .t-scroll-linked {
   transition: none;
 }
@@ -379,25 +328,6 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
 @keyframes t-orbit-counter-ccw {
   from { transform: rotate(var(--counter-offset, 0deg)); }
   to { transform: rotate(calc(var(--counter-offset, 0deg) + 360deg)); }
-}
-
-/* Stacked scroll cards (Principles): each sticky card scales back and dims
-   slightly as the next one slides over it. Scroll-driven where supported;
-   elsewhere the cards simply stack cleanly. */
-@supports (animation-timeline: view()) {
-  .t-stack-card {
-    animation: t-stack-back linear both;
-    animation-timeline: view();
-    animation-range: exit 0% exit 100%;
-    transform-origin: 50% 0%;
-    will-change: transform;
-  }
-}
-@keyframes t-stack-back {
-  to {
-    transform: scale(0.94);
-    opacity: 0.6;
-  }
 }
 
 /* ---- Section entrance ------------------------------------------------------
@@ -668,6 +598,28 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   }
 }
 
+/* The assistant's point of light: a slow ring that expands and fades
+   (transform + opacity), the same light that forms in the film's chapter 02. */
+.t-light-ping {
+  animation: t-light-ping 2.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+@keyframes t-light-ping {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-light-ping {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 /* ---- Film cues -------------------------------------------------------------
    Text tied to a film moment: data-beat="mN:fraction" gets .is-beat from
    FilmStage once the film reaches that frame (and loses it when you scroll
@@ -699,6 +651,38 @@ html[data-film='on'] [data-beat].is-beat {
 }
 .text-fg\/60 {
   color: rgb(var(--c-fg) / var(--tx-soft));
+}
+.text-fg\/65,
+.text-fg\/70,
+.text-fg\/75 {
+  color: rgb(var(--c-fg) / var(--tx-body, 0.88));
+}
+.text-fg\/80 {
+  color: rgb(var(--c-fg) / var(--tx-strong, 0.92));
+}
+
+/* Title lettering over the film: a tight shadow for edge definition and a wide
+   soft one that darkens just the air around the words. Inherited, so set once
+   per section. Painted with the text (never per scroll frame). */
+.t-ink {
+  text-shadow:
+    0 1px 2px rgb(0 0 0 / 0.55),
+    0 0 26px rgb(0 0 0 / 0.42);
+}
+/* Small text has fewer pixels of its own to hold contrast, so it gets a denser
+   halo: a tight dark ring that darkens only the air right around each letter. */
+.t-ink .font-mono,
+.t-ink .text-sm,
+.t-ink .text-xs {
+  text-shadow:
+    0 1px 2px rgb(0 0 0 / 0.75),
+    0 0 8px rgb(0 0 0 / 0.65),
+    0 0 20px rgb(0 0 0 / 0.45);
+}
+/* Dark text on a light fill (cream buttons) must not carry the dark halo. */
+.t-ink .bg-fg,
+.t-ink .bg-accent {
+  text-shadow: none;
 }
 /* Accent text at reduced opacity drops below AA on paper. */
 [data-theme='light'] .text-accent\/80 {

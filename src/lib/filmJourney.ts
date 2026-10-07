@@ -7,8 +7,9 @@
  * scroll down and backward as you scroll up. Positions are measured from the
  * live layout, so the timeline holds at any screen size.
  *
- * The lighting is a uniform `dim` plus an optional one-sided `grade` on the
- * side where that section's text sits (unused until the film-forward layout). The sides come
+ * The film is the front of the site (Murci, 2026-10-07), so the lighting is
+ * art-directed, not a blanket veil: a light uniform `dim`, plus a soft
+ * one-sided `grade` on the side where that section's text sits. The sides come
  * from a measured frame map (where each section's frames are darkest and
  * calmest): desktop text sits in the dark side zones, phones (a centre crop)
  * in the top and bottom bands. Strengths are then tuned with a pixel contrast
@@ -46,31 +47,36 @@ const L = (dim: number, grade: GradeSide, strength: number): Look => ({ dim, gra
 
 export const KNOTS: FilmKnot[] = [
   // M1 0 s: the night desk. Copy on the dark window side, the laptop in full light.
-  { at: 'start', T: 0.0, wide: L(0.32, 'none', 0), tall: L(0.32, 'none', 0) },
+  { at: 'start', T: 0.0, wide: L(0.04, 'left', 0.78), tall: L(0.2, 'ends', 0.62) },
   // M1 5 s: glyphs start on the laptop screen. Left third measured darkest.
-  { at: 'about', T: 0.5, wide: L(0.72, 'none', 0), tall: L(0.72, 'none', 0) },
+  { at: 'about', T: 0.5, wide: L(0.1, 'left', 0.74), tall: L(0.38, 'ends', 0.55) },
   // M2 5.6 s: the light, just before it bursts. The network fills the frame,
   // so this is the brightest stretch the text crosses.
-  { at: 'experience', T: 1.56, wide: L(0.8, 'none', 0), tall: L(0.8, 'none', 0) },
+  { at: 'experience', T: 1.56, wide: L(0.44, 'left', 0.88), tall: L(0.66, 'ends', 0.6) },
   // A second knot near the top keeps the burst on the heading even where the
   // section is tall (phones: 4,300 px); the network then grows over the roles.
-  { at: 'experience', f: 0.12, T: 1.7, wide: L(0.8, 'none', 0), tall: L(0.8, 'none', 0) },
+  { at: 'experience', f: 0.12, T: 1.7, wide: L(0.44, 'left', 0.88), tall: L(0.66, 'ends', 0.6) },
+  // Hold the reading light to the end of the roles, then ease into the next look.
+  { at: 'experience', f: 0.9, T: 1.97, wide: L(0.44, 'left', 0.88), tall: L(0.66, 'ends', 0.6) },
   // M3 0 s: the network crystallises into cubes. Header top-left, cards below.
-  { at: 'opensource', T: 2.0, wide: L(0.66, 'none', 0), tall: L(0.66, 'none', 0) },
+  { at: 'opensource', T: 2.0, wide: L(0.3, 'top', 0.9), tall: L(0.34, 'top', 0.75) },
   // M4 4 s: through the gate. Numbers flank the bright aisle.
-  { at: 'stats', T: 3.4, wide: L(0.74, 'none', 0), tall: L(0.74, 'none', 0) },
+  { at: 'stats', T: 3.4, wide: L(0.06, 'sides', 0.58), tall: L(0.26, 'ends', 0.6) },
   // M5 0 s: the bright aisle; the title sits on its own pool (ExpandMedia).
-  { at: 'vision', T: 4.0, wide: L(0.68, 'none', 0), tall: L(0.68, 'none', 0) },
+  { at: 'vision', T: 4.0, wide: L(0.1, 'sides', 0.55), tall: L(0.24, 'none', 0) },
   // M5 8.5 s: the classroom, held to the end. The mission copy sits low.
-  { at: 'vision', f: 0.62, T: 4.85, wide: L(0.3, 'none', 0), tall: L(0.3, 'none', 0) },
+  { at: 'vision', f: 0.62, T: 4.85, wide: L(0.06, 'bottom', 0.6), tall: L(0.2, 'bottom', 0.62) },
   // M6 0 s: a room at night. The right edge measured darkest: the stack goes there.
-  { at: 'skills', T: 5.0, wide: L(0.8, 'none', 0), tall: L(0.8, 'none', 0) },
-  { at: 'education', T: 5.2, wide: L(0.8, 'none', 0), tall: L(0.8, 'none', 0) }, // M6 2 s: the skylight
-  { at: 'reviews', T: 5.38, wide: L(0.8, 'none', 0), tall: L(0.8, 'none', 0) }, // M6 3.8 s: dusk
-  { at: 'faq', T: 5.55, wide: L(0.8, 'none', 0), tall: L(0.8, 'none', 0) }, // M6 5.5 s: city lights
+  { at: 'skills', T: 5.0, wide: L(0.28, 'right', 0.88), tall: L(0.62, 'ends', 0.55) },
+  { at: 'skills', f: 0.85, T: 5.18, wide: L(0.28, 'right', 0.88), tall: L(0.62, 'ends', 0.55) }, // hold
+  { at: 'education', T: 5.2, wide: L(0.18, 'right', 0.84), tall: L(0.52, 'ends', 0.55) }, // M6 2 s: the skylight
+  // Principles is long, so its text scrolls through the whole height: a side grade, not a band.
+  { at: 'principles', T: 5.38, wide: L(0.26, 'right', 0.88), tall: L(0.52, 'ends', 0.55) }, // M6 3.8 s: dusk
+  { at: 'faq', T: 5.55, wide: L(0.33, 'right', 0.9), tall: L(0.66, 'ends', 0.55) }, // M6 5.5 s: city lights
+  { at: 'faq', f: 0.85, T: 5.69, wide: L(0.33, 'right', 0.9), tall: L(0.66, 'ends', 0.55) }, // hold
   // M6 7 s: rising into orbit. Heading in the space above, the form below.
-  { at: 'contact', T: 5.72, wide: L(0.62, 'none', 0), tall: L(0.62, 'none', 0) },
-  { at: 'end', T: 6.0, wide: L(0.62, 'none', 0), tall: L(0.62, 'none', 0) }, // M6 10 s: arcs over the globe
+  { at: 'contact', T: 5.72, wide: L(0.38, 'ends', 0.84), tall: L(0.34, 'ends', 0.65) },
+  { at: 'end', T: 6.0, wide: L(0.38, 'ends', 0.84), tall: L(0.34, 'ends', 0.65) }, // M6 10 s: arcs over the globe
 ];
 
 type Listener = (T: number) => void;

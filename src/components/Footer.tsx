@@ -6,7 +6,7 @@ export default function Footer() {
     { name: 'Experience', href: '#experience' },
     { name: 'Projects', href: '#opensource' },
     { name: 'Skills', href: '#skills' },
-    { name: 'Principles', href: '#reviews' },
+    { name: 'Principles', href: '#principles' },
     { name: 'Contact', href: '#contact' },
   ];
 

@@ -6,7 +6,7 @@ import Skills from './components/Skills';
 import Stats from './components/Stats';
 import OpenSource from './components/OpenSource';
 import Education from './components/Education';
-import Testimonials from './components/Testimonials';
+import Principles from './components/Principles';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -21,17 +21,23 @@ function App() {
   return (
     // overflow-x-CLIP, never -hidden: `hidden` turns this into a scroll
     // container and silently breaks every position:sticky on the page
-    // (the Vision expansion and the Principles card stack both depend on it).
+    // (the Vision stage and the pinned filmstrip both depend on it).
     <div className="min-h-screen bg-bg overflow-x-clip">
       {/* The film is the background of every section (fixed, z-0); the
           sections themselves stay transparent so it shows through. */}
       <FilmStage />
       <div className="grain-overlay" aria-hidden="true" />
       <div className="relative z-10">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-fg focus:px-5 focus:py-2.5 focus:font-sans focus:text-sm focus:font-semibold focus:text-bg"
+        >
+          Skip to content
+        </a>
         <SimpleCursor />
         <ScrollProgress />
         <Navigation />
-        <div className="relative">
+        <main id="main" className="relative">
           {/* No background on any wrapper: the fixed film paints beneath them.
               overflow-CLIP, not -hidden: `hidden` would make this a scroll
               container and break position: sticky inside it. */}
@@ -49,11 +55,11 @@ function App() {
             <ExpandMedia />
             <Skills />
             <Education />
-            <Testimonials />
+            <Principles />
             <FAQ />
             <Contact />
           </div>
-        </div>
+        </main>
         <Footer />
         <ChatWidget />
       </div>
