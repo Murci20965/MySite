@@ -668,25 +668,6 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   }
 }
 
-/* ---- Theme toggle ----------------------------------------------------------
-   Sun and moon share one slot; the inactive one turns away and shrinks.
-   The icon shows the destination (sun while dark). Transform + opacity. */
-.t-theme svg {
-  transition:
-    transform 420ms var(--stagger-ease),
-    opacity 260ms ease;
-}
-.t-theme[data-current='light'] .t-theme-sun,
-.t-theme[data-current='dark'] .t-theme-moon {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.6);
-}
-@media (prefers-reduced-motion: reduce) {
-  .t-theme svg {
-    transition: none !important;
-  }
-}
-
 /* ---- Film cues -------------------------------------------------------------
    Text tied to a film moment: data-beat="mN:fraction" gets .is-beat from
    FilmStage once the film reaches that frame (and loses it when you scroll
