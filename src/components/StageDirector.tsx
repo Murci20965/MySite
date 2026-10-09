@@ -2,6 +2,9 @@ import { useEffect } from 'react';
 import { DECK, deckDepth, placeBox, stepLook } from '../lib/stage';
 import type { Place } from '../lib/stage';
 
+/** Where a nav link lands in a scene, in steps: past the first step's arrival (it ends at 0.12). */
+const LAND = 0.3;
+
 type SceneState = {
   el: HTMLElement;
   steps: HTMLElement[];
@@ -57,11 +60,15 @@ export default function StageDirector() {
         s.stepPx = (s.stepVh / 100) * vh;
         if (!staged) {
           s.el.style.height = '';
+          s.el.style.scrollMarginTop = '';
           delete s.el.dataset.active;
           s.steps.forEach(clearStep);
           continue;
         }
         s.el.style.height = `${Math.round(s.steps.length * s.stepPx)}px`;
+        // A nav link lands LAND into the first step, fully arrived and inside the scene's film window
+        // (at the scene's top it was still half faded in, with the previous scene's film).
+        s.el.style.scrollMarginTop = `${-Math.round(LAND * s.stepPx)}px`;
         s.steps.forEach((step, i) => {
           const b = placeBox(s.places[i], vw, vh);
           step.style.left = `${b.left}px`;

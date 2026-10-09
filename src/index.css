@@ -680,6 +680,11 @@ html[data-film='on'] .scene-step {
 html[data-film='on'] .scene-step[data-on] {
   pointer-events: auto;
 }
+/* Staged, a nav link cuts to its chapter. A smooth scroll would sweep the film through every
+   chapter in between (frames that are not loaded) and flash each chapter's steps past. */
+html[data-film='on'] {
+  scroll-behavior: auto;
+}
 /* The shade under a step (scenes with data-pool: the globe chapters, the brightest frames). Small
    cream text needs the background under it at or below ~0.15 luminance; the Earth's cloud tops
    are far brighter, and shading the whole frame would dim the globe. So the shade sits only behind

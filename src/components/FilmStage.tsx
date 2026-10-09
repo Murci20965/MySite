@@ -23,8 +23,9 @@ const PRE_SCROLL_FRAMES = 24;
 
 type Beat = { el: Element; T: number; on: boolean };
 type Frame = ImageBitmap | HTMLImageElement;
-/** `fails` counts failed fetches and decodes; a frame gets MAX_TRIES, then it is skipped. */
-type Slot = { blob?: Blob; frame?: Frame; fetching?: boolean; decoding?: boolean; fails?: number };
+/** `fails` counts failed fetches and decodes; a frame gets MAX_TRIES, then it is skipped. `abort`
+ *  cancels a download the playhead has left behind (a jump), so it does not hold up the new ones. */
+type Slot = { blob?: Blob; frame?: Frame; fetching?: boolean; decoding?: boolean; fails?: number; abort?: AbortController };
 const MAX_TRIES = 2;
 
 /** What the film is doing, readable from the console (`__filmStatus`) when it does not show. */
@@ -166,15 +167,17 @@ export default function FilmStage() {
     let decodes = 0;
     let focus = 0;
 
-    /** Fetch order: the playhead outward within HORIZON frames, every 4th frame first, then the rest. */
+    /** Fetch order: the playhead and its neighbours (what a jump lands on), then outward within
+     *  HORIZON frames, every 4th frame first, then the rest. */
     const fetchOrder = (): number[] => {
       if (still || !started) return [focus]; // the still, or the poster before the page has loaded
       const lo = scrolled ? Math.max(0, focus - HORIZON) : 0;
       const hi = Math.min(FRAME_COUNT - 1, scrolled ? focus + HORIZON : PRE_SCROLL_FRAMES - 1);
+      const head = [focus, focus + 1, focus - 1].filter((j) => j >= lo && j <= hi);
       const idx: number[] = [];
-      for (let j = lo; j <= hi; j++) idx.push(j);
+      for (let j = lo; j <= hi; j++) if (!head.includes(j)) idx.push(j);
       const byDist = (a: number, b: number) => Math.abs(a - focus) - Math.abs(b - focus);
-      return [...idx.filter((j) => j % 4 === 0).sort(byDist), ...idx.filter((j) => j % 4 !== 0).sort(byDist)];
+      return [...head, ...idx.filter((j) => j % 4 === 0).sort(byDist), ...idx.filter((j) => j % 4 !== 0).sort(byDist)];
     };
 
     /** Which decoded frames to keep: a window around the playhead. */
@@ -182,12 +185,16 @@ export default function FilmStage() {
 
     const pump = () => {
       if (disposed) return;
-      // Evict decoded frames outside the window (the encoded file stays cached in memory).
+      // Evict decoded frames outside the window (the encoded file stays cached in memory). The frame
+      // on screen stays until a nearer one is drawn: after a jump the film holds its last picture
+      // instead of going black while the new frames arrive (measured: 1-2.5 s of black on a nav jump).
+      // Downloads the playhead has left behind are cancelled.
       slots.forEach((s, j) => {
-        if (s.frame && !keep(j)) {
+        if (s.frame && !keep(j) && s.frame !== shown) {
           release(s.frame);
           s.frame = undefined;
         }
+        if (s.fetching && Math.abs(j - focus) > HORIZON) s.abort?.abort();
       });
       // Decode what the window needs and is already downloaded, nearest first.
       const want: number[] = [];
@@ -229,10 +236,11 @@ export default function FilmStage() {
         // A frame that failed MAX_TRIES times is skipped; the nearest decoded one is drawn.
         if (s.blob || s.fetching || (s.fails ?? 0) >= MAX_TRIES) continue;
         s.fetching = true;
+        s.abort = new AbortController();
         fetches++;
         const forRendition = rendition;
         const url = frameUrl(rendition, j);
-        fetch(url)
+        fetch(url, { signal: s.abort.signal })
           .then((r) => (r.ok ? r.blob() : Promise.reject(new Error(`HTTP ${r.status}`))))
           .then((blob) => {
             if (disposed || forRendition !== rendition) return;
@@ -240,12 +248,14 @@ export default function FilmStage() {
             status.fetched++;
           })
           .catch((err) => {
+            if (err instanceof DOMException && err.name === 'AbortError') return; // left behind, not a failure
             s.fails = (s.fails ?? 0) + 1;
             status.failedFetches++;
             fail('fetch', `a frame could not be fetched: ${url} (${errorText(err)})`);
           })
           .finally(() => {
             s.fetching = false;
+            s.abort = undefined;
             fetches--;
             pump();
           });
@@ -255,12 +265,14 @@ export default function FilmStage() {
     // ---- Drawing ----
     let dirty = true;
     let lastKey = '';
-    const nearest = (i: number) => {
+    let shown: Frame | undefined; // the frame drawn last as the base, kept until a nearer one is drawn
+    /** The decoded frame nearest to i, and how far it is (frames). */
+    const nearest = (i: number): { frame?: Frame; d: number } => {
       for (let d = 0; d < slots.length; d++) {
-        if (slots[i - d]?.frame) return slots[i - d].frame;
-        if (slots[i + d]?.frame) return slots[i + d].frame;
+        if (slots[i - d]?.frame) return { frame: slots[i - d].frame, d };
+        if (slots[i + d]?.frame) return { frame: slots[i + d].frame, d };
       }
-      return undefined;
+      return { d: Infinity };
     };
     const frameSize = (f: Frame) => ('naturalWidth' in f ? [f.naturalWidth, f.naturalHeight] : [f.width, f.height]);
     const cover = (img: Frame, alpha: number) => {
@@ -314,22 +326,32 @@ export default function FilmStage() {
 
     const draw = (T: number, pose: Pose) => {
       const { i, a } = frameAt(T);
-      const base = nearest(i);
+      const { frame: base, d } = nearest(i);
       if (base) {
         cover(base, 1);
+        shown = base;
         // Blend toward the next kept frame (frames are spaced by equal motion, so this stays subtle).
         const next = slots[i + 1]?.frame;
         if (!still && a > 0.02 && next) cover(next, a);
+        // A frame held from far away (a jump, its frames still loading) is another scene: dip it
+        // toward dark, so the wait reads as a cut through black, not the wrong picture.
+        if (d > WINDOW[rendition]) {
+          ctx.globalAlpha = 0.7;
+          fillBgRect();
+        }
       } else fillBg();
       // Lighting: the two knots' looks cross-fade as the scroll moves between them.
       lightBy(pose.a, pose.a === pose.b ? 1 : 1 - pose.t);
       if (pose.a !== pose.b) lightBy(pose.b, pose.t);
       ctx.globalAlpha = 1;
     };
-    const fillBg = () => {
-      ctx.globalAlpha = 1;
+    const fillBgRect = () => {
       ctx.fillStyle = `rgb(${bg})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
+    const fillBg = () => {
+      ctx.globalAlpha = 1;
+      fillBgRect();
     };
 
     // ---- Text cues ----
