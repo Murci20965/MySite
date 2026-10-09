@@ -1,7 +1,7 @@
 # Motion system
 
 How motion works on this site, the rules every animation follows, and how to add one without
-breaking them. Last updated 2026-10-07.
+breaking them. Last updated 2026-10-09.
 
 ## The rules
 
@@ -11,16 +11,16 @@ breaking them. Last updated 2026-10-07.
    `box-shadow` and colour tweens all repaint or re-layout every frame.
 2. **Reduced motion is honoured twice.** Every effect ships a `@media (prefers-reduced-motion:
    reduce)` block, and a global rule in `src/index.css` zeroes all durations as a backstop. JS
-   effects (the film, filmstrip, number pop-in) also check `matchMedia` and skip the motion
-   entirely; the film then shows one still per section and every cued text is visible.
+   effects (the film, the reveal stage, the hero) also check `matchMedia` and skip the motion
+   entirely; the film then shows one still per section, every cued text is visible and every
+   scene reads as a normal section.
 3. **Fail open.** Nothing may stay invisible because an observer missed. `AnimatedSection`
    reveals by IntersectionObserver, by a geometry check on mount and by a 2.5 s timer.
 4. **Tokens, not literals.** Durations and easings live as CSS custom properties in
-   `src/index.css` (the transitions.dev naming: `--enter-*`, `--stagger-*`, `--tilt-*`,
-   `--skel-*`, ...). The shared ease is `cubic-bezier(0.22, 1, 0.36, 1)`.
+   `src/index.css` (the transitions.dev naming: `--enter-*`, `--chars-*`, `--shake-*`, ...). The shared ease is `cubic-bezier(0.22, 1, 0.36, 1)`.
 5. **No `will-change` on large things that wait.** The hint pins a GPU layer for as long as it
-   is set. It is used on elements that move continuously (marquee, orbit, progress
-   bar, filmstrip) and on a few tiny one-shot elements (hero lines, digits, the success check), never on
+   is set. It is used on elements that move continuously (the progress bar, the film canvas)
+   and on a few tiny one-shot elements, never on
    section-sized blocks waiting below the fold. Transitions are promoted automatically while
    they run.
 6. **Scroll-linked layers take no CSS transition.** Anything JS writes from scroll or film
@@ -34,28 +34,21 @@ breaking them. Last updated 2026-10-07.
 | Effect | Where | Animates | Notes |
 |---|---|---|---|
 | Section entrance | `AnimatedSection.tsx`, `.t-enter` | opacity, transform | `index` prop cascades list items by `--enter-stagger` (70 ms, capped at 4 steps) |
-| Hero text reveal | `Hero.tsx`, `.t-stagger-line` | opacity, transform | runs once on mount |
+| Hero copy pass | `Hero.tsx` | opacity, transform | fixed on the film's first shot; passes the camera over the first 50vh of scroll; ordinary first screen under reduced motion |
+| Reveal stage | `StageDirector.tsx`, `lib/stage.ts` | opacity, transform | sections 02-10 as scenes: one step at a time (or a deck that stacks) on a fixed stage, driven by scroll position; see `stage.md` |
 | Heading reveal | `RevealHeading.tsx`, `.t-chars` | opacity, transform | per character; no `will-change` (it held a layer per character) |
-| Section numeral drift | `.t-drift` | transform | CSS scroll-driven (`animation-timeline: view()`), static where unsupported |
 | Reading progress | `ScrollProgress.tsx` | transform (`scaleX`) | rAF-throttled; `t-scroll-linked` |
 | Film | `FilmStage.tsx`, `lib/filmJourney.ts` | canvas frames (2 blended) + lighting | the front of the site, scrubbed by scroll, eased (70/110 ms), off-thread decode; see `film.md` |
 | Film text cues | `[data-beat]`, `.is-beat` | opacity, transform | text lands on a film moment; hidden only while `html[data-film="on"]` |
-| Vision title and copy | `ExpandMedia.tsx` | transform, opacity | driven by the film clock (doorway opens, classroom appears), not their own scroll; `t-scroll-linked` |
-| Open-source filmstrip | `OpenSource.tsx`, `.t-film-*` | transform, opacity | pinned horizontal strip, see below; carousel on phones and under reduced motion |
-| Live badge | `.t-live` | transform, opacity | ring expands and fades; marks projects with a live demo |
-| Number pop-in | `PopNumber.tsx`, `.t-digit` | opacity, transform | Stats counters pop on a film moment (`beat="m4:0.6"`) |
 | Chat typing dots | `ChatWidget.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" |
 | Assistant's point of light | `ChatWidget.tsx`, `.t-light-ping` | transform, opacity | a slow ring on the launcher (2.8 s); off under reduced motion |
 | Navbar hide and return | `Navigation.tsx` | transform | slides up on scroll down, back on scroll up (6 px of intent); active link dot fades |
-| Stack layers | `Skills.tsx` | opacity, colour on pick | still otherwise: the film is the motion in that section |
 | Arrow nudge | `.t-nudge` | transform | |
-| Marquee | `.t-marquee-track` | transform | infinite; frozen by the reduced-motion rule |
 
 ### Deliberate exceptions
 
-- **FAQ accordion height** (`FAQ.tsx`): `grid-template-rows` 0fr to 1fr. There is no transform
-  that grows a box without distorting its text. It is one 250 ms tween on a small list; the
-  answer itself only fades and rises, and padding sits on the inner block, never the track.
+- **"Read more"** (every scene): a native `<details>`, which opens instantly (no height tween);
+  its body scrolls inside the step.
 - **Hover colour changes**: explicit `transition-colors` (or `transition-opacity`) classes ease
   colour and border changes on hover. They are single-element, user-triggered, and not animations
   in the sense above.
@@ -76,33 +69,13 @@ canvas), the Principles sticky card stack (`.t-stack-card`), the contact success
 no longer claims a success it cannot know), the hero terminal and the launcher stow, the theme
 toggle morph, the nav underline (`.t-navlink`) and the global `*` transition rule.
 
-## Open-source filmstrip
-
-The single work section (option C of three, chosen by Murci on 2026-10-06). Mode is decided by
-`(min-width: 1024px) and (pointer: fine) and (prefers-reduced-motion: no-preference)`.
-
-**Pinned mode.** The wrapper's height becomes `innerHeight + travel`, and a sticky stage holds
-the header and track for that extra scroll. Each rAF-throttled scroll event computes progress
-`p` from the wrapper's top and writes:
-- `translate3d(-p * travel)` on the track;
-- per panel, opacity `1 - min(|d| * 0.9, 0.6)` and scale `1 - min(|d| * 0.1, 0.06)`, where `d` is
-  the panel's distance from the stage centre in stage widths (from `offsetLeft`, pre-transform);
-- a parallax `translate3d(-d * 48px)` on the panel's diagram, which is 2rem wider than its
-  frame on each side so no edge shows;
-- the header's progress bar (`scaleX(p)`) and the "01 of 07" counter (text only when it changes).
-
-`travel` is the last panel's right edge plus the end gutter, minus the stage width.
-(`scrollWidth` drops a flex row's end padding and left the last panel overhanging.) The stage is
-`overflow-x: clip`, so focus cannot scroll it sideways. Instead, focusing a link in an off-screen
-panel scrolls the page to the point where that panel is centred.
-
-**Carousel mode.** Native `scroll-snap-type: x mandatory` with `scroll-padding` equal to the page
-gutter, Prev/Next buttons, and the same counter and bar driven by `scrollLeft`.
-
-Verified headless (Playwright) at 1280x800, 1366x768, 1440x900, 1920x1080 and 360x702, plus
-reduced motion. Stage stays at y=0 while pinned, track 0 -> -2136 px at 1280 wide, counter
-01 -> 07, keyboard focus centres panel 6 at x=640, touch swipe advances the carousel, and the
-header row clears the floating chat launcher at every size.
+With the v4 reveal stage (2026-10-09): the Open-source filmstrip (pinned horizontal strip and
+phone carousel, `.t-film-*`, `.t-carousel`, option C of 2026-10-06), the live badge ping
+(`.t-live`), the Stats number pop-in (`PopNumber`, `.t-digit`), the capability marquee
+(`Marquee`), the hero's line stagger (`.t-stagger-line`), the Vision doorway driven by the film
+clock, the FAQ accordion, the Skills layer picker and the unused section-numeral drift
+(`.t-drift`). Each section is now a scene on the stage (`stage.md`); all of these are in git
+history (before `feat/v4-film` phase C).
 
 ## Adding an animation
 
@@ -115,6 +88,6 @@ header row clears the floating chat launcher at every size.
 5. If JS writes it from scroll position, opt it out of the global transition (rule 6).
 6. Verify in a real browser, not only with tsc. On this laptop a local `vite build` can OOM
    while other sessions run; the Vercel preview build of the pushed branch is the fallback,
-   and headless Playwright (see the filmstrip numbers above) covers motion that a hidden
+   and headless Playwright (`scratchpad/v4/all_check.cjs`) covers motion that a hidden
    Browser pane cannot run.
 7. Add the effect to the inventory above.

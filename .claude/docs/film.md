@@ -69,10 +69,13 @@ it is hard, for the same weight.
 
 ## Contracts
 
-**Knot** `{ at: sectionId | 'start' | 'end', f?: number, T: number (seconds), wide: Look, tall: Look }`,
-where `Look = { dim, grade, strength, reach? }` and `grade` is one of none, left, right, top, bottom,
-sides (both walls) or ends (top and bottom); `reach` is how far a one-sided grade extends across the
-frame (default 0.62). A knot pins film time T to the scroll position where
+**Knot** `{ at: sectionId | 'start' | 'end', edge?: 'top' | 'bottom', f?: number, T: number (seconds),
+wide: Look, tall: Look }`, where `Look = { dim, grade, strength, reach? }` and `grade` is one of none,
+left, right, top, bottom, sides (both walls) or ends (top and bottom); `reach` is how far a one-sided
+grade extends across the frame (default 0.62). A knot with `edge` pins film time T to the scroll
+position where section `at`'s top (or bottom) edge meets the top of the viewport: the staged scenes
+use a pair, so each scene's film window runs exactly from its first step arriving to its last step
+gone (stage.md, "The scenes"). A knot without `edge` pins T to the scroll position where
 section `at`'s top plus `f` of its height reaches the focus line (the middle of the viewport).
 Between knots, T moves linearly and the two looks cross-fade. Positions are measured on resize,
 font load and body size changes (not every frame), so the timeline holds at any screen size. Extra
@@ -83,49 +86,41 @@ FAQ).
 **Easing** The drawn time eases toward the scroll target (time constant 70 ms on touch screens,
 110 ms with a mouse), so wheel notches glide instead of cutting; jumps over 3 s of film snap.
 
-**Text cue** `data-beat="t:seconds"` on any element (e.g. `t:5.6` = 5.6 s into the film). The
+**Text cue** `data-beat="t:seconds"` on any element (e.g. `t:20.45` = 20.45 s into the film). The
 element gets `.is-beat` while the eased T reaches its time (0.4 s hysteresis on the way back). CSS
 hides cued elements only while `html[data-film="on"]`, which is set on the visitor's FIRST SCROLL:
-before that (and for crawlers, which never scroll) all text is visible. Vision and the Stats
-counters follow the same rule. A malformed or out-of-range cue never fires, so its text would stay
-hidden after the first scroll: check every cue with the playback script after timing changes.
-Put cues on wrappers, not on elements that animate transform themselves.
+before that (and for crawlers, which never scroll) all text is visible. A malformed or out-of-range
+cue never fires, so its text would stay hidden after the first scroll: check every cue with the
+playback script after timing changes. Put cues on wrappers, not on elements that animate transform
+themselves.
 
 **Clock** `filmClock.subscribe(fn)` → unsubscribe; `filmClock.on` is false under reduced motion
-or Save-Data, and subscribers then show their final state. `PopNumber beat="t:9.4"` pops on a
-film moment.
+or Save-Data, and subscribers then show their final state.
 
-### Current cues (v4 phase A: retimed to the new film; phase B/C replace them with reveals)
+### Current cues (v4)
+Sections 02-10 no longer use cues: they are staged scenes whose steps are driven by scroll position
+(stage.md), with their film windows pinned by `edge` knots. One cue remains:
+
 | Element | Cue | Film moment |
 |---|---|---|
-| About heading / lead / columns | `t:3.6` / `t:4.1` / `t:4.6` | the monitor fills, through the screen, the code blurs |
-| Experience heading | `t:5.6` | the light field |
-| Open-source heading | `t:7.8` | the threads stream in |
-| Stats counters | `t:9.4` (PopNumber) | the glow |
-| Vision words part / copy | T 10.2-10.6 / 10.7-10.95 (filmClock) | through the glow / the city appears |
-| Contact heading | `t:20.45` | the settled globe |
+| Contact heading | `t:20.45` | the settled globe, the arcs fanned out |
 
-Verified 2026-10-09 (desktop, full scroll): film time runs strictly forward 0 → 20.94, all 6 cues
-fire, all 315 frames fetched, no failures or console errors.
+Verified 2026-10-09 (desktop and phone, every scene): film time stays inside each scene's window,
+all 315 frames fetched where played, no failed fetches or decodes, no console errors.
 
 ## Lighting and readability (measured)
-**v4 note:** the looks and the measurements below are the previous film's; the knots carry them
-over as placeholders. They are re-measured on the v4 frames as each section's reveal layout lands.
-
-The film runs at near full brightness. Each section's look is a light uniform veil plus a soft
-one-sided grade (black, strongest at the frame edge, gone by 62% of the way across) on the side
-where its text sits. The sides come from a **frame map**: for each section, the frames that play
-behind it were measured on a grid for brightness (p90) and busyness, and the text was moved to the
-darkest, calmest zone. Desktop: left for the hero, About and Experience; right for Skills,
-Education, Principles and FAQ; both rack walls for Stats; top for the Open-source header; top and
-bottom for Contact. The right-column sections (Skills, Education, Principles, FAQ) start their text
-near the middle of the frame, so their grade reaches 0.85 across; at the default 0.62 it faded out
-before the text column began. As Vision opens, Stats' last row leaves under the aisle's ceiling
-lights, so Vision starts with a short top shade (reach 0.35) instead of wall shades. Phones (a
-centre crop) use the top and bottom bands, with a reading veil (0.46-0.66) in long reading sections
-(Experience, Stats, Skills, Education, Principles, FAQ, Contact) because their text spans the width
-and scrolls through the middle. Long sections need a side grade, not a band: their text travels the
-whole screen height.
+The film runs at near full brightness. Each staged scene's look is a light uniform veil plus a soft
+one-sided grade (black, strongest at the frame edge) on the side its steps sit on (placements:
+stage.md, "The scenes"). Desktop: the right for About, Experience and Open source (the film's
+open right while the threads stream in from the left); the top for Numbers, Vision, Stack and the
+three globe chapters (the sky above the city, then the space above the Earth's edge). Phones (a
+centre slice): the bottom band for About and Open source, both bands with a veil for Experience
+(its steps sit mid-screen), the top band for Numbers through Questions. The globe's cloud tops are
+the brightest frames of the film and the steps sit right on them, so the globe chapters do not get
+more frame shade (it would dim the globe); each step carries its own soft shade instead (`pool`,
+stage.md). During the last question the light turns to Contact's (top and bottom bands, knots at
+FAQ f 0.844 and 0.956), so Contact's first lines rise into shade. Contact and the footer keep v3's
+look (Murci's call); the phone veil there went from 0.60 to 0.66 after Contact started lower.
 
 Lettering does the rest, with no text boxes:
 - cream text (`--c-fg` 244 239 230) with `.t-ink`: a tight shadow plus a soft 26 px one; small and
@@ -135,21 +130,35 @@ Lettering does the rest, with no text boxes:
   tiers (raised to 76-92%) are only for small metadata. Text lime is lighter (`--c-accent`
   200 242 107) but still about 11% darker than the cream, so small lime text needs its section's
   shade;
-- a feathered radial "pool" under chapter kickers, the Open-source header and Contact's link list
-  (desktop: the globe's lime arcs cross it, and lime headings on lime arcs lose their edge), and
-  Vision's pool behind its title and floor under its copy (soft shade, no edges);
+- a feathered radial "pool" under the chapter kickers (the hero, Contact) and Contact's link list
+  (desktop: the globe's lime arcs cross it, and lime headings on lime arcs lose their edge); the
+  step shade in the globe chapters (stage.md); controls sit on the dark glass of the "Ask Murci"
+  button (the project links, the menu), and so do the cards Murci chose (the Stack deck, the
+  project cards);
 - the footer is type on the film's last frame (the arcs over the globe), not a slab: the end
   knot's bottom band shades it, and it follows the same lettering rules.
 
 Verified with a **pixel contrast scan**: every visible text box is measured against the real
 screenshot pixels under it (film + lighting + shadows; text made transparent), using the brightest
 decile under light text. The film changes with scroll, so the scan steps every 0.1 viewport over the
-whole page, and every 28-32 px over any section that failed or sits on a bright moment. Final
+whole page, and every 28-32 px over any section that failed or sits on a bright moment. v3 final
 (2026-10-07): **0 failures** at 1280x800 (2,198 text-box checks over the page) and 360x702 (2,104
 over the page, then each re-tuned stretch again at 28 px: hero, Experience, Stats into Vision,
 Contact and the footer). Later tuning only added shade, so it cannot undo a pass elsewhere. An
 earlier scan at 0.75-viewport steps had reported 0 failures where the fine scan found 25: a coarse
-scan is a sample. The scan script lives in the session scratchpad (`film_bg_check.cjs`;
+scan is a sample.
+
+**v4 (2026-10-09).** First full fine scan after the scenes landed: 184 failures at 1280x800 and 117
+at 360x702: the globe chapters' text on the cloud tops (down to 2.1:1), Stack's small lime line
+(2.8:1 on phones), Contact's first lines entering under the globe's look (1.8:1), and text inside
+closed "Read more" panels, which is laid out but never painted (the scanner now skips it). After the
+step shade, the darker Stack glass and the Contact handoff: 14 and 6, all near misses (3.99-4.25 of
+4.5), each fixed and re-scanned at 28 px: 0 failures in each (lowest 4.70, 4.71 and 4.83). Left
+open: Open source's small "Live demo" label on phones (3.99), which the Phase D project card puts on
+dark glass. The scanner must switch staged mode on (a first scroll) before it measures the page:
+read at load, the page was half its staged length and the scan stopped halfway.
+
+The scan script lives in the session scratchpad (`film_bg_check.cjs`;
 `CFROM`/`CTO`/`CSTEP` narrow a re-scan); it skips text under the fixed nav, the chat button and the
 progress hairline, clips text to its scroll containers, and treats blended text separately.
 
@@ -162,8 +171,17 @@ progress hairline, clips text to its scroll containers, and treats blended text 
   315-frame film, the old every-8th-frame spine would hold ~40 decoded frames, several hundred MB on
   desktop. Encoded files stay in memory once fetched.
 - Before the window `load` event only the poster frame loads; before the first scroll, only the
-  opening 24 frames. Then frames within 60 of the playhead load outward from it (every 4th frame
-  first), at most 4 in flight. Until a frame arrives the nearest decoded one is drawn.
+  opening 24 frames. Then the playhead's own frame and its two neighbours load first, then frames
+  within 60 of the playhead outward from it (every 4th frame first), at most 4 in flight. A download
+  the playhead has left more than 60 frames behind is cancelled (`AbortController`; not counted as
+  a failure), so after a jump the new frames do not queue behind the old ones.
+- **Jumps** (a nav link cuts to a chapter, a restored position): until a frame near the playhead
+  is decoded, the frame on screen is held, never evicted, and dimmed 70% toward the background when
+  it is more than the decode window away (it is another scene), so the wait reads as a cut through
+  black. Measured 2026-10-09, local server, from the top to Education / Principles / Stack: before
+  the fix the canvas was near-black for 1-2.5 s (the smooth scroll swept the film and every frame
+  behind the playhead was evicted before new ones arrived); after it, the dimmed held frame for
+  0.2-1.3 s (runs vary), then the chapter's frame, never black, on desktop and phone.
 - Caching (`vercel.json`): `/film/*` for 7 days with stale-while-revalidate. Re-encoded frames must
   go in a new folder (v4 lives in `film/v4/`), or visitors keep the old ones for up to a week.
 - Sizes (measured): wide 20.5 MB, tall 6.9 MB for all 315 frames. A full read of the page costs
@@ -210,4 +228,5 @@ Static, same-origin public assets only (the canvas is never tainted). No user da
   it is full cream; then extend that knot's grade `reach` (if the grade fades out before the text
   column), or raise its `strength` or `dim`, for the rendition that failed; re-run the pixel contrast
   scan at both sizes, at 0.1 viewport steps or finer (the film changes between samples; a 0.75-step
-  scan once reported 0 failures where a fine one found 25). No panels behind text (Murci's brief).
+  scan once reported 0 failures where a fine one found 25). No panels behind running text (Murci's
+  brief): staged scenes over the brightest frames take the step shade (`pool`) instead.

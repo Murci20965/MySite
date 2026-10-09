@@ -1,7 +1,7 @@
 # Content Truth Map
 
 
-## Current state of the claims (2026-10-07)
+## Current state of the claims (2026-10-09)
 
 The sections further down are the August plan, kept as history. This is what the site says now,
 and where each claim comes from (source of truth: the Sep 2026 CV, then the public repos).
@@ -9,12 +9,15 @@ and where each claim comes from (source of truth: the Sep 2026 CV, then the publ
 | Claim on the site | Source |
 |---|---|
 | Stats: 7 open-source projects | the seven cards in `OpenSource.tsx` (all public repos) |
-| Stats: 3 AI roles; 6 certifications | the CV (Nudle, Alignerr, Artintel; its certifications list) |
+| Stats: 3 AI roles; 6+ certifications | the CV (Nudle, Alignerr, Artintel). The CV lists six certifications; the "6+" is Murci's instruction (2026-10-09) |
 | Stats: 2 live AI demos | the avatar and orbit Vercel apps (see open items: their HF backends) |
 | Education: ALX/ExploreAI Data Science; DynamicDNA Systems Development NQF 4; Wits, two BSc programmes incomplete | the CV, word for word (extra bullets the CV does not make were removed) |
 | Skills ("From model to classroom"): seven categories | the CV's "Core technical skills", word for word (plus XR & 3D from its experience and project lines) |
 | "What I can build" RAG proof: Artintel | the CV ("clean tokens for LLM training / RAG applications"); "Nudle and Alignerr" was not backed by the CV |
 | Principles (#principles, was #reviews) | Murci's own standards, shown as numbered type, not as quotes or testimonials |
+| About, one short line per step (v4) | condensations of his About paragraphs, which stay word for word behind "Read more" |
+| FAQ, question plus the answer's first sentence (v4) | the full answers, unchanged, behind "Read more" |
+| "Currently learning" (Education) | the only such list: Skills' "Currently exploring" repeated it and was dropped in v4 |
 
 Open items (Murci's decisions or actions):
 - The two live demos call retired Groq models on their HF Spaces until the `fix/limits-and-models`
