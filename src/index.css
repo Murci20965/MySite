@@ -680,6 +680,10 @@ html[data-film='on'] .scene-step {
 html[data-film='on'] .scene-step[data-on] {
   pointer-events: auto;
 }
+/* Stack mode: a covered card keeps its glass slab, but its words fade with depth. */
+html[data-film='on'] .deck-text {
+  opacity: max(0, calc(1 - var(--depth, 0) * 1.4));
+}
 /* An open "Read more" scrolls inside the step, so the step never outgrows the screen or runs
    under the "Ask Murci" button (measured: 38vh ran 36 px past a 702 px phone screen). */
 html[data-film='on'] .step-more[open] .step-more-body {

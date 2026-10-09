@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { placeBox, stepLook } from '../lib/stage';
+import { DECK, deckDepth, placeBox, stepLook } from '../lib/stage';
 import type { Place } from '../lib/stage';
 
 type SceneState = {
@@ -90,12 +90,20 @@ export default function StageDirector() {
         }
         if (!active) continue;
         const lastT = p - (n - 1);
+        const ts = s.steps.map((_, i) => p - i);
         s.steps.forEach((step, i) => {
-          const look = stepLook(p - i, s.stack, lastT);
-          step.style.opacity = look.opacity.toFixed(3);
-          step.style.transform = `translate3d(0, ${look.y.toFixed(1)}px, 0) scale(${look.scale.toFixed(4)})`;
-          // Only a step that is clearly on screen takes pointer events (its links and Read more).
-          if (look.opacity > 0.5) step.dataset.on = '';
+          const look = stepLook(ts[i], s.stack, lastT);
+          // A deck card sinks into the pile as later cards land on it (lib/stage.ts DECK).
+          const depth = s.stack ? deckDepth(ts[i], ts.slice(i + 1)) : 0;
+          const y = look.y - DECK.lift * depth;
+          const scale = look.scale * (1 - DECK.shrink * Math.min(depth, 6));
+          const opacity = look.opacity * (1 - DECK.dim * Math.min(depth, 4));
+          step.style.opacity = opacity.toFixed(3);
+          step.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0) scale(${scale.toFixed(4)})`;
+          // A covered card keeps its glass but its words fade, so transparent cards never read through.
+          if (s.stack) step.style.setProperty('--depth', depth.toFixed(3));
+          // Only a step that is clearly on screen, and on top of its pile, takes pointer events.
+          if (opacity > 0.5 && depth < 0.5) step.dataset.on = '';
           else delete step.dataset.on;
         });
       }

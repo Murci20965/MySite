@@ -79,6 +79,15 @@ const EXIT: [number, number] = [0.8, 1.0];
 const ramp = (t: number, [a, b]: [number, number]) => Math.min(1, Math.max(0, (t - a) / (b - a)));
 const ease = (k: number) => 1 - (1 - k) ** 3;
 
+/** A deck card (stack mode) sinks into the pile as later cards land on it: depth is how many cards
+ *  have arrived above it (fractional while one is arriving). Each level lifts it so its top edge
+ *  peeks out, shrinks it a little and dims it. */
+export const DECK = { lift: 14, shrink: 0.03, dim: 0.16 };
+
+export function deckDepth(t: number, laterTs: number[]): number {
+  return laterTs.reduce((d, lt) => d + ease(ramp(lt, ENTER)), 0) * (t > ENTER[0] ? 1 : 0);
+}
+
 export function stepLook(t: number, accumulate: boolean, lastT: number): Look {
   const inK = ease(ramp(t, ENTER));
   // A stacking step stays on screen and leaves with the scene's last step (lastT is that step's t).
