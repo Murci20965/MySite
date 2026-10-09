@@ -15,14 +15,14 @@ export default function About() {
         <div className="max-w-[38rem]">
           <Kicker n="02" name="About" />
 
-          <div data-beat="m1:0.55" className="mt-6">
+          <div data-beat="t:3.6" className="mt-6">
             <RevealHeading
               text="Who am I?"
               className="max-w-3xl font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
             />
           </div>
 
-          <p data-beat="m1:0.7" className="mt-8 font-sans text-xl leading-relaxed text-fg lg:text-2xl">
+          <p data-beat="t:4.1" className="mt-8 font-sans text-xl leading-relaxed text-fg lg:text-2xl">
             I&rsquo;m a production-focused AI engineer who owns systems end to end: from{' '}
             <span className="text-accent">data pipeline</span> through{' '}
             <span className="text-accent">model training and inference</span> to deployment, translating
@@ -30,7 +30,7 @@ export default function About() {
             shouldn&rsquo;t depend on where you were born.
           </p>
 
-          <div data-beat="m1:0.92" className="mt-8 space-y-6 font-sans text-base leading-relaxed text-fg lg:text-lg">
+          <div data-beat="t:4.6" className="mt-8 space-y-6 font-sans text-base leading-relaxed text-fg lg:text-lg">
             <p>
               I design agentic workflows with LangChain, LangGraph and n8n, RAG architectures over vector
               databases, and the end-to-end MLOps that keeps them honest: Python and FastAPI backends,

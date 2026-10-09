@@ -22,7 +22,7 @@ function Figure({ value, label, note, align }: { value: string; label: string; n
     <div className={align === 'right' ? 'lg:text-right' : ''}>
       <div className="font-display text-[clamp(5rem,13vw,7.5rem)] font-medium leading-[0.85] tracking-[-0.04em] text-fg lg:text-[clamp(7.5rem,11vw,10.5rem)]">
         {/* Pops as the data-centre racks come into view (M4, 6 s). */}
-        <PopNumber value={value} beat="m4:0.6" />
+        <PopNumber value={value} beat="t:9.4" />
       </div>
       <div className="mt-4 font-sans text-lg font-medium text-fg">{label}</div>
       <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-fg">{note}</div>

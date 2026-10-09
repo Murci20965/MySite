@@ -98,7 +98,7 @@ export default function Experience() {
           <AnimatedSection animation="fade-in">
             <Kicker n="03" name="Experience" />
             {/* Film cue: the light bursts into the agent network (M2, 6 s). */}
-            <div data-beat="m2:0.6" className="mt-6">
+            <div data-beat="t:5.6" className="mt-6">
               <RevealHeading
                 text="Professional experience"
                 className="font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"

@@ -1,63 +1,75 @@
-# The film ("Prompt to People"): the front of the site · 2026-10-07
+# The film ("Prompt to People"): the front of the site · v4, 2026-10-09
 
 ## Purpose
-One AI-generated camera journey is the background of the whole site and tells the career story
-as you scroll: night desk → into the laptop screen → agent network → glass cubes ship → data
-centre → XR classroom → orbit over the globe. Scroll is the playhead: the film plays forward as
-you scroll down and backward as you scroll up, and text lands on the film's moments.
+One AI-generated camera journey is the background of the whole site and tells the career story as
+you scroll, in a single continuous take: Murci's desk at night → the camera dives into the monitor →
+the code dissolves into points of light → threads of light → a warm glow → a city at night → up to
+orbit → the globe with lime arcs. Scroll is the playhead: the film plays forward as you scroll down
+and backward as you scroll up, and text lands on the film's moments.
 
-Decisions (Murci): concept A "Prompt to People" (2026-10-06); the film is the FULL-SCREEN
-background of every section, not a framed screen (2026-10-07, replacing the "Studio" laptop); the
-WebGL Earth and the particle background are retired (2026-10-07). Then, the same day: the film is
-the FRONT of the site at near full brightness, not a darkened backdrop, with text art-directed into
-each section's dark zones and no text boxes (design B "Editorial margins" with A's giant type at
-the big moments), and light mode is retired for now (a paper veil would wash the film out; the
-colour tokens stay). Clips were generated on his own OpenArt account.
+Decisions (Murci): concept A "Prompt to People" (2026-10-06); the film is the FULL-SCREEN background
+of every section (2026-10-07); the film is the FRONT of the site at near full brightness, text
+art-directed into each moment's dark space, no text boxes (2026-10-07); light mode retired for now.
+v4 (2026-10-09): ONE continuous ~20 s take replaces the six clips, from his own desk image (start
+frame) to the previous film's globe (end frame), generated in one prompt on his own OpenArt account
+and upscaled there to 4K. Content reveals one item at a time, placed where each frame leaves room
+(storyboard v1, approved 2026-10-09).
 
 ## Sources (masters)
-`media-src/` is gitignored and holds the masters: keyframes `K0-K6.png` and clips `M1-M6.mp4`
-(1280x720, 24 fps, 10 s, 241 frames, no audio). Only encoded outputs are committed.
+`media-src/` is gitignored and holds the masters: `film-v4-4k.mp4` (3866x2160, 30 fps, 21 s, 630
+frames, the OpenArt 4K upscale) and the old six clips. Only encoded outputs are committed. Copies of
+the prompt, keyframes and storyboard: `~/Downloads/mysite-video-v4/` on Murci's laptop.
 
-Measured facts about the masters (2026-10-06):
-- Each clip starts on its keyframe but does not land on the next one, so clips do not join end
-  to end. The renderer dissolves between clips over 0.6 s of film.
-- **M6 ends over North America**, with the light arcs leaving the US, not Johannesburg. Murci
-  kept it. No copy may say the arcs start in Johannesburg.
-- K6 has readable text labels baked in, so it is not used anywhere.
-- Events per clip (seconds): M1 desk dolly 0-5, glyph waterfall 5-7, screen fills 7, light
-  point 9. M2 light grows 0-6, burst 6, network 7-10. M3 network 0-2, cubes form 2, sideways
-  track 3-10. M4 cubes and gate 0-3, through the gate 3-5, data-centre aisle 6-10. M5 bright aisle
-  0-4, golden doorway 5-7, classroom 8-10. M6 night room 0-1, skylight 2-3, dusk window 4, city
-  5, orbit 6, arcs 7-10.
+Measured facts about the v4 master (2026-10-09):
+- The same take as the 1284x716 original (per-second correlation >= 0.999), no added flicker, and
+  genuinely sharper (upscale-check.png).
+- No cuts: the largest frame-to-frame change is about 4x the median (fast moves through the screen
+  glass at ~3.8 s and the glow forming at ~8 s). Brightness is steady (40-50 of 255), darkest in the
+  light field at 5-7 s (~20).
+- Camera speed varies: fast through 1-5 s and 14-15 s (the rise to orbit, the fastest stretch),
+  slow over the city at 11-13 s, nearly still on the globe from 17 s.
+- Moments (s): desk 0-3, monitor fills 3.2, through the screen 3.8, code blurs 4.5-4.8, light field
+  5-7.6, threads 7.6-9, glow 9-10.4, city appears 10.4, city grid 11-13.6, rise to orbit 13.6-16,
+  arcs fan out 16.4-18.4, settled 19-21.
+- **The globe is over North America**, arcs leaving the US hub, not Johannesburg: no copy may say
+  the arcs start in Johannesburg.
 
 ## Architecture
 ```
-media-src/Mn.mp4 ─ scripts/encode-film.sh ─> public/film/mN/wide/001-081.webp  (1280x720, landscape)
-                                            public/film/mN/tall/001-081.webp  (432x720 centre crop, portrait)
+media-src/film-v4-4k.mp4 ─ scripts/pick-film-frames.py ─> src/lib/filmFrames.json  (315 kept frames)
+                         └ scripts/encode-film.py ─> public/film/v4/wide/001-315.webp  (1920x1072)
+                                                  public/film/v4/tall/001-315.webp  (540x960 slice)
 
 App.tsx
  ├─ <FilmStage/>      fixed full-screen canvas, z-0 (behind every section)
  │    scroll ─> lib/filmJourney KNOTS ─> target T (+ look) ─> eased T ─> 2 blended frames + lighting
- │    └─ runs text cues: [data-beat="mN:f"] gets .is-beat when T reaches it
+ │    └─ runs text cues: [data-beat="t:seconds"] gets .is-beat when T reaches it
  │    └─ writes filmClock (T) ─> ExpandMedia (Vision title/copy), PopNumber (Stats counters)
  ├─ grain overlay (z-60)
  └─ sections (z-10, transparent backgrounds)
 ```
 
-- `src/lib/film.ts`: the clip list (`CLIPS`, 81 frames each), `frameUrl`, `loadOrder`,
-  `parseBeat`. Film time **T runs 0..6**: integer part = clip (0 = M1), fraction = position.
+- `src/lib/film.ts`: `FRAME_TIMES` (the time of each kept frame), `FILM_SECONDS`, `frameAt`,
+  `nearestFrame`, `frameUrl`, `parseBeat`. Film time **T is in seconds of the master**, 0..20.97.
 - `src/lib/filmJourney.ts`: `KNOTS` (the timeline and per-section lighting), `filmClock`.
 - `src/components/FilmStage.tsx`: fetching, off-thread decoding, drawing, lighting, cues, clock.
 
 ### Why frames on a canvas, not `<video>`
 Seeking a normally encoded video decodes forward from the previous keyframe, which stutters on
 scroll and is worst on iOS Safari. Separate frames seek instantly (Apple's product pages use the
-same technique). Every 3rd source frame is kept and the renderer blends the two nearest frames by
-the fractional position, so 81 frames per clip still move smoothly.
+same technique). The renderer blends the two nearest kept frames by the time between them.
+
+### Why the kept frames are spaced by motion, not by time
+Smoothness depends on how much the picture changes between two blended frames, not on frame rate.
+`pick-film-frames.py` measures the change between every pair of source frames and keeps 315 frames
+spaced by equal amounts of it: dense where the camera moves fast (55-61 frames per 3 s in the first
+9 s), sparse where it is nearly still (18 frames in the last 3 s), never more than 6 source frames
+apart. The worst change between kept frames is 14.1 against 17.3 for every 2nd frame: smoother where
+it is hard, for the same weight.
 
 ## Contracts
 
-**Knot** `{ at: sectionId | 'start' | 'end', f?: number, T: number, wide: Look, tall: Look }`,
+**Knot** `{ at: sectionId | 'start' | 'end', f?: number, T: number (seconds), wide: Look, tall: Look }`,
 where `Look = { dim, grade, strength, reach? }` and `grade` is one of none, left, right, top, bottom,
 sides (both walls) or ends (top and bottom); `reach` is how far a one-sided grade extends across the
 frame (default 0.62). A knot pins film time T to the scroll position where
@@ -69,30 +81,37 @@ classroom) or hold a long section's reading light until it has scrolled past (Ex
 FAQ).
 
 **Easing** The drawn time eases toward the scroll target (time constant 70 ms on touch screens,
-110 ms with a mouse), so wheel notches glide instead of cutting; jumps over half a clip snap.
+110 ms with a mouse), so wheel notches glide instead of cutting; jumps over 3 s of film snap.
 
-**Text cue** `data-beat="mN:fraction"` on any element (e.g. `m2:0.6` = M2 at 6 s, T = 1.6). The
-element gets `.is-beat` while the eased T reaches its time (0.04 hysteresis on the way back). CSS
+**Text cue** `data-beat="t:seconds"` on any element (e.g. `t:5.6` = 5.6 s into the film). The
+element gets `.is-beat` while the eased T reaches its time (0.4 s hysteresis on the way back). CSS
 hides cued elements only while `html[data-film="on"]`, which is set on the visitor's FIRST SCROLL:
 before that (and for crawlers, which never scroll) all text is visible. Vision and the Stats
-counters follow the same rule.
+counters follow the same rule. A malformed or out-of-range cue never fires, so its text would stay
+hidden after the first scroll: check every cue with the playback script after timing changes.
 Put cues on wrappers, not on elements that animate transform themselves.
 
 **Clock** `filmClock.subscribe(fn)` → unsubscribe; `filmClock.on` is false under reduced motion
-or Save-Data, and subscribers then show their final state. `PopNumber beat="m4:0.6"` pops on a
+or Save-Data, and subscribers then show their final state. `PopNumber beat="t:9.4"` pops on a
 film moment.
 
-### Current cues (each verified to fire with its element on screen, desktop and phone)
+### Current cues (v4 phase A: retimed to the new film; phase B/C replace them with reveals)
 | Element | Cue | Film moment |
 |---|---|---|
-| About heading / lead / columns | `m1:0.55` / `m1:0.7` / `m1:0.92` | glyphs start, screen fills, light point |
-| Experience heading | `m2:0.6` | the burst into the agent network |
-| Open-source heading | `m3:0.2` | the first glass cubes form |
-| Stats counters | `m4:0.6` (PopNumber) | the data-centre racks |
-| Vision words part / copy | T 4.45-4.72 / 4.78-4.9 (filmClock) | the golden doorway / the classroom |
-| Contact heading | `m6:0.76` | the arcs fan out |
+| About heading / lead / columns | `t:3.6` / `t:4.1` / `t:4.6` | the monitor fills, through the screen, the code blurs |
+| Experience heading | `t:5.6` | the light field |
+| Open-source heading | `t:7.8` | the threads stream in |
+| Stats counters | `t:9.4` (PopNumber) | the glow |
+| Vision words part / copy | T 10.2-10.6 / 10.7-10.95 (filmClock) | through the glow / the city appears |
+| Contact heading | `t:20.45` | the settled globe |
+
+Verified 2026-10-09 (desktop, full scroll): film time runs strictly forward 0 → 20.94, all 6 cues
+fire, all 315 frames fetched, no failures or console errors.
 
 ## Lighting and readability (measured)
+**v4 note:** the looks and the measurements below are the previous film's; the knots carry them
+over as placeholders. They are re-measured on the v4 frames as each section's reveal layout lands.
+
 The film runs at near full brightness. Each section's look is a light uniform veil plus a soft
 one-sided grade (black, strongest at the frame edge, gone by 62% of the way across) on the side
 where its text sits. The sides come from a **frame map**: for each section, the frames that play
@@ -138,20 +157,18 @@ progress hairline, clips text to its scroll containers, and treats blended text 
 - Rendition by viewport shape: `wide` if width ≥ height, else `tall`. Canvas backing store is
   capped at 1.5x DPR and 1.25x the rendition width.
 - Frames are fetched as files and decoded with `createImageBitmap` (off the main thread). Only a
-  window of 12 frames each side of the playhead, every 8th frame of the clip and the dissolve edges
-  stay decoded; the rest are closed (their encoded files stay in memory).
+  window around the playhead stays decoded: 8 frames each side on wide screens (a decoded 1920 px
+  frame is about 8 MB), 12 on phones (about 2 MB each). There is no spine of far frames: with one
+  315-frame film, the old every-8th-frame spine would hold ~40 decoded frames, several hundred MB on
+  desktop. Encoded files stay in memory once fetched.
 - Before the window `load` event only the poster frame loads; before the first scroll, only the
-  opening 24 frames. Then the clip on screen loads outward from the playhead (every 4th frame
-  first), then its neighbours, at most 4 in flight. Until a frame arrives the nearest decoded one
-  is drawn. Measured: 0.47 MB (phone) and 0.82 MB (desktop) before any scroll.
+  opening 24 frames. Then frames within 60 of the playhead load outward from it (every 4th frame
+  first), at most 4 in flight. Until a frame arrives the nearest decoded one is drawn.
 - Caching (`vercel.json`): `/film/*` for 7 days with stale-while-revalidate. Re-encoded frames must
-  go in a new folder, or visitors keep the old ones for up to a week.
-- Budgets: ≤ 5 MB per clip on desktop, ≤ 2 MB per clip on phones. Measured (KB, wide / tall):
-  M1 2,204 / 1,057 · M2 3,147 / 1,420 · M3 2,628 / 1,109 · M4 1,939 / 713 · M5 2,692 / 854 ·
-  M6 1,752 / 787. A full read of the page costs about 14 MB on desktop and 6 MB on a phone,
-  fetched one clip ahead, never up front.
+  go in a new folder (v4 lives in `film/v4/`), or visitors keep the old ones for up to a week.
+- Sizes (measured): wide 20.5 MB, tall 6.9 MB for all 315 frames. A full read of the page costs
+  about 20 MB on desktop and 7 MB on a phone, fetched around the playhead, never up front.
 - Reduced motion or Save-Data: one still per knot, no scrubbing, no cues, all text visible.
-  Measured: 9 frame requests for the whole page.
 
 ## Error handling
 Every frame gets 2 tries across fetching and decoding (`MAX_TRIES`); after that it is skipped and
@@ -181,9 +198,11 @@ Static, same-origin public assets only (the canvas is never tainted). No user da
   `failedDecodes` at the files; `decoder: 'img'` with frames drawing means the fallback worked;
   `contextLost` at the graphics process. Zero everywhere with a black canvas: check
   `prefers-reduced-motion` and Save-Data (still mode) and whether anything paints over the canvas.
-- **Re-encode a clip:** `bash scripts/encode-film.sh m3 media-src/M3.mp4` and check the printed
-  sizes against the budgets. To cut size, raise the frame step (third argument) before lowering
-  quality, and update `count` in `CLIPS`.
+- **Re-encode the film:** `python scripts/pick-film-frames.py media-src/film-v4-4k.mp4`, then
+  `python scripts/encode-film.py media-src/film-v4-4k.mp4`, and check the printed
+  sizes against the budgets. To cut size, lower `K` (frames kept) in pick-film-frames.py before
+  lowering quality; film.ts reads the new frame list, nothing else changes. Encode into a new folder
+  (cache, see Loading).
 - **Move a cue:** pick the film moment from the events list, set `data-beat`, then verify the
   element is on screen when it fires (walk the page, record T and the element's rect per step).
 - **Change a section's height:** knots follow the layout automatically; re-check its cues.

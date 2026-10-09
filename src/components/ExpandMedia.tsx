@@ -12,8 +12,8 @@ import Kicker from './Kicker';
  */
 
 // Film times (lib/film.ts: clip index + fraction). M5 is clip 4.
-const DOOR_OPEN = [4.45, 4.72] as const;
-const CLASSROOM = [4.78, 4.9] as const;
+const DOOR_OPEN = [10.2, 10.6] as const;
+const CLASSROOM = [10.7, 10.95] as const;
 
 const ramp = (T: number, [a, b]: readonly [number, number]) => Math.min(1, Math.max(0, (T - a) / (b - a)));
 

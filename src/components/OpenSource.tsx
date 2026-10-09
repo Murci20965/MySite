@@ -271,7 +271,7 @@ export default function OpenSource() {
                   className="pointer-events-none absolute -inset-x-10 -inset-y-8 -z-10 bg-[radial-gradient(ellipse_at_25%_50%,rgb(0_0_0/0.55),transparent_70%)]"
                 />
                 {/* Film cue: the network crystallises into glass cubes (M3, 2 s). */}
-                <div data-beat="m3:0.2">
+                <div data-beat="t:7.8">
                   <RevealHeading
                     text="Open-source work"
                     className="mb-4 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.01em] text-fg sm:text-5xl lg:text-6xl"
