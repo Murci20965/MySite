@@ -126,96 +126,6 @@
    transitions.dev — motion tokens (shared) + per-transition CSS
    ───────────────────────────────────────────────────────────── */
 :root {
-  /* texts reveal (18) */
-  --stagger-dur: 500ms;
-  --stagger-distance: 12px;
-  --stagger-stagger: 40ms;
-  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Texts reveal (transitions.dev 18) — display omitted so flex/block
-   line elements keep their own layout. */
-.t-stagger-line {
-  opacity: 0;
-  transform: translateY(var(--stagger-distance));
-  transition:
-    opacity var(--stagger-dur) var(--stagger-ease),
-    transform var(--stagger-dur) var(--stagger-ease);
-  will-change: transform, opacity;
-}
-.t-stagger-line--2 { transition-delay: var(--stagger-stagger); }
-.t-stagger-line--3 { transition-delay: calc(var(--stagger-stagger) * 2); }
-.t-stagger-line--4 { transition-delay: calc(var(--stagger-stagger) * 3); }
-.t-stagger.is-shown .t-stagger-line {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .t-stagger-line {
-    transition: none !important;
-  }
-}
-
-:root {
-  /* number pop-in (02) */
-  --digit-dur: 500ms;
-  --digit-distance: 8px;
-  --digit-stagger: 70ms;
-  --digit-ease: cubic-bezier(0.34, 1.45, 0.64, 1);
-  --digit-dir-x: 0;
-  --digit-dir-y: 1;
-}
-
-/* Number pop-in (transitions.dev 02) */
-@keyframes t-digit-pop-in {
-  0% {
-    transform: translate(
-      calc(var(--digit-distance) * var(--digit-dir-x)),
-      calc(var(--digit-distance) * var(--digit-dir-y))
-    );
-    opacity: 0;
-  }
-  100% {
-    transform: translate(0, 0);
-    opacity: 1;
-  }
-}
-.t-digit-group {
-  display: inline-flex;
-  align-items: baseline;
-}
-.t-digit {
-  display: inline-block;
-  will-change: transform, opacity;
-}
-/* Held hidden until scrolled into view so the pop-in isn't missed above the fold.
-   Film-cued numbers ([data-popbeat]) hide only once the film is live (after the
-   first scroll), so crawlers and unscrolled visitors read them. */
-.t-digit-group.is-pending:not([data-popbeat]) .t-digit,
-html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
-  opacity: 0;
-}
-.t-digit-group.is-animating .t-digit {
-  animation: t-digit-pop-in var(--digit-dur) var(--digit-ease) both;
-}
-.t-digit-group.is-animating .t-digit[data-stagger='1'] {
-  animation-delay: var(--digit-stagger);
-}
-.t-digit-group.is-animating .t-digit[data-stagger='2'] {
-  animation-delay: calc(var(--digit-stagger) * 2);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .t-digit-group .t-digit {
-    animation: none !important;
-  }
-  .t-digit-group.is-pending .t-digit {
-    opacity: 1;
-  }
-}
-
-:root {
   /* error shake (12) */
   --shake-distance: 6px;
   --shake-overshoot: 4px;
@@ -387,52 +297,6 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   }
 }
 
-/* Capability marquee: duplicated track slides half its width, loops seamlessly. */
-.t-marquee {
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent, #fff 8%, #fff 92%, transparent);
-  mask-image: linear-gradient(to right, transparent, #fff 8%, #fff 92%, transparent);
-}
-.t-marquee-track {
-  display: flex;
-  width: max-content;
-  animation: t-marquee var(--marquee-dur, 46s) linear infinite;
-  will-change: transform;
-}
-.t-marquee:hover .t-marquee-track {
-  animation-play-state: paused;
-}
-@keyframes t-marquee {
-  to { transform: translateX(-50%); }
-}
-
-/* Certifications carousel: horizontal scroll-snap with faded edges. */
-.t-carousel {
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -webkit-mask-image: linear-gradient(to right, transparent, #fff 4%, #fff 96%, transparent);
-  mask-image: linear-gradient(to right, transparent, #fff 4%, #fff 96%, transparent);
-}
-.t-carousel::-webkit-scrollbar {
-  display: none;
-}
-
-/* Section-numeral drift: CSS scroll-driven animation — zero JS, and browsers
-   without animation-timeline simply render the numeral static. */
-@supports (animation-timeline: view()) {
-  .t-drift {
-    animation: t-drift-y linear both;
-    animation-timeline: view();
-    animation-range: entry 0% exit 100%;
-    will-change: transform;
-  }
-}
-@keyframes t-drift-y {
-  from { transform: translateY(var(--drift-y)); }
-  to { transform: translateY(calc(var(--drift-y) * -1)); }
-}
-
 /* Per-character heading reveal: chars rise out of a blur once the heading
    scrolls into view. Words are nowrap-wrapped so lines never break mid-word. */
 .t-chars .t-char {
@@ -450,9 +314,6 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .t-drift {
-    animation: none !important;
-  }
   .t-chars .t-char {
     opacity: 1 !important;
     transform: none !important;
@@ -500,66 +361,6 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
 @media (prefers-reduced-motion: reduce) {
   .t-nudge {
     transition: none !important;
-  }
-}
-
-/* ---- Open-source filmstrip ---------------------------------------------------
-   Pinned mode: OpenSource.tsx writes one translate3d on the track and an
-   opacity/scale per panel from scroll progress; nothing here animates on its
-   own. The progress bar is a full-width bar scaled from the left. */
-.t-film-track {
-  will-change: transform;
-}
-.t-film-track > li,
-.t-film-art {
-  will-change: transform, opacity;
-}
-/* Scroll-linked motion must track the scroll exactly: opt out of the global
-   `*` transition rule, which would ease every write over 200ms and make the
-   strip trail the scrollbar. */
-.t-film-track,
-.t-film-track > li,
-.t-film-art {
-  transition: none;
-}
-.t-film-bar {
-  transform-origin: 0 50%;
-  transform: scaleX(0);
-}
-
-/* "Live" badge: a lime dot with a ring that expands and fades (transform +
-   opacity), marking the projects with a working demo. */
-.t-live {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.t-live::before,
-.t-live::after {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #a3e635;
-}
-.t-live::after {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  margin-top: -3px;
-  animation: t-live-ping 1.8s ease-out infinite;
-}
-@keyframes t-live-ping {
-  to {
-    transform: scale(3.2);
-    opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .t-live::after {
-    animation: none !important;
-    opacity: 0;
   }
 }
 
