@@ -11,6 +11,8 @@ type SceneProps = {
   stepVh?: number;
   /** 'sequence': one step at a time; 'stack': steps stay and pile up until the scene ends */
   mode?: 'sequence' | 'stack';
+  /** a feathered dark shade behind each step, for scenes over the film's brightest frames */
+  pool?: boolean;
   children: ReactNode;
 };
 
@@ -20,9 +22,16 @@ type SceneProps = {
  * before the first scroll and under reduced motion; staged mode turns it into a spacer with the
  * steps on a fixed stage.
  */
-export function Scene({ id, n, name, stepVh = 85, mode = 'sequence', children }: SceneProps) {
+export function Scene({ id, n, name, stepVh = 85, mode = 'sequence', pool = false, children }: SceneProps) {
   return (
-    <section id={id} className="scene t-ink" data-step-vh={stepVh} data-mode={mode} aria-labelledby={`${id}-title`}>
+    <section
+      id={id}
+      className="scene t-ink"
+      data-step-vh={stepVh}
+      data-mode={mode}
+      data-pool={pool ? '' : undefined}
+      aria-labelledby={`${id}-title`}
+    >
       <h2 id={`${id}-title`} className="scene-title">
         <span aria-hidden="true" className="h-px w-8 bg-accent" />
         <span>

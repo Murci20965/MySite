@@ -680,6 +680,25 @@ html[data-film='on'] .scene-step {
 html[data-film='on'] .scene-step[data-on] {
   pointer-events: auto;
 }
+/* The shade under a step (scenes with data-pool: the globe chapters, the brightest frames). Small
+   cream text needs the background under it at or below ~0.15 luminance; the Earth's cloud tops
+   are far brighter, and shading the whole frame would dim the globe. So the shade sits only behind
+   the step, part of it (it arrives and leaves with it): 58% black with a very long feather, so it
+   reads as shadow, not a shape. A 72 px feather read as a dark rectangle on the clouds, and a glass
+   panel read as a UI box (A/B, 2026-10-09). */
+html[data-film='on'] .scene[data-pool] .scene-step {
+  isolation: isolate;
+}
+html[data-film='on'] .scene[data-pool] .scene-step::before {
+  content: '';
+  position: absolute;
+  inset: 0; /* full strength to the step's edges: a "Read more" on the edge sat in the fade (4.17) */
+  z-index: -1;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.58);
+  box-shadow: 0 0 140px 90px rgb(0 0 0 / 0.58);
+  pointer-events: none;
+}
 /* Stack mode: a covered card keeps its glass slab, but its words fade with depth. */
 html[data-film='on'] .deck-text {
   opacity: max(0, calc(1 - var(--depth, 0) * 1.4));
