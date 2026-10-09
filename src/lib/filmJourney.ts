@@ -61,10 +61,11 @@ export const KNOTS: FilmKnot[] = [
   { at: 'start', T: 0.0, wide: L(0.04, 'left', 0.78), tall: L(0.26, 'ends', 0.62) },
   // 3-5 s: the monitor fills the frame and the camera passes through the screen.
   { at: 'about', T: 3.0, wide: L(0.1, 'left', 0.74), tall: L(0.38, 'ends', 0.55) },
-  // 5-7.6 s: the light field, the darkest and calmest stretch of the film.
-  { at: 'experience', T: 5.0, wide: L(0.44, 'left', 0.88), tall: L(0.66, 'ends', 0.6) },
-  { at: 'experience', f: 0.12, T: 5.4, wide: L(0.44, 'left', 0.88), tall: L(0.66, 'ends', 0.6) },
-  { at: 'experience', f: 0.9, T: 7.4, wide: L(0.44, 'left', 0.88), tall: L(0.66, 'ends', 0.6) }, // hold
+  // 5-7.6 s: the light field, the darkest and calmest stretch of the film. A staged scene: the film
+  // runs from its first step arriving to its last step gone. Steps sit on the right, where the field
+  // stays open while threads start streaming in from the left.
+  { at: 'experience', edge: 'top', T: 5.0, wide: L(0.12, 'right', 0.6, 0.6), tall: L(0.3, 'ends', 0.5) },
+  { at: 'experience', edge: 'bottom', T: 7.6, wide: L(0.12, 'right', 0.6, 0.6), tall: L(0.3, 'ends', 0.5) },
   // 7.6-9.2 s: threads of light stream in from the left.
   { at: 'opensource', T: 7.6, wide: L(0.3, 'top', 0.9), tall: L(0.34, 'top', 0.75) },
   // 9.2-10.2 s: the threads gather into the warm glow.
