@@ -1,11 +1,8 @@
-import AnimatedSection from './AnimatedSection';
-import RevealHeading from './RevealHeading';
-import Kicker from './Kicker';
+import { Scene, Step, StepLabel } from './Scene';
+import type { Place } from '../lib/stage';
 
-/* Chapter 09, Principles: how Murci works, in his own words (these are his
- * standards, not testimonials, so they are not marked up as quotes). Behind
- * them the film rises through a skylight into dusk; the right edge measured
- * darkest, so the list sits there as plain numbered type, no cards.
+/* Chapter 09, Principles: one at a time, top right above the Earth's edge, mirrored from Education
+ * (17.6-19.0 s, storyboard v1). Murci's own standards, set as type, not quotes or testimonials.
  */
 const PRINCIPLES = [
   {
@@ -40,38 +37,22 @@ const PRINCIPLES = [
   },
 ];
 
+const PLACE: Place = { wide: { x: 0.95, y: 0.06, w: 0.4, align: 'right' }, tall: { y: 0.09 } };
+
 export default function Principles() {
   return (
-    <section id="principles" className="t-ink relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
-        <div className="lg:ml-auto lg:w-[min(42rem,52%)]">
-          <AnimatedSection animation="fade-in">
-            <Kicker n="09" name="Principles" />
-            <RevealHeading
-              text="How I work"
-              className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
-            />
-            <p className="mt-6 font-sans text-lg leading-relaxed text-fg">
-              The standards behind everything I ship, and the same ones you&rsquo;ll find in my commits.
-            </p>
-          </AnimatedSection>
-
-          <ol className="mt-12">
-            {PRINCIPLES.map((p, i) => (
-              <AnimatedSection key={p.title} animation="fade-in" index={i % 3}>
-                <li className="grid grid-cols-[2.75rem_minmax(0,1fr)] border-t border-fg/20 py-8">
-                  <span className="pt-2 font-mono text-[11px] text-accent">{String(i + 1).padStart(2, '0')}</span>
-                  <div>
-                    <h3 className="font-display text-2xl font-medium text-fg lg:text-3xl">{p.title}</h3>
-                    <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-fg/80">{p.area}</div>
-                    <p className="mt-4 font-sans text-base leading-relaxed text-fg lg:text-lg">{p.text}</p>
-                  </div>
-                </li>
-              </AnimatedSection>
-            ))}
-          </ol>
-        </div>
-      </div>
-    </section>
+    <Scene id="principles" n="09" name="Principles" stepVh={70} pool>
+      {PRINCIPLES.map((p, i) => (
+        <Step key={p.title} place={PLACE}>
+          <div className="lg:flex lg:flex-col lg:items-end lg:text-right">
+            <StepLabel n="09" name={p.area} i={i} of={PRINCIPLES.length} />
+            <h3 className="mt-4 font-display text-3xl font-medium leading-[1.06] tracking-[-0.02em] text-fg lg:text-4xl">
+              {p.title}
+            </h3>
+            <p className="mt-3 font-sans text-base leading-relaxed text-fg lg:text-lg">{p.text}</p>
+          </div>
+        </Step>
+      ))}
+    </Scene>
   );
 }
