@@ -135,7 +135,9 @@ export default function FilmStage() {
           if (!el) y = prev;
           else {
             const top = el.getBoundingClientRect().top + window.scrollY;
-            y = top + (k.f ?? 0) * el.offsetHeight - FOCUS * window.innerHeight;
+            if (k.edge === 'top') y = top;
+            else if (k.edge === 'bottom') y = top + el.offsetHeight;
+            else y = top + (k.f ?? 0) * el.offsetHeight - FOCUS * window.innerHeight;
           }
         }
         y = Math.max(y, prev + 1); // keep the timeline strictly increasing

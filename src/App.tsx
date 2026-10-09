@@ -16,6 +16,7 @@ import ExpandMedia from './components/ExpandMedia';
 import Marquee from './components/Marquee';
 import ChatWidget from './components/ChatWidget';
 import FilmStage from './components/FilmStage';
+import StageDirector from './components/StageDirector';
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
       {/* The film is the background of every section (fixed, z-0); the
           sections themselves stay transparent so it shows through. */}
       <FilmStage />
+      {/* Runs the staged scenes: content revealed one step at a time over the film. */}
+      <StageDirector />
       <div className="grain-overlay" aria-hidden="true" />
       <div className="relative z-10">
         <a

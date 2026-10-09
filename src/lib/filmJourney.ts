@@ -36,9 +36,12 @@ export interface Look {
 export interface FilmKnot {
   /** a section id, or the page's start/end */
   at: string;
-  /** fraction of the section's height below its top (default 0) */
+  /** fraction of the section's height below its top (default 0), measured at the focus line */
   f?: number;
-  /** film time at this knot */
+  /** for a staged scene (Scene.tsx): pin T to the scroll position where the scene starts ('top',
+   *  its first step arriving) or ends ('bottom', its last step gone), instead of the focus line */
+  edge?: 'top' | 'bottom';
+  /** film time at this knot, in seconds */
   T: number;
   /** landscape screens (the full frame) */
   wide: Look;

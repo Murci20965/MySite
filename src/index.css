@@ -585,8 +585,116 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   }
 }
 
+/* ---- Reveal stage (lib/stage.ts, Scene.tsx, StageDirector.tsx) -------------
+   Default: a scene is a normal readable section (no JavaScript, before the
+   first scroll, reduced motion). Staged (html[data-film='on']): the section is
+   an invisible spacer and its steps sit on a fixed stage over the film,
+   arriving, holding and passing in place; StageDirector sets their place,
+   opacity and transform. */
+.scene {
+  position: relative;
+  padding: 6rem 1.5rem;
+}
+.scene-title {
+  max-width: 44rem;
+  margin: 0 auto 3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgb(var(--c-accent));
+}
+.scene-stage {
+  max-width: 44rem;
+  margin: 0 auto;
+  display: grid;
+  gap: 4.5rem;
+}
+.step-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgb(var(--c-accent));
+}
+/* "Read more": the full detail of a step, closed by default. */
+.step-more > summary {
+  display: inline-flex;
+  cursor: pointer;
+  list-style: none;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(var(--c-accent));
+}
+.step-more > summary::-webkit-details-marker {
+  display: none;
+}
+.step-more > summary::after {
+  content: ' +';
+}
+.step-more[open] > summary::after {
+  content: ' –';
+}
+.step-more > summary:focus-visible {
+  outline: 2px solid rgb(var(--c-accent));
+  outline-offset: 4px;
+}
+html[data-film='on'] .scene {
+  padding: 0;
+}
+html[data-film='on'] .scene-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+html[data-film='on'] .scene-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: block;
+  max-width: none;
+  margin: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+html[data-film='on'] .scene[data-active] .scene-stage {
+  visibility: visible;
+}
+html[data-film='on'] .scene-step {
+  position: absolute;
+  opacity: 0;
+  transform-origin: 50% 0;
+  will-change: opacity, transform;
+}
+html[data-film='on'] .scene-step[data-on] {
+  pointer-events: auto;
+}
+/* An open "Read more" scrolls inside the step, so the step never outgrows the screen or runs
+   under the "Ask Murci" button (measured: 38vh ran 36 px past a 702 px phone screen). */
+html[data-film='on'] .step-more[open] .step-more-body {
+  max-height: 32vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media (orientation: portrait) {
+  html[data-film='on'] .step-more[open] .step-more-body {
+    max-height: 26vh;
+  }
+}
+
 /* ---- Film cues -------------------------------------------------------------
-   Text tied to a film moment: data-beat="mN:fraction" gets .is-beat from
+   Text tied to a film moment: data-beat="t:seconds" gets .is-beat from
    FilmStage once the film reaches that frame (and loses it when you scroll
    back past it). Hidden only while the film runs (html[data-film='on']), so
    without it (reduced motion, Save-Data, a failure) all text is visible.
