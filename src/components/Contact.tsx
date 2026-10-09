@@ -127,7 +127,7 @@ export default function Contact() {
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <Kicker n="11" name="Contact" />
-          {/* Film cue: the arcs fan out across the globe (M6, 7.6 s). */}
+          {/* Film cue: the globe settles, the arcs fanned out (20.45 s). */}
           <div data-beat="t:20.45" className="mt-6">
             <RevealHeading
               text="Let’s work together"

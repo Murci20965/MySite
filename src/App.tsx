@@ -57,6 +57,8 @@ function App() {
             <Stats />
             <ExpandMedia />
             <Skills />
+            {/* The rise to orbit: the film's fastest stretch, crossed in a short scroll with no text. */}
+            <div id="breather" className="breather" aria-hidden="true" />
             <Education />
             <Principles />
             <FAQ />

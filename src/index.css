@@ -699,9 +699,22 @@ html[data-film='on'] .scene[data-pool] .scene-step::before {
   box-shadow: 0 0 140px 90px rgb(0 0 0 / 0.58);
   pointer-events: none;
 }
+/* Contact follows the last scene in normal flow. Staged, its content starts 90vh down, so it rises
+   into view just as the last question passes (step 6 passes over the last 0.15 viewport of FAQ):
+   one thing at a time, and no empty screen between them. */
+html[data-film='on'] #contact {
+  padding-top: 90vh;
+}
 /* Stack mode: a covered card keeps its glass slab, but its words fade with depth. */
 html[data-film='on'] .deck-text {
   opacity: max(0, calc(1 - var(--depth, 0) * 1.4));
+}
+/* The breather: a short empty scroll for the rise to orbit; nothing in normal flow. */
+.breather {
+  height: 0;
+}
+html[data-film='on'] .breather {
+  height: 70vh;
 }
 /* An open "Read more" scrolls inside the step, so the step never outgrows the screen or runs
    under the "Ask Murci" button (measured: 38vh ran 36 px past a 702 px phone screen). */
