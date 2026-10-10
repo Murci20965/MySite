@@ -1,8 +1,12 @@
 import { Scene, Step, StepLabel } from './Scene';
+import ProjectDiagram from './ProjectDiagram';
+import type { DiagramVariant } from './ProjectDiagram';
 import type { Place } from '../lib/stage';
 
 type Work = {
   repo: string;
+  /** the system diagram the card opens with (ProjectDiagram) */
+  diagram: DiagramVariant;
   title: string;
   metric: string;
   summary: string;
@@ -15,6 +19,7 @@ type Work = {
 const WORK: Work[] = [
   {
     repo: 'avatar-pipeline',
+    diagram: 'avatar',
     title: 'Avatar-3D Pipeline',
     metric: '14 states · 0.5s crossfade',
     summary:
@@ -24,6 +29,7 @@ const WORK: Work[] = [
   },
   {
     repo: 'orbit-3d-pipeline',
+    diagram: 'orbit',
     title: 'Orbit-3D Asset Pipeline',
     metric: 'Text + image · Draco GLB',
     summary:
@@ -33,6 +39,7 @@ const WORK: Work[] = [
   },
   {
     repo: 'real_estate_price_predictor',
+    diagram: 'regression',
     title: 'Real Estate Price Predictor',
     metric: 'R² 0.9037 · RMSE 0.1341',
     summary:
@@ -41,6 +48,7 @@ const WORK: Work[] = [
   },
   {
     repo: 'medical_image_classifier',
+    diagram: 'transfer',
     title: 'Medical Image Classifier',
     metric: '82.85% acc · 0.96 recall',
     summary:
@@ -49,6 +57,7 @@ const WORK: Work[] = [
   },
   {
     repo: 'cat-dog-classifier',
+    diagram: 'vision',
     title: 'Cat vs Dog Classifier',
     metric: 'FastAI CNN · Oxford-IIIT Pet',
     summary:
@@ -57,6 +66,7 @@ const WORK: Work[] = [
   },
   {
     repo: 'resume-match-ai',
+    diagram: 'match',
     title: 'Resume-Match AI',
     metric: 'LLM fit scoring',
     summary: 'Scores how well a resume matches a job posting, turning structured LLM analysis into actionable fit feedback.',
@@ -64,6 +74,7 @@ const WORK: Work[] = [
   },
   {
     repo: 'smart-spend',
+    diagram: 'spend',
     title: 'Smart-Spend',
     metric: 'AI auto-categorisation',
     summary:
@@ -76,33 +87,50 @@ const WORK: Work[] = [
 // v1). Phones: the threads converge through the middle of the slice, so the bottom band.
 const place = (i: number): Place => ({
   wide: { x: 0.58, y: i % 2 ? 0.34 : 0.28, w: 0.34 },
-  tall: { y: 0.07, from: 'bottom' },
+  tall: { y: 0.12, from: 'bottom' }, // ends above the "Ask Murci" button (its links ran under it)
 });
 
-// Small lime text on a moving film can land on one of its bright light orbs (measured 1.87:1 on
-// "Code"), so the links sit on the same dark glass as the "Ask Murci" button. Also a 36 px target.
+// The links are soft pills on the card (no borders, Murci 2026-10-10): a light tint marks them as
+// buttons on the dark glass, and they are 36 px tap targets.
 const link =
-  'inline-flex min-h-9 items-center rounded-full border border-fg/25 bg-[rgb(10_10_10/0.72)] px-4 transition-colors hover:border-accent/60 hover:text-fg';
+  'inline-flex min-h-9 items-center rounded-full bg-fg/[0.08] px-4 transition-colors hover:bg-fg/[0.14] hover:text-fg';
 
-/** Chapter 04, Open source: one project at a time, the two live demos first. */
+/**
+ * Chapter 04, Open source: one project at a time, the two live demos first. Each is a card that
+ * opens with its system drawn as a diagram, a lime pulse running the pipeline while the card is on
+ * screen (Murci's pick, option C of three, 2026-10-09): the idea of each project, no screenshots.
+ * The card is dark glass, so its text reads over any frame. Phones keep the description behind
+ * "Read more" so the card fits the bottom band.
+ */
 export default function OpenSource() {
   return (
     <Scene id="opensource" n="04" name="Open source">
       {WORK.map((w, i) => (
         <Step key={w.repo} place={place(i)}>
-          <StepLabel n="04" name="Open source" i={i} of={WORK.length} />
-          {w.live && (
-            <div className="mt-5 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              Live demo
+          <article className="overflow-hidden rounded-[20px] bg-[rgb(10_10_10/0.8)]">
+            <div className="relative bg-fg/[0.03] px-3 py-2">
+              <ProjectDiagram variant={w.diagram} className="h-[120px] w-full lg:h-[140px]" />
+              {w.live && (
+                <span className="absolute right-4 top-3 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                  Live
+                </span>
+              )}
             </div>
-          )}
-          <h3 className={`${w.live ? 'mt-3' : 'mt-5'} font-display text-4xl font-medium leading-[1.04] tracking-[-0.02em] text-fg lg:text-5xl`}>
-            {w.title}
-          </h3>
-          <div className="mt-3 font-mono text-[12px] uppercase tracking-[0.16em] text-fg">{w.metric}</div>
-          <p className="mt-4 font-sans text-base leading-relaxed text-fg lg:text-lg">{w.summary}</p>
-          <div className="mt-5 flex flex-wrap gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+            <div className="px-5 pb-5 pt-4 lg:px-6">
+              <StepLabel n="04" name="Open source" i={i} of={WORK.length} />
+              <h3 className="mt-3 font-display text-3xl font-medium leading-[1.06] tracking-[-0.02em] text-fg lg:text-4xl">
+                {w.title}
+              </h3>
+              <div className="mt-2 font-mono text-[12px] uppercase tracking-[0.16em] text-fg">{w.metric}</div>
+              <p className="mt-3 hidden font-sans text-base leading-relaxed text-fg sm:block">{w.summary}</p>
+              <details className="step-more mt-3 sm:hidden">
+                <summary>Read more</summary>
+                <div className="step-more-body mt-2 pr-2">
+                  <p className="font-sans text-base leading-relaxed text-fg">{w.summary}</p>
+                </div>
+              </details>
+              <div className="mt-4 flex flex-wrap gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
             {w.live && (
               <a href={w.live} target="_blank" rel="noopener noreferrer" className={link}>
                 Live demo ↗
@@ -111,7 +139,9 @@ export default function OpenSource() {
             <a href={w.code} target="_blank" rel="noopener noreferrer" className={link}>
               Code ↗
             </a>
-          </div>
+              </div>
+            </div>
+          </article>
         </Step>
       ))}
     </Scene>

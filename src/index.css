@@ -270,11 +270,11 @@
   }
 }
 
-/* Project system diagrams: micro labels + a lime pulse that runs the flow
-   path on card hover, so the pipeline reads as alive. */
+/* Project system diagrams (the open-source cards): micro labels and a lime pulse that runs the
+   flow path while the card is on screen, so the pipeline reads as alive. */
 .t-diagram-t {
   font-family: 'Space Mono', ui-monospace, monospace;
-  font-size: 11px;
+  font-size: 12.5px; /* SVG units: 11.8 px on a 360 px phone, 13.8 px on desktop */
   letter-spacing: 0.04em;
 }
 .t-diagram-pulse {
@@ -283,17 +283,18 @@
   opacity: 0;
   transition: opacity 200ms ease;
 }
-.group:hover .t-diagram-pulse {
+/* The pipeline runs while its card is the step on screen (staged mode only). */
+html[data-film='on'] .scene-step[data-on] .t-diagram-pulse {
   opacity: 1;
-  animation: t-diagram-run 1.5s linear infinite;
+  animation: t-diagram-run 1.8s linear infinite;
 }
 @keyframes t-diagram-run {
   to { stroke-dashoffset: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .group:hover .t-diagram-pulse {
-    animation: none;
-    opacity: 0;
+  .t-diagram-pulse {
+    animation: none !important;
+    opacity: 0 !important;
   }
 }
 
