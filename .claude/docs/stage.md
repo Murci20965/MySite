@@ -63,7 +63,7 @@ card shows its glass edge, never ghosted text. Only the top card (depth < 0.5) t
 ## The scenes (storyboard v1)
 | Scene | Film window | Steps | stepVh | Where the steps sit (wide · tall) |
 |---|---|---|---|---|
-| Hero (01) | 0 s | copy | first 50vh | on the monitor's dark editor, x .615 y .17 · top 10% |
+| Hero (01) | 0 s | copy | first 50vh | the dark wall left of the lamp, x .085 y .37 (was the monitor's editor: the code behind it made it hard to read) · top 10% |
 | About (02) | 3.0-5.0 s | 3 | 85 | editor's empty right side, x .55 · bottom band |
 | Experience (03) | 5.0-7.6 s | 3 roles + 4 capabilities | 85 | right of the light field · top |
 | Open source (04) | 7.6-9.2 s | 7 | 85 | open right, threads stream from the left · bottom band |

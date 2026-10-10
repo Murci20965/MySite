@@ -3,10 +3,12 @@ import Kicker from './Kicker';
 import { placeBox } from '../lib/stage';
 import type { Place } from '../lib/stage';
 
-// Film 0 s, the desk: the name sits on the monitor's editor, its dark, empty right side (the
-// biggest calm area in the frame, measured). Phones: the slice starts centred on the monitor, so
-// the name sits on its upper part.
-const PLACE: Place = { wide: { x: 0.615, y: 0.17, w: 0.27 }, tall: { y: 0.1 } };
+// Film 0 s, the desk: the name sits on the dark wall left of the lamp, between the window and the
+// lamp (measured over the hero's first 1.5 s: p90 brightness 12-17 there, against 50-120 on the
+// monitor's editor, and it widens as the camera pushes in and the window leaves the frame). It sat on
+// the editor first, where the code behind it made it hard to read (Murci, 2026-10-10). Phones show
+// only the middle of the frame (the monitor), so there the name keeps the top, under a deeper shade.
+const PLACE: Place = { wide: { x: 0.085, y: 0.37, w: 0.3 }, tall: { y: 0.1 } };
 
 /**
  * Chapter 01, "Prompt": the opening shot. The copy is placed on the film from the first paint and
@@ -28,6 +30,13 @@ export default function Hero() {
       el.style.width = `${b.width}px`;
       el.style.top = b.top === undefined ? '' : `${b.top}px`;
       el.style.bottom = b.bottom === undefined ? '' : `${b.bottom}px`;
+      // On a short window the copy would run into the "Scroll to dive in" cue (its bottom offset is
+      // bottom-8 from sm up, bottom-24 on phones): lift it to end clear of the cue, never under the nav.
+      if (b.top !== undefined) {
+        const clear = window.innerWidth >= 640 ? 88 : 136;
+        const maxTop = window.innerHeight - clear - el.offsetHeight;
+        if (b.top > maxTop) el.style.top = `${Math.max(80, maxTop)}px`;
+      }
     };
     const pass = () => {
       raf = 0;
@@ -40,6 +49,8 @@ export default function Hero() {
       if (!raf) raf = window.requestAnimationFrame(pass);
     };
     place();
+    // The display face changes the copy's height when it lands; place again then.
+    void document.fonts?.ready.then(place);
     if (!reduced) {
       el.style.position = 'fixed';
       pass();
@@ -57,15 +68,15 @@ export default function Hero() {
     <section id="hero" className="t-ink relative h-[100svh]">
       <div
         ref={copyRef}
-        className="absolute left-6 right-6 top-[14%] z-20 max-w-[34rem] origin-top lg:left-[61%] lg:right-auto lg:top-[17%] lg:w-[27%]"
+        className="absolute left-6 right-6 top-[14%] z-20 max-w-[34rem] origin-top lg:left-[7%] lg:right-auto lg:top-[37%] lg:w-[30%]"
       >
         <Kicker n="01" name="Prompt" />
-        <h1 className="mt-5 font-display text-[clamp(3rem,12vw,4.25rem)] font-medium leading-[0.95] tracking-[-0.025em] text-fg lg:text-[clamp(3.25rem,4.6vw,5rem)]">
+        <h1 className="mt-5 font-display text-[clamp(3.25rem,14vw,4.75rem)] font-medium leading-[0.95] tracking-[-0.025em] text-fg lg:text-[clamp(4rem,5.8vw,6.5rem)]">
           Nhlanhla
           <br />
           <span className="font-normal italic">Mokoena</span>
         </h1>
-        <p className="mt-5 font-sans text-base leading-relaxed text-fg lg:text-lg">
+        <p className="mt-5 font-sans text-lg leading-relaxed text-fg lg:text-[1.375rem]">
           AI Engineer · agentic AI, RAG and MLOps
         </p>
       </div>

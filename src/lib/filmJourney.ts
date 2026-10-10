@@ -59,8 +59,9 @@ export const KNOTS: FilmKnot[] = [
   // arriving ('top') to its last step gone ('bottom'); windows are contiguous, so the film never
   // jumps between scenes. Windows and placements: storyboard v1 (stage.md). Looks shade the side
   // each scene's steps sit on; the contrast scan tunes them.
-  // 0-3 s: the desk; the name sits on the monitor's editor, then the camera pushes in.
-  { at: 'start', T: 0.0, wide: L(0.06, 'right', 0.35, 0.45), tall: L(0.2, 'top', 0.6) },
+  // 0-3 s: the desk; the name sits on the dark wall left of the lamp (shaded from the left), then
+  // the camera pushes in. Phones: the top band, deeper (the name sits over the monitor there).
+  { at: 'start', T: 0.0, wide: L(0.06, 'left', 0.45, 0.45), tall: L(0.2, 'top', 0.8, 0.5) },
   // 3-5 s: the monitor fills the frame, through the screen. Steps on the editor's empty right side.
   { at: 'about', edge: 'top', T: 3.0, wide: L(0.12, 'right', 0.55, 0.6), tall: L(0.35, 'bottom', 0.7) },
   { at: 'about', edge: 'bottom', T: 5.0, wide: L(0.12, 'right', 0.55, 0.6), tall: L(0.35, 'bottom', 0.7) },
