@@ -3,6 +3,7 @@ import { FRAME_COUNT, frameAt, frameUrl, nearestFrame, parseBeat, RENDITION_WIDT
 import type { Rendition } from '../lib/film';
 import { filmClock, FOCUS, KNOTS } from '../lib/filmJourney';
 import type { GradeSide, Look } from '../lib/filmJourney';
+import { FEATHER, shadeLayer } from '../lib/shade';
 
 /** A beat that has fired stays until the film is this many seconds before it again. */
 const BEAT_HYSTERESIS = 0.4;
@@ -324,6 +325,53 @@ export default function FilmStage() {
       }
     };
 
+    // The shade under the text (lib/shade.ts): a solid box with a soft feather, the look of the CSS
+    // box-shadow it replaces. The feather is rendered once into a sprite and drawn in nine slices, so
+    // it keeps its width in pixels at any box size. The sprite's core must be wide (3x the blur):
+    // blurring a small square leaves even its middle at ~65%, and the fade then reads as an edge. The
+    // box is not filled solid on top: the blur is ~90% at its edge, and a solid fill made a visible
+    // step there (measured 29 -> 35 brightness on a phone).
+    // The blur comes from shadowBlur on a square drawn off the sprite (every canvas supports it).
+    const sprites = new Map<number, { img: HTMLCanvasElement; edge: number; core: number }>();
+    const shadeSprite = (spread: number, blur: number) => {
+      const edge = spread + blur; // how far the feather reaches beyond the box
+      const hit = sprites.get(edge);
+      if (hit) return hit;
+      const core = 3 * blur;
+      const img = document.createElement('canvas');
+      img.width = img.height = 2 * edge + core;
+      const g = img.getContext('2d');
+      if (g) {
+        const off = img.width + 4 * blur;
+        g.shadowColor = 'rgba(0,0,0,1)';
+        g.shadowBlur = blur;
+        g.shadowOffsetX = off;
+        g.fillStyle = '#000';
+        g.fillRect(edge - spread - off, edge - spread, core + 2 * spread, core + 2 * spread);
+      }
+      const sprite = { img, edge, core };
+      sprites.set(edge, sprite);
+      return sprite;
+    };
+    const paintShades = () => {
+      const kx = canvas.width / (canvas.clientWidth || window.innerWidth);
+      const ky = canvas.height / (canvas.clientHeight || window.innerHeight);
+      const f = window.innerWidth <= 640 ? FEATHER.phone : FEATHER.wide;
+      const { img, edge: e, core } = shadeSprite(f.spread, f.blur);
+      const src = [0, e, e + core, img.width];
+      shadeLayer.each((sh) => {
+        const dx = [sh.x - e, sh.x, sh.x + sh.w, sh.x + sh.w + e];
+        const dy = [sh.y - e, sh.y, sh.y + sh.h, sh.y + sh.h + e];
+        ctx.globalAlpha = sh.alpha;
+        for (let i = 0; i < 3; i++) {
+          for (let j = 0; j < 3; j++) {
+            ctx.drawImage(img, src[i], src[j], src[i + 1] - src[i], src[j + 1] - src[j],
+              dx[i] * kx, dy[j] * ky, (dx[i + 1] - dx[i]) * kx, (dy[j + 1] - dy[j]) * ky);
+          }
+        }
+      });
+    };
+
     const draw = (T: number, pose: Pose) => {
       const { i, a } = frameAt(T);
       const { frame: base, d } = nearest(i);
@@ -343,6 +391,7 @@ export default function FilmStage() {
       // Lighting: the two knots' looks cross-fade as the scroll moves between them.
       lightBy(pose.a, pose.a === pose.b ? 1 : 1 - pose.t);
       if (pose.a !== pose.b) lightBy(pose.b, pose.t);
+      paintShades();
       ctx.globalAlpha = 1;
     };
     const fillBgRect = () => {
@@ -469,6 +518,11 @@ export default function FilmStage() {
       schedule();
     });
     ro.observe(document.body);
+    // A shade moved (a step, the hero name): repaint, even when the film itself did not.
+    const offShades = shadeLayer.subscribe(() => {
+      dirty = true;
+      schedule();
+    });
     document.fonts?.ready.then(() => !disposed && onResize());
     // If the browser's graphics process resets, the canvas comes back blank: redraw it.
     const onContextLost = () => {
@@ -489,6 +543,7 @@ export default function FilmStage() {
       filmClock.on = false;
       delete root.dataset.film;
       ro.disconnect();
+      offShades();
       canvas.removeEventListener('contextlost', onContextLost);
       canvas.removeEventListener('contextrestored', onContextRestored);
       window.removeEventListener('load', onLoad);

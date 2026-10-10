@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import Kicker from './Kicker';
 import { placeBox } from '../lib/stage';
 import type { Place } from '../lib/stage';
+import { SHADE, shadeLayer } from '../lib/shade';
 
 // Film 0 s, the desk: the name sits on the dark wall left of the lamp, between the window and the
 // lamp (measured over the hero's first 1.5 s: p90 brightness 12-17 there, against 50-120 on the
@@ -24,6 +25,7 @@ export default function Hero() {
     if (!el) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let raf = 0;
+    let box = { x: 0, y: 0, w: 0, h: 0 }; // the copy's placed box, for the shade under it
     const place = () => {
       const b = placeBox(PLACE, window.innerWidth, window.innerHeight);
       el.style.left = `${b.left}px`;
@@ -37,6 +39,10 @@ export default function Hero() {
         const maxTop = window.innerHeight - clear - el.offsetHeight;
         if (b.top > maxTop) el.style.top = `${Math.max(80, maxTop)}px`;
       }
+      const h = el.offsetHeight;
+      const top = el.style.top ? parseFloat(el.style.top) : window.innerHeight - (parseFloat(el.style.bottom) || 0) - h;
+      box = { x: b.left, y: top, w: b.width, h };
+      if (!reduced) pass();
     };
     const pass = () => {
       raf = 0;
@@ -44,6 +50,12 @@ export default function Hero() {
       el.style.opacity = String(1 - k);
       el.style.transform = `translate3d(0, ${(-16 * k).toFixed(1)}px, 0) scale(${(1 + 0.06 * k).toFixed(4)})`;
       el.style.visibility = k >= 1 ? 'hidden' : '';
+      // The shade under the name, painted by the film (lib/shade.ts), passes with it (origin top centre).
+      const sc = 1 + 0.06 * k;
+      shadeLayer.set(
+        'hero',
+        k >= 1 ? null : { x: box.x - (box.w * (sc - 1)) / 2, y: box.y - 16 * k, w: box.w * sc, h: box.h * sc, alpha: (1 - k) * SHADE.base }
+      );
     };
     const onScroll = () => {
       if (!raf) raf = window.requestAnimationFrame(pass);
@@ -60,6 +72,7 @@ export default function Hero() {
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', place);
+      shadeLayer.set('hero', null);
       if (raf) window.cancelAnimationFrame(raf);
     };
   }, []);
@@ -68,7 +81,7 @@ export default function Hero() {
     <section id="hero" className="t-ink relative h-[100svh]">
       <div
         ref={copyRef}
-        className="t-shade absolute left-6 right-6 top-[14%] z-20 max-w-[34rem] origin-top lg:left-[7%] lg:right-auto lg:top-[37%] lg:w-[30%]"
+        className="absolute left-6 right-6 top-[14%] z-20 max-w-[34rem] origin-top lg:left-[7%] lg:right-auto lg:top-[37%] lg:w-[30%]"
       >
         <Kicker n="01" name="Prompt" />
         <h1 className="mt-5 font-display text-[clamp(3.25rem,14vw,4.75rem)] font-medium leading-[0.95] tracking-[-0.025em] text-fg lg:text-[clamp(4rem,5.8vw,6.5rem)]">

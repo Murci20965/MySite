@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { DECK, deckDepth, placeBox, stepLook } from '../lib/stage';
 import type { Place } from '../lib/stage';
+import { SHADE, shadeLayer } from '../lib/shade';
 
 /** Where a nav link lands in a scene, in steps: past the first step's arrival (it ends at 0.12). */
 const LAND = 0.3;
@@ -11,6 +12,10 @@ type SceneState = {
   places: Place[];
   stepVh: number;
   stack: boolean;
+  /** a deeper shade under its steps (data-pool: the film's brightest frames) */
+  pool: boolean;
+  /** each step's placed box (viewport px, before its transform), for the shade under it */
+  boxes: { left: number; top: number; width: number; height: number }[];
   top: number;
   stepPx: number;
   active: boolean;
@@ -19,7 +24,7 @@ type SceneState = {
 /**
  * Runs every `.scene` (Scene.tsx) in staged mode: sizes each scene's spacer, places its steps for
  * the viewport, and on scroll moves only the active scene's steps (opacity and transform, so the
- * compositor does the work). Staged mode follows html[data-film="on"], which FilmStage sets on the
+ * compositor does the work) and publishes the shade under each one for the film to paint. Staged mode follows html[data-film="on"], which FilmStage sets on the
  * first scroll and never under reduced motion or Save-Data. Mounted once, next to FilmStage.
  */
 export default function StageDirector() {
@@ -40,6 +45,8 @@ export default function StageDirector() {
           places: steps.map((s) => JSON.parse(s.dataset.place ?? '{}') as Place),
           stepVh: Number(el.dataset.stepVh) || 85,
           stack: el.dataset.mode === 'stack',
+          pool: el.dataset.pool !== undefined,
+          boxes: [],
           top: 0,
           stepPx: 1,
           active: false,
@@ -50,6 +57,15 @@ export default function StageDirector() {
     const clearStep = (s: HTMLElement) => {
       s.style.cssText = '';
       delete s.dataset.on;
+    };
+    const clearShades = (s: SceneState) => s.steps.forEach((_, i) => shadeLayer.set(`${s.el.id}:${i}`, null));
+    // A step's height, for its shade: measured at layout, and again when its "Read more" opens or closes.
+    const measureBox = (s: SceneState, i: number) => {
+      const b = s.boxes[i];
+      if (!b) return;
+      const step = s.steps[i];
+      b.height = step.offsetHeight;
+      if (step.style.top === '') b.top = vh - (parseFloat(step.style.bottom) || 0) - b.height;
     };
 
     const layout = () => {
@@ -63,6 +79,7 @@ export default function StageDirector() {
           s.el.style.scrollMarginTop = '';
           delete s.el.dataset.active;
           s.steps.forEach(clearStep);
+          clearShades(s);
           continue;
         }
         s.el.style.height = `${Math.round(s.steps.length * s.stepPx)}px`;
@@ -75,7 +92,9 @@ export default function StageDirector() {
           step.style.width = `${b.width}px`;
           step.style.top = b.top === undefined ? '' : `${b.top}px`;
           step.style.bottom = b.bottom === undefined ? '' : `${b.bottom}px`;
+          s.boxes[i] = { left: b.left, top: b.top ?? 0, width: b.width, height: 0 };
         });
+        s.steps.forEach((_, i) => measureBox(s, i));
       }
       // Scene tops after every height is set: a scene's top depends on the scenes above it.
       for (const s of scenes) s.top = s.el.getBoundingClientRect().top + window.scrollY;
@@ -93,7 +112,10 @@ export default function StageDirector() {
         if (active !== s.active) {
           s.active = active;
           if (active) s.el.dataset.active = '';
-          else delete s.el.dataset.active;
+          else {
+            delete s.el.dataset.active;
+            clearShades(s);
+          }
         }
         if (!active) continue;
         const lastT = p - (n - 1);
@@ -112,6 +134,14 @@ export default function StageDirector() {
           // Only a step that is clearly on screen, and on top of its pile, takes pointer events.
           if (opacity > 0.5 && depth < 0.5) step.dataset.on = '';
           else delete step.dataset.on;
+          // Its shade, painted by the film (lib/shade.ts), follows the step's transform (origin top
+          // centre). In a deck only the top card casts one, or eight piled shades make a black block.
+          const b = s.boxes[i];
+          const alpha = opacity * (s.stack ? Math.max(0, 1 - depth) : 1) * (s.pool ? SHADE.pool : SHADE.base);
+          shadeLayer.set(
+            `${s.el.id}:${i}`,
+            b ? { x: b.left + (b.width * (1 - scale)) / 2, y: b.top + y, w: b.width * scale, h: b.height * scale, alpha } : null
+          );
         });
       }
     };
@@ -123,6 +153,15 @@ export default function StageDirector() {
     // page height mid-scroll. Only a width change or a big height change (rotation) re-lays out.
     const onResize = () => {
       if (window.innerWidth !== vw || Math.abs(window.innerHeight - vh) > vh * 0.2) layout();
+    };
+
+    const onToggle = (e: Event) => {
+      if (!staged) return;
+      const step = (e.target as Element | null)?.closest?.('.scene-step');
+      const s = step && scenes.find((sc) => sc.steps.includes(step as HTMLElement));
+      if (!s) return;
+      measureBox(s, s.steps.indexOf(step as HTMLElement));
+      schedule();
     };
 
     // A keyboard user tabbing into a step that is not on screen is taken to it.
@@ -146,6 +185,7 @@ export default function StageDirector() {
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
     document.addEventListener('focusin', onFocus);
+    document.addEventListener('toggle', onToggle, true); // <details> toggle does not bubble
     document.fonts?.ready.then(layout);
 
     return () => {
@@ -153,11 +193,13 @@ export default function StageDirector() {
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', onResize);
       document.removeEventListener('focusin', onFocus);
+      document.removeEventListener('toggle', onToggle, true);
       if (raf) window.cancelAnimationFrame(raf);
       for (const s of scenes) {
         s.el.style.height = '';
         delete s.el.dataset.active;
         s.steps.forEach(clearStep);
+        clearShades(s);
       }
     };
   }, []);
