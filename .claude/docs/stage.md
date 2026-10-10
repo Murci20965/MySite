@@ -41,14 +41,15 @@ pass in place while the film moves forward.
 
 **Scene** `stepVh` (default 85): scroll length of one step in % of the viewport height.
 `mode`: `sequence` (one step at a time) or `stack` (steps stay and pile up until the scene ends).
-**The shade under the text**: every step of a sequence scene has a soft dark area behind it, part
-of the step, so it arrives and leaves with it (Murci, 2026-10-10: text "clearly visible"). It is
-45% black with a 140 px feather (96 px on phones, a smaller layer per step), so it reads as shadow,
-not a shape: a 72 px feather read as a dark rectangle on the clouds and a glass panel as a UI box
-(A/B on the same frames, 2026-10-09). `pool` (`data-pool`) deepens it to 58% for scenes over the
-film's brightest frames (the globe chapters). The Stack deck has none (its cards are their own
-glass), and the hero name takes the same shade (`.t-shade`). Shading the whole frame instead would
-dim the film everywhere.
+**The shade under the text**: every step has a soft dark area behind it, part of the step, so it
+arrives and leaves with it (Murci, 2026-10-10: text "clearly visible", darker, and no borders
+anywhere). It is 55% black with a 140 px feather (96 px on phones, a smaller layer per step), so it
+reads as shadow, not a shape: a 72 px feather read as a dark rectangle on the clouds and a glass
+panel as a UI box (A/B on the same frames, 2026-10-09). `pool` (`data-pool`) deepens it to 65% for
+scenes over the film's brightest frames (the globe chapters). In the Stack deck only the top card
+casts it (its opacity follows `--depth`), or eight piled shades would make a black block. The hero
+name and the desktop nav take the same shade (`.t-shade`). Shading the whole frame instead would
+dim the film everywhere. Contact and the footer keep their own look (Murci's call).
 
 **Step curve** (`stepLook`, t = the step's position in steps): arrives over t -0.2 → 0.12 (from a
 little depth: scale 0.965 → 1, 16 px below), holds, passes over t 0.8 → 1.0 (scale up 4%, 12 px up).
@@ -70,7 +71,7 @@ card shows its glass edge, never ghosted text. Only the top card (depth < 0.5) t
 | Hero (01) | 0 s | copy | first 50vh | the dark wall left of the lamp, x .085 y .37 (was the monitor's editor: the code behind it made it hard to read) · top 10% |
 | About (02) | 3.0-5.0 s | 3 | 85 | editor's empty right side, x .55 · bottom band |
 | Experience (03) | 5.0-7.6 s | 3 roles + 4 capabilities | 85 | right of the light field · top |
-| Open source (04) | 7.6-9.2 s | 7 | 85 | open right, threads stream from the left · bottom band |
+| Open source (04) | 7.6-9.2 s | 7 cards | 85 | open right, threads stream from the left · bottom band |
 | Numbers (05) | 9.2-10.2 s | 4 | 70 | top right, clear of the warm glow · top |
 | Vision (06) | 10.2-11.2 s | 2 | 90 | centred in the sky above the city · top |
 | Stack (07) | 11.2-13.6 s | 8 (deck) | 55 | the sky, top left (lime glass cards) · top quarter |

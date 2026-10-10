@@ -43,10 +43,15 @@ breaking them. Last updated 2026-10-09.
 | Chat typing dots | `ChatWidget.tsx`, `.t-typing` | opacity, transform | announced as "Assistant is typing" |
 | Assistant's point of light | `ChatWidget.tsx`, `.t-light-ping` | transform, opacity | a slow ring on the launcher (2.8 s); off under reduced motion |
 | Navbar hide and return | `Navigation.tsx` | transform | slides up on scroll down, back on scroll up (6 px of intent); active link dot fades |
+| Menu sheet (phones, tablets) | `Navigation.tsx`, `.t-menu-sheet`, `.t-menu-item` | opacity, transform | grows from the Menu pill's corner (280 ms), items rise in 30 ms apart; visibility flips after the fade-out; desktop keeps the row of links |
+| Project pipeline pulse | `ProjectDiagram.tsx`, `.t-diagram-pulse` | stroke-dashoffset | runs while its card is the step on screen (staged only), under the boxes so it never crosses a label; off under reduced motion |
 | Arrow nudge | `.t-nudge` | transform | |
 
 ### Deliberate exceptions
 
+- **Project pipeline pulse** (`ProjectDiagram.tsx`): `stroke-dashoffset` is not compositor-only; it
+  repaints the card's diagram (about 300x140 px) each frame, only while that card is the step on
+  screen, so one small repaint at a time. A transform cannot move a dash along a path.
 - **"Read more"** (every scene): a native `<details>`, which opens instantly (no height tween);
   its body scrolls inside the step.
 - **Hover colour changes**: explicit `transition-colors` (or `transition-opacity`) classes ease

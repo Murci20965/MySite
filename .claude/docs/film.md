@@ -132,9 +132,9 @@ Lettering does the rest, with no text boxes:
   shade;
 - a feathered radial "pool" under the chapter kickers (the hero, Contact) and Contact's link list
   (desktop: the globe's lime arcs cross it, and lime headings on lime arcs lose their edge); the
-  step shade in the globe chapters (stage.md); controls sit on the dark glass of the "Ask Murci"
-  button (the project links, the menu), and so do the cards Murci chose (the Stack deck, the
-  project cards);
+  shade behind every step, the hero name and the desktop nav (stage.md); the project cards are dark
+  glass with no borders (their links soft tinted pills), the phone menu a borderless dark sheet, and
+  the Stack deck keeps its lime glass;
 - the footer is type on the film's last frame (the arcs over the globe), not a slab: the end
   knot's bottom band shades it, and it follows the same lettering rules.
 
