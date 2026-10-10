@@ -4,11 +4,11 @@ import type { Place } from '../lib/stage';
 
 // Film 3.0-5.0 s: the monitor fills the frame and the camera passes through the screen. The code
 // sits on the left of the editor; its empty right side is the calm space (storyboard v1). Phones:
-// the code fills the slice, so the steps sit in the bottom band.
+// the code fills the slice, so the steps sit in the bottom band, ending above the "Ask Murci" button.
 const PLACES: Place[] = [
-  { wide: { x: 0.55, y: 0.3, w: 0.36 }, tall: { y: 0.07, from: 'bottom' } },
-  { wide: { x: 0.56, y: 0.34, w: 0.35 }, tall: { y: 0.07, from: 'bottom' } },
-  { wide: { x: 0.55, y: 0.3, w: 0.36 }, tall: { y: 0.07, from: 'bottom' } },
+  { wide: { x: 0.55, y: 0.3, w: 0.36 }, tall: { y: 0.12, from: 'bottom' } },
+  { wide: { x: 0.56, y: 0.34, w: 0.35 }, tall: { y: 0.12, from: 'bottom' } },
+  { wide: { x: 0.55, y: 0.3, w: 0.36 }, tall: { y: 0.12, from: 'bottom' } },
 ];
 
 const short = 'font-display text-3xl font-medium leading-[1.12] tracking-[-0.02em] text-fg lg:text-4xl';
