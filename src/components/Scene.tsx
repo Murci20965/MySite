@@ -11,7 +11,7 @@ type SceneProps = {
   stepVh?: number;
   /** 'sequence': one step at a time; 'stack': steps stay and pile up until the scene ends */
   mode?: 'sequence' | 'stack';
-  /** a feathered dark shade behind each step, for scenes over the film's brightest frames */
+  /** a deeper shade behind each step (every sequence step has one), for the film's brightest frames */
   pool?: boolean;
   children: ReactNode;
 };

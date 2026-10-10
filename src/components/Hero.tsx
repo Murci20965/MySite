@@ -68,7 +68,7 @@ export default function Hero() {
     <section id="hero" className="t-ink relative h-[100svh]">
       <div
         ref={copyRef}
-        className="absolute left-6 right-6 top-[14%] z-20 max-w-[34rem] origin-top lg:left-[7%] lg:right-auto lg:top-[37%] lg:w-[30%]"
+        className="t-shade absolute left-6 right-6 top-[14%] z-20 max-w-[34rem] origin-top lg:left-[7%] lg:right-auto lg:top-[37%] lg:w-[30%]"
       >
         <Kicker n="01" name="Prompt" />
         <h1 className="mt-5 font-display text-[clamp(3.25rem,14vw,4.75rem)] font-medium leading-[0.95] tracking-[-0.025em] text-fg lg:text-[clamp(4rem,5.8vw,6.5rem)]">

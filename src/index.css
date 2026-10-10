@@ -486,24 +486,38 @@ html[data-film='on'] .scene-step[data-on] {
 html[data-film='on'] {
   scroll-behavior: auto;
 }
-/* The shade under a step (scenes with data-pool: the globe chapters, the brightest frames). Small
-   cream text needs the background under it at or below ~0.15 luminance; the Earth's cloud tops
-   are far brighter, and shading the whole frame would dim the globe. So the shade sits only behind
-   the step, part of it (it arrives and leaves with it): 58% black with a very long feather, so it
-   reads as shadow, not a shape. A 72 px feather read as a dark rectangle on the clouds, and a glass
-   panel read as a UI box (A/B, 2026-10-09). */
-html[data-film='on'] .scene[data-pool] .scene-step {
+/* The shade under the text: a dark area with a very long feather behind every step, part of the
+   step (it arrives and leaves with it), so text reads clearly wherever it lands on the film (Murci,
+   2026-10-10: "a bit darker where they appear"). Shading the whole frame instead would dim the film.
+   It reads as shadow, not a shape: a 72 px feather read as a dark rectangle on the clouds, and a
+   glass panel as a UI box (A/B, 2026-10-09). Scenes over the brightest frames (data-pool: the globe
+   chapters, whose cloud tops are far brighter than the ~0.15 luminance small cream text needs) take
+   it deeper. The Stack deck has none: its cards are their own glass. The hero name takes the same
+   shade (.t-shade). */
+html[data-film='on'] .scene:not([data-mode='stack']) .scene-step,
+.t-shade {
   isolation: isolate;
 }
-html[data-film='on'] .scene[data-pool] .scene-step::before {
+html[data-film='on'] .scene:not([data-mode='stack']) .scene-step::before,
+.t-shade::before {
   content: '';
   position: absolute;
-  inset: 0; /* full strength to the step's edges: a "Read more" on the edge sat in the fade (4.17) */
+  inset: 0; /* full strength to the edges: a "Read more" on the edge sat in the fade (4.17) */
   z-index: -1;
   border-radius: 999px;
-  background: rgb(0 0 0 / 0.58);
-  box-shadow: 0 0 140px 90px rgb(0 0 0 / 0.58);
+  background: rgb(0 0 0 / var(--shade, 0.45));
+  box-shadow: 0 0 140px 90px rgb(0 0 0 / var(--shade, 0.45));
   pointer-events: none;
+}
+html[data-film='on'] .scene[data-pool] {
+  --shade: 0.58;
+}
+/* Phones: a shorter feather, so each step's layer is smaller to composite on the reference phone. */
+@media (max-width: 640px) {
+  html[data-film='on'] .scene:not([data-mode='stack']) .scene-step::before,
+  .t-shade::before {
+    box-shadow: 0 0 96px 60px rgb(0 0 0 / var(--shade, 0.45));
+  }
 }
 /* Contact follows the last scene in normal flow. Staged, its content starts 90vh down, so it rises
    into view just as the last question passes (step 6 passes over the last 0.15 viewport of FAQ):
