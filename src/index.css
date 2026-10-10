@@ -536,7 +536,8 @@ html[data-film='on'] {
    step (it arrives and leaves with it), so text reads clearly wherever it lands on the film (Murci,
    2026-10-10: "a bit darker where they appear"). Shading the whole frame instead would dim the film.
    It reads as shadow, not a shape: a 72 px feather read as a dark rectangle on the clouds, and a
-   glass panel as a UI box (A/B, 2026-10-09). No borders anywhere (Murci, 2026-10-10). Scenes over
+   glass panel as a UI box (A/B, 2026-10-09). No borders anywhere (Murci, 2026-10-10), except the
+   Stack deck's lime outlines, which he kept: they draw the stacked edges. Scenes over
    the brightest frames (data-pool: the globe chapters, whose cloud tops are far brighter than the
    ~0.15 luminance small cream text needs) take it deeper. In the Stack deck only the top card casts
    it, or eight piled shades would make a black block. The hero name and the nav take the same shade

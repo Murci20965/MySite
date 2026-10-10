@@ -43,7 +43,8 @@ pass in place while the film moves forward.
 `mode`: `sequence` (one step at a time) or `stack` (steps stay and pile up until the scene ends).
 **The shade under the text**: every step has a soft dark area behind it, part of the step, so it
 arrives and leaves with it (Murci, 2026-10-10: text "clearly visible", darker, and no borders
-anywhere). It is 55% black with a 140 px feather (96 px on phones, a smaller layer per step), so it
+anywhere; the one exception, by his call, is the Stack deck's lime outlines, which draw the stacked
+edges). It is 55% black with a 140 px feather (96 px on phones, a smaller layer per step), so it
 reads as shadow, not a shape: a 72 px feather read as a dark rectangle on the clouds and a glass
 panel as a UI box (A/B on the same frames, 2026-10-09). `pool` (`data-pool`) deepens it to 65% for
 scenes over the film's brightest frames (the globe chapters). In the Stack deck only the top card
