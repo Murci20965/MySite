@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-// Real in-page links: the browser scrolls (smoothly, via `scroll-behavior` on
-// <html>, which the reduced-motion rule turns off), the URL hash updates so a
-// section can be shared, and Back works. No JS scrolling needed.
+// Real in-page links: the URL hash updates so a chapter can be shared, and Back works. Staged, the
+// jump is a cut (stage.md, "Navigation"); in flow mode the browser scrolls smoothly.
 const NAV_LINKS = [
   { n: '02', name: 'About', href: '#about' },
   { n: '03', name: 'Experience', href: '#experience' },
@@ -15,22 +14,24 @@ const NAV_LINKS = [
 const RESUME = { href: '/resume.pdf', filename: 'Nhlanhla_Mokoena_Resume.pdf' };
 
 /**
- * No bar (Murci, 2026-10-07): the wordmark and small mono links sit straight
- * on the film, with a soft fade at the very top so they read over bright
- * frames. It steps out of the way while you read (hides on scroll down) and
- * comes back the moment you scroll up. No backdrop blur: over a canvas that
- * changes every frame, a blur is recomputed every frame.
+ * No bar and no borders. Desktop: the wordmark and the row of mono links sit straight on the film,
+ * each on a soft dark shade (Murci, 2026-10-10: the row was right, only its text needed a darker
+ * background). Phones and tablets: one Menu pill that opens a small dark sheet from its corner
+ * (option A of three, 2026-10-09), so the film keeps playing around it. The sheet is a disclosure,
+ * not a modal: the page stays live behind it, and it closes on a link, Escape, a click outside,
+ * focus leaving it, or a scroll.
+ * The nav steps out of the way while you read (hides on scroll down) and comes back on scroll up.
+ * No backdrop blur: over a canvas that changes every frame, a blur is recomputed every frame.
  */
 export default function Navigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [hidden, setHidden] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
 
-  // Scroll-spy: mark the nav link for whichever section sits near mid-viewport.
-  // Every section is observed, so scrolling back to the hero (or Stats, Vision,
-  // FAQ) clears the mark instead of leaving the last linked section lit.
+  // Scroll-spy: mark the chapter whose section sits near mid-viewport. Every section is observed,
+  // so scrolling to one without a link (Stats, Vision, FAQ) clears the mark.
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll<HTMLElement>('section[id]'));
     if (!sections.length) return;
@@ -68,135 +69,152 @@ export default function Navigation() {
     };
   }, []);
 
-  // Mobile menu: focus moves in, Tab stays inside, Escape closes it and hands
-  // focus back to the toggle; the page behind stops scrolling.
+  // Open: focus moves to the first chapter. Escape closes and hands focus back to the pill; a click
+  // outside, focus leaving the menu, or a scroll of more than a few pixels closes it.
   useEffect(() => {
-    if (!isMenuOpen) return;
-    const menu = menuRef.current;
-    const focusables = () => Array.from(menu?.querySelectorAll<HTMLElement>('a, button') ?? []);
-    focusables()[0]?.focus();
+    if (!open) return;
+    const sheet = sheetRef.current;
+    sheet?.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+    const inside = (t: EventTarget | null) =>
+      t instanceof Node && (sheet?.contains(t) || toggleRef.current?.contains(t));
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setIsMenuOpen(false);
-        toggleRef.current?.focus();
-        return;
-      }
-      if (e.key !== 'Tab') return;
-      const items = [toggleRef.current, ...focusables()].filter(Boolean) as HTMLElement[];
-      const i = items.indexOf(document.activeElement as HTMLElement);
-      const next = e.shiftKey ? (i <= 0 ? items.length - 1 : i - 1) : i === items.length - 1 ? 0 : i + 1;
-      e.preventDefault();
-      items[next]?.focus();
+      if (e.key !== 'Escape') return;
+      setOpen(false);
+      toggleRef.current?.focus();
     };
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const onPointer = (e: PointerEvent) => {
+      if (!inside(e.target)) setOpen(false);
+    };
+    const onFocus = (e: FocusEvent) => {
+      if (!inside(e.target)) setOpen(false);
+    };
+    const startY = window.scrollY;
+    const onScroll = () => {
+      if (Math.abs(window.scrollY - startY) > 24) setOpen(false);
+    };
     window.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointer);
+    document.addEventListener('focusin', onFocus);
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
-      document.body.style.overflow = prevOverflow;
       window.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointer);
+      document.removeEventListener('focusin', onFocus);
+      window.removeEventListener('scroll', onScroll);
     };
-  }, [isMenuOpen]);
+  }, [open]);
 
-  const closeMenu = () => setIsMenuOpen(false);
-  const tucked = hidden && !isMenuOpen;
+  const close = () => setOpen(false);
+  const tucked = hidden && !open;
 
   return (
-    <>
-      <nav
-        aria-label="Primary"
-        className={`t-ink fixed inset-x-0 top-0 z-50 transition-transform duration-300 ease-out ${
-          tucked ? '-translate-y-full' : 'translate-y-0'
-        }`}
-      >
-        {/* The fade that lets the links read over bright frames; not a bar. */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/55 to-transparent" />
-        <div className="relative mx-auto flex h-20 max-w-[1760px] items-center justify-between px-6 sm:px-10 lg:px-16 xl:px-24">
-          <a
-            href="#hero"
-            onClick={closeMenu}
-            className="font-display text-[22px] font-medium text-fg transition-opacity hover:opacity-80"
-            aria-label="Murci, back to top"
-          >
-            Murci
-          </a>
+    <nav
+      aria-label="Primary"
+      className={`t-ink fixed inset-x-0 top-0 z-50 transition-transform duration-300 ease-out ${
+        tucked ? '-translate-y-full' : 'translate-y-0'
+      }`}
+    >
+      {/* The fade that lets the wordmark read over bright frames; not a bar. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/55 to-transparent" />
+      <div className="relative mx-auto flex h-20 max-w-[1760px] items-center justify-between px-6 sm:px-10 lg:px-16 xl:px-24">
+        <a
+          href="#hero"
+          onClick={close}
+          className="t-shade relative font-display text-[22px] font-medium text-fg transition-opacity hover:opacity-80"
+          aria-label="Murci, back to top"
+        >
+          Murci
+        </a>
 
-          <div className="hidden items-center gap-8 lg:flex">
-            {NAV_LINKS.map((link) => {
-              const isActive = activeSection === link.href.slice(1);
-              return (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  aria-current={isActive ? 'location' : undefined}
-                  className={`flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.24em] transition-colors ${
-                    isActive ? 'text-fg' : 'text-fg/80 hover:text-fg'
-                  }`}
-                >
-                  <span
-                    aria-hidden="true"
-                    className={`h-1 w-1 rounded-full bg-accent transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}
-                  />
-                  {link.name}
-                </a>
-              );
-            })}
+        {/* Desktop: the row of links, on a soft shade (no borders). */}
+        <div className="t-shade relative hidden items-center gap-8 lg:flex">
+          {NAV_LINKS.map((link) => {
+            const isActive = activeSection === link.href.slice(1);
+            return (
+              <a
+                key={link.name}
+                href={link.href}
+                aria-current={isActive ? 'location' : undefined}
+                className={`flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.24em] transition-colors ${
+                  isActive ? 'text-fg' : 'text-fg/80 hover:text-fg'
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`h-1 w-1 rounded-full bg-accent transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}
+                />
+                {link.name}
+              </a>
+            );
+          })}
+          <a
+            href={RESUME.href}
+            download={RESUME.filename}
+            className="font-mono text-[11px] uppercase tracking-[0.24em] text-accent transition-opacity hover:opacity-80"
+          >
+            Resume ↓
+          </a>
+        </div>
+
+        {/* Phones and tablets: the Menu pill and its sheet. */}
+        <div className="relative flex items-center lg:hidden">
+          <button
+            ref={toggleRef}
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="site-menu"
+            className="flex min-h-10 items-center rounded-full bg-[rgb(10_10_10/0.82)] px-4 font-mono text-[11px] uppercase tracking-[0.24em] text-fg transition-colors hover:text-accent"
+          >
+            {open ? 'Close' : 'Menu'}
+          </button>
+
+          {/* The sheet: grows from the pill's corner. `invisible` when closed takes its links out of
+              the tab order and the accessibility tree; visibility flips after the fade-out. */}
+          <div
+            ref={sheetRef}
+            id="site-menu"
+            data-open={open ? '' : undefined}
+            className={`t-menu-sheet absolute right-0 top-[calc(100%+10px)] w-[min(15.5rem,calc(100vw-3rem))] rounded-[18px] bg-[rgb(10_10_10/0.985)] px-5 pb-4 pt-3 ${
+              open ? 'visible' : 'invisible'
+            }`}
+          >
+            <ul>
+              {NAV_LINKS.map((link, i) => {
+                const isActive = activeSection === link.href.slice(1);
+                return (
+                  <li key={link.href} className="t-menu-item" style={{ ['--i' as string]: i }}>
+                    <a
+                      href={link.href}
+                      onClick={close}
+                      aria-current={isActive ? 'location' : undefined}
+                      className="group flex min-h-10 items-center gap-3"
+                    >
+                      <span className="w-6 font-mono text-[11px] tracking-[0.12em] text-accent">{link.n}</span>
+                      <span className="font-display text-lg font-medium text-fg transition-opacity group-hover:opacity-80">
+                        {link.name}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className={`h-1.5 w-1.5 rounded-full bg-accent transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}
+                      />
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
             <a
               href={RESUME.href}
               download={RESUME.filename}
-              className="font-mono text-[11px] uppercase tracking-[0.24em] text-accent transition-opacity hover:opacity-80"
+              onClick={close}
+              className="t-menu-item mt-3 flex min-h-10 items-center font-mono text-[11px] uppercase tracking-[0.24em] text-accent"
+              style={{ ['--i' as string]: NAV_LINKS.length }}
             >
               Resume ↓
             </a>
           </div>
-
-          <button
-            ref={toggleRef}
-            onClick={() => setIsMenuOpen((open) => !open)}
-            className="font-mono text-[11px] uppercase tracking-[0.24em] text-fg lg:hidden"
-            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            {isMenuOpen ? 'Close' : 'Menu'}
-          </button>
         </div>
-      </nav>
-
-      {/* `invisible` (visibility: hidden) when closed takes the off-screen links
-          out of the tab order and the accessibility tree; visibility is in the
-          transition list so it only flips after the slide-out finishes.
-          z-[45]: above the floating assistant (z-40), below the nav (z-50) so
-          the close button stays on top. */}
-      <nav
-        ref={menuRef}
-        id="mobile-menu"
-        aria-label="Mobile"
-        className={`fixed inset-0 z-[45] bg-bg/95 transition-[opacity,visibility] duration-300 ease-out lg:hidden ${
-          isMenuOpen ? 'visible opacity-100' : 'invisible opacity-0'
-        }`}
-      >
-        <div className="flex h-full flex-col justify-center gap-4 px-6 pb-8 pt-24 sm:px-10">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={closeMenu}
-              className="flex items-baseline gap-4 font-display text-4xl font-medium text-fg transition-opacity hover:opacity-80"
-            >
-              <span className="font-mono text-[11px] tracking-[0.2em] text-accent">{link.n}</span>
-              {link.name}
-            </a>
-          ))}
-          <a
-            href={RESUME.href}
-            download={RESUME.filename}
-            onClick={closeMenu}
-            className="mt-6 self-start rounded-full bg-accent px-8 py-3 font-sans text-base font-semibold text-black transition-opacity hover:opacity-90"
-          >
-            Download resume
-          </a>
-        </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 }

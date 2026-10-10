@@ -126,96 +126,6 @@
    transitions.dev — motion tokens (shared) + per-transition CSS
    ───────────────────────────────────────────────────────────── */
 :root {
-  /* texts reveal (18) */
-  --stagger-dur: 500ms;
-  --stagger-distance: 12px;
-  --stagger-stagger: 40ms;
-  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Texts reveal (transitions.dev 18) — display omitted so flex/block
-   line elements keep their own layout. */
-.t-stagger-line {
-  opacity: 0;
-  transform: translateY(var(--stagger-distance));
-  transition:
-    opacity var(--stagger-dur) var(--stagger-ease),
-    transform var(--stagger-dur) var(--stagger-ease);
-  will-change: transform, opacity;
-}
-.t-stagger-line--2 { transition-delay: var(--stagger-stagger); }
-.t-stagger-line--3 { transition-delay: calc(var(--stagger-stagger) * 2); }
-.t-stagger-line--4 { transition-delay: calc(var(--stagger-stagger) * 3); }
-.t-stagger.is-shown .t-stagger-line {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .t-stagger-line {
-    transition: none !important;
-  }
-}
-
-:root {
-  /* number pop-in (02) */
-  --digit-dur: 500ms;
-  --digit-distance: 8px;
-  --digit-stagger: 70ms;
-  --digit-ease: cubic-bezier(0.34, 1.45, 0.64, 1);
-  --digit-dir-x: 0;
-  --digit-dir-y: 1;
-}
-
-/* Number pop-in (transitions.dev 02) */
-@keyframes t-digit-pop-in {
-  0% {
-    transform: translate(
-      calc(var(--digit-distance) * var(--digit-dir-x)),
-      calc(var(--digit-distance) * var(--digit-dir-y))
-    );
-    opacity: 0;
-  }
-  100% {
-    transform: translate(0, 0);
-    opacity: 1;
-  }
-}
-.t-digit-group {
-  display: inline-flex;
-  align-items: baseline;
-}
-.t-digit {
-  display: inline-block;
-  will-change: transform, opacity;
-}
-/* Held hidden until scrolled into view so the pop-in isn't missed above the fold.
-   Film-cued numbers ([data-popbeat]) hide only once the film is live (after the
-   first scroll), so crawlers and unscrolled visitors read them. */
-.t-digit-group.is-pending:not([data-popbeat]) .t-digit,
-html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
-  opacity: 0;
-}
-.t-digit-group.is-animating .t-digit {
-  animation: t-digit-pop-in var(--digit-dur) var(--digit-ease) both;
-}
-.t-digit-group.is-animating .t-digit[data-stagger='1'] {
-  animation-delay: var(--digit-stagger);
-}
-.t-digit-group.is-animating .t-digit[data-stagger='2'] {
-  animation-delay: calc(var(--digit-stagger) * 2);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .t-digit-group .t-digit {
-    animation: none !important;
-  }
-  .t-digit-group.is-pending .t-digit {
-    opacity: 1;
-  }
-}
-
-:root {
   /* error shake (12) */
   --shake-distance: 6px;
   --shake-overshoot: 4px;
@@ -360,11 +270,11 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   }
 }
 
-/* Project system diagrams: micro labels + a lime pulse that runs the flow
-   path on card hover, so the pipeline reads as alive. */
+/* Project system diagrams (the open-source cards): micro labels and a lime pulse that runs the
+   flow path while the card is on screen, so the pipeline reads as alive. */
 .t-diagram-t {
   font-family: 'Space Mono', ui-monospace, monospace;
-  font-size: 11px;
+  font-size: 12.5px; /* SVG units: 11.8 px on a 360 px phone, 13.8 px on desktop */
   letter-spacing: 0.04em;
 }
 .t-diagram-pulse {
@@ -373,64 +283,64 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   opacity: 0;
   transition: opacity 200ms ease;
 }
-.group:hover .t-diagram-pulse {
+/* The pipeline runs while its card is the step on screen (staged mode only). */
+html[data-film='on'] .scene-step[data-on] .t-diagram-pulse {
   opacity: 1;
-  animation: t-diagram-run 1.5s linear infinite;
+  animation: t-diagram-run 1.8s linear infinite;
 }
 @keyframes t-diagram-run {
   to { stroke-dashoffset: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .group:hover .t-diagram-pulse {
-    animation: none;
-    opacity: 0;
+  .t-diagram-pulse {
+    animation: none !important;
+    opacity: 0 !important;
   }
 }
 
-/* Capability marquee: duplicated track slides half its width, loops seamlessly. */
-.t-marquee {
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent, #fff 8%, #fff 92%, transparent);
-  mask-image: linear-gradient(to right, transparent, #fff 8%, #fff 92%, transparent);
+:root {
+  /* the menu sheet */
+  --menu-dur: 280ms;
+  --menu-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --menu-stagger: 30ms;
 }
-.t-marquee-track {
-  display: flex;
-  width: max-content;
-  animation: t-marquee var(--marquee-dur, 46s) linear infinite;
-  will-change: transform;
+/* The menu sheet (Navigation.tsx) grows from the Menu pill's corner and its items rise in after it.
+   Transform and opacity only. Closing, visibility flips after the fade so closed links leave the
+   tab order only once they are gone from sight. */
+.t-menu-sheet {
+  transform-origin: top right;
+  opacity: 0;
+  transform: translateY(-4px) scale(0.96);
+  transition:
+    opacity var(--menu-dur) var(--menu-ease),
+    transform var(--menu-dur) var(--menu-ease),
+    visibility 0s linear var(--menu-dur);
 }
-.t-marquee:hover .t-marquee-track {
-  animation-play-state: paused;
+.t-menu-sheet[data-open] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--menu-dur) var(--menu-ease),
+    transform var(--menu-dur) var(--menu-ease),
+    visibility 0s;
 }
-@keyframes t-marquee {
-  to { transform: translateX(-50%); }
+.t-menu-item {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 220ms ease,
+    transform var(--menu-dur) var(--menu-ease);
 }
-
-/* Certifications carousel: horizontal scroll-snap with faded edges. */
-.t-carousel {
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -webkit-mask-image: linear-gradient(to right, transparent, #fff 4%, #fff 96%, transparent);
-  mask-image: linear-gradient(to right, transparent, #fff 4%, #fff 96%, transparent);
+.t-menu-sheet[data-open] .t-menu-item {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(40ms + var(--i, 0) * var(--menu-stagger));
 }
-.t-carousel::-webkit-scrollbar {
-  display: none;
-}
-
-/* Section-numeral drift: CSS scroll-driven animation — zero JS, and browsers
-   without animation-timeline simply render the numeral static. */
-@supports (animation-timeline: view()) {
-  .t-drift {
-    animation: t-drift-y linear both;
-    animation-timeline: view();
-    animation-range: entry 0% exit 100%;
-    will-change: transform;
+@media (prefers-reduced-motion: reduce) {
+  .t-menu-sheet,
+  .t-menu-item {
+    transform: none !important;
   }
-}
-@keyframes t-drift-y {
-  from { transform: translateY(var(--drift-y)); }
-  to { transform: translateY(calc(var(--drift-y) * -1)); }
 }
 
 /* Per-character heading reveal: chars rise out of a blur once the heading
@@ -450,9 +360,6 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .t-drift {
-    animation: none !important;
-  }
   .t-chars .t-char {
     opacity: 1 !important;
     transform: none !important;
@@ -503,66 +410,6 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   }
 }
 
-/* ---- Open-source filmstrip ---------------------------------------------------
-   Pinned mode: OpenSource.tsx writes one translate3d on the track and an
-   opacity/scale per panel from scroll progress; nothing here animates on its
-   own. The progress bar is a full-width bar scaled from the left. */
-.t-film-track {
-  will-change: transform;
-}
-.t-film-track > li,
-.t-film-art {
-  will-change: transform, opacity;
-}
-/* Scroll-linked motion must track the scroll exactly: opt out of the global
-   `*` transition rule, which would ease every write over 200ms and make the
-   strip trail the scrollbar. */
-.t-film-track,
-.t-film-track > li,
-.t-film-art {
-  transition: none;
-}
-.t-film-bar {
-  transform-origin: 0 50%;
-  transform: scaleX(0);
-}
-
-/* "Live" badge: a lime dot with a ring that expands and fades (transform +
-   opacity), marking the projects with a working demo. */
-.t-live {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.t-live::before,
-.t-live::after {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #a3e635;
-}
-.t-live::after {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  margin-top: -3px;
-  animation: t-live-ping 1.8s ease-out infinite;
-}
-@keyframes t-live-ping {
-  to {
-    transform: scale(3.2);
-    opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .t-live::after {
-    animation: none !important;
-    opacity: 0;
-  }
-}
-
 /* The assistant's point of light: a slow ring that expands and fades
    (transform + opacity), the same light that forms in the film's chapter 02. */
 .t-light-ping {
@@ -585,8 +432,160 @@ html[data-film='on'] .t-digit-group.is-pending[data-popbeat] .t-digit {
   }
 }
 
+/* ---- Reveal stage (lib/stage.ts, Scene.tsx, StageDirector.tsx) -------------
+   Default: a scene is a normal readable section (no JavaScript, before the
+   first scroll, reduced motion). Staged (html[data-film='on']): the section is
+   an invisible spacer and its steps sit on a fixed stage over the film,
+   arriving, holding and passing in place; StageDirector sets their place,
+   opacity and transform. */
+.scene {
+  position: relative;
+  padding: 6rem 1.5rem;
+}
+.scene-title {
+  max-width: 44rem;
+  margin: 0 auto 3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgb(var(--c-accent));
+}
+.scene-stage {
+  max-width: 44rem;
+  margin: 0 auto;
+  display: grid;
+  gap: 4.5rem;
+}
+.step-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgb(var(--c-accent));
+}
+/* "Read more": the full detail of a step, closed by default. */
+.step-more > summary {
+  display: inline-flex;
+  cursor: pointer;
+  list-style: none;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(var(--c-accent));
+}
+.step-more > summary::-webkit-details-marker {
+  display: none;
+}
+.step-more > summary::after {
+  content: ' +';
+}
+.step-more[open] > summary::after {
+  content: ' –';
+}
+.step-more > summary:focus-visible {
+  outline: 2px solid rgb(var(--c-accent));
+  outline-offset: 4px;
+}
+html[data-film='on'] .scene {
+  padding: 0;
+}
+html[data-film='on'] .scene-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+html[data-film='on'] .scene-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: block;
+  max-width: none;
+  margin: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+html[data-film='on'] .scene[data-active] .scene-stage {
+  visibility: visible;
+}
+html[data-film='on'] .scene-step {
+  position: absolute;
+  opacity: 0;
+  transform-origin: 50% 0;
+  will-change: opacity, transform;
+}
+html[data-film='on'] .scene-step[data-on] {
+  pointer-events: auto;
+}
+/* Staged, a nav link cuts to its chapter. A smooth scroll would sweep the film through every
+   chapter in between (frames that are not loaded) and flash each chapter's steps past. */
+html[data-film='on'] {
+  scroll-behavior: auto;
+}
+/* The shade under the text (Murci, 2026-10-10: darker behind the text, no borders anywhere, except
+   the Stack deck's lime outlines, which he kept). Under the steps and the hero name the film canvas
+   paints it in its own frame (lib/shade.ts): as CSS layers, a blurred box-shadow and then a
+   gradient cost the phone 5-8 fps, one more translucent layer over the film each frame. Only the
+   desktop nav row, small and outside the stage, keeps a CSS shade. */
+.t-shade {
+  isolation: isolate;
+}
+.t-shade::before {
+  content: '';
+  position: absolute;
+  inset: -26px -36px;
+  z-index: -1;
+  background: radial-gradient(
+    farthest-corner,
+    rgb(0 0 0 / 0.55) 0%,
+    rgb(0 0 0 / 0.55) 60%,
+    rgb(0 0 0 / 0.28) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+/* Contact follows the last scene in normal flow. Staged, its content starts 90vh down, so it rises
+   into view just as the last question passes (step 6 passes over the last 0.15 viewport of FAQ):
+   one thing at a time, and no empty screen between them. */
+html[data-film='on'] #contact {
+  padding-top: 90vh;
+}
+/* Stack mode: a covered card keeps its glass slab, but its words fade with depth. */
+html[data-film='on'] .deck-text {
+  opacity: max(0, calc(1 - var(--depth, 0) * 1.4));
+}
+/* The breather: a short empty scroll for the rise to orbit; nothing in normal flow. */
+.breather {
+  height: 0;
+}
+html[data-film='on'] .breather {
+  height: 70vh;
+}
+/* An open "Read more" scrolls inside the step, so the step never outgrows the screen or runs
+   under the "Ask Murci" button (measured: 38vh ran 36 px past a 702 px phone screen). */
+html[data-film='on'] .step-more[open] .step-more-body {
+  max-height: 32vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media (orientation: portrait) {
+  html[data-film='on'] .step-more[open] .step-more-body {
+    max-height: 26vh;
+  }
+}
+
 /* ---- Film cues -------------------------------------------------------------
-   Text tied to a film moment: data-beat="mN:fraction" gets .is-beat from
+   Text tied to a film moment: data-beat="t:seconds" gets .is-beat from
    FilmStage once the film reaches that frame (and loses it when you scroll
    back past it). Hidden only while the film runs (html[data-film='on']), so
    without it (reduced motion, Save-Data, a failure) all text is visible.

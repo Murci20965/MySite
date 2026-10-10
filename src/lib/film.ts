@@ -1,61 +1,57 @@
-/* The "Prompt to People" film: six clips encoded as frame sequences by
- * scripts/encode-film.sh into public/film/<id>/<rendition>/NNN.webp (1-based,
- * zero-padded). FilmStage draws them as the site's full-screen background.
+/* The film: one continuous take, from Murci's desk into the screen, through the light, over a city
+ * at night and out to the globe (v4, 2026-10-09). The 4K master is in media-src/ (gitignored);
+ * scripts/pick-film-frames.py chooses which source frames the site keeps (spaced by equal motion,
+ * listed in filmFrames.json) and scripts/encode-film.py encodes them into
+ * public/film/v4/<rendition>/NNN.webp (1-based, in kept order). FilmStage draws them on a canvas.
  * Pipeline, contract and budgets: .claude/docs/film.md.
  *
- * Film time T runs 0..6 across the whole film: the integer part is the clip
- * (0 = M1 ... 5 = M6), the fraction is how far through it (0 = 0 s, 1 = 10 s).
+ * Film time T is in SECONDS of the master, 0 .. FILM_SECONDS. Kept frames are not evenly spaced in
+ * time (dense where the camera moves fast), so frames are found by time, not by index arithmetic.
  */
+import filmFrames from './filmFrames.json';
 
-export interface FilmClip {
-  /** folder under public/film */
-  id: string;
-  /** frames per rendition (every 3rd source frame of a 10 s, 24 fps clip) */
-  count: number;
-}
+/** Source frame numbers the site keeps, in order (from scripts/pick-film-frames.py). */
+const SOURCE_FRAMES: number[] = filmFrames.frames;
 
-export const CLIPS: FilmClip[] = [
-  { id: 'm1', count: 81 }, // night desk, dolly into the laptop, glyph waterfall
-  { id: 'm2', count: 81 }, // glyph rain, a point of light, burst (6 s), agent network
-  { id: 'm3', count: 81 }, // network crystallises into glass cubes (2 s), sideways track
-  { id: 'm4', count: 81 }, // cubes pass a gate of light (3-5 s) into a data-centre aisle
-  { id: 'm5', count: 81 }, // bright aisle, golden doorway (5-7 s), XR classroom (8 s)
-  { id: 'm6', count: 81 }, // night room, skylight, dusk city, orbit, arcs over the globe
-];
-export const FILM_END = CLIPS.length;
+/** The time, in seconds, of each kept frame. */
+export const FRAME_TIMES: number[] = SOURCE_FRAMES.map((n) => n / filmFrames.fps);
+export const FRAME_COUNT = FRAME_TIMES.length;
+export const FILM_SECONDS = FRAME_TIMES[FRAME_COUNT - 1];
 
-/** wide: the full 1280x720 frame; tall: a 432x720 centre crop for portrait screens. */
+/** wide: the full frame, 1920 px wide; tall: a 540x960 vertical slice for portrait screens. */
 export type Rendition = 'wide' | 'tall';
-export const RENDITION_WIDTH: Record<Rendition, number> = { wide: 1280, tall: 432 };
+export const RENDITION_WIDTH: Record<Rendition, number> = { wide: 1920, tall: 540 };
 
-export function frameUrl(clip: FilmClip, rendition: Rendition, index: number): string {
-  return `/film/${clip.id}/${rendition}/${String(index + 1).padStart(3, '0')}.webp`;
+export function frameUrl(rendition: Rendition, index: number): string {
+  return `/film/v4/${rendition}/${String(index + 1).padStart(3, '0')}.webp`;
 }
 
 /**
- * Coarse-to-fine load order: the first and last frames, then every 32nd,
- * 16th, ... 1st. Scrubbing works almost at once (the nearest loaded frame is
- * drawn) and sharpens as the rest arrive.
+ * The kept frame at or before time T, and how far (0..1) T is toward the next one: the renderer
+ * draws frame i and blends frame i + 1 over it by `a`.
  */
-export function loadOrder(count: number): number[] {
-  const seen = new Uint8Array(count);
-  const order: number[] = [];
-  const push = (i: number) => {
-    if (!seen[i]) {
-      seen[i] = 1;
-      order.push(i);
-    }
-  };
-  push(0);
-  push(count - 1);
-  for (let step = 32; step >= 1; step >>= 1) {
-    for (let i = 0; i < count; i += step) push(i);
+export function frameAt(T: number): { i: number; a: number } {
+  if (!(T > FRAME_TIMES[0])) return { i: 0, a: 0 };
+  if (T >= FILM_SECONDS) return { i: FRAME_COUNT - 1, a: 0 };
+  let lo = 0;
+  let hi = FRAME_COUNT - 1;
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (FRAME_TIMES[mid] <= T) lo = mid;
+    else hi = mid;
   }
-  return order;
+  return { i: lo, a: (T - FRAME_TIMES[lo]) / (FRAME_TIMES[hi] - FRAME_TIMES[lo]) };
 }
 
-/** "m2:0.6" (clip id, fraction through it) -> film time 1.6. NaN if malformed. */
+/** The kept frame nearest to time T. */
+export function nearestFrame(T: number): number {
+  const { i, a } = frameAt(T);
+  return a > 0.5 ? Math.min(FRAME_COUNT - 1, i + 1) : i;
+}
+
+/** "t:6.3" (seconds into the film) -> 6.3. NaN if malformed or outside the film. */
 export function parseBeat(beat: string): number {
-  const m = /^m([1-6]):(0(?:\.\d+)?|1(?:\.0+)?)$/.exec(beat.trim());
-  return m ? Number(m[1]) - 1 + Number(m[2]) : NaN;
+  const m = /^t:(\d+(?:\.\d+)?)$/.exec(beat.trim());
+  const T = m ? Number(m[1]) : NaN;
+  return T >= 0 && T <= FILM_SECONDS ? T : NaN;
 }

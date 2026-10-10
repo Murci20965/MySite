@@ -1,11 +1,9 @@
-import AnimatedSection from './AnimatedSection';
-import RevealHeading from './RevealHeading';
-import Kicker from './Kicker';
+import { Scene, Step, StepLabel } from './Scene';
+import type { Place } from '../lib/stage';
 
-/* Chapter 08, Education. Word for word from the CV (Sep 2026): its education
- * entries, statuses and six certifications, nothing added. Set as one column
- * on the frame's dark right edge (measured), with no cards: the film behind it
- * (the night room, the skylight) stays in full view on the left.
+/* Chapter 08, Education: the globe, the arcs starting to fan out (16.2-17.6 s). The steps sit in
+ * the open space above the Earth's edge, top left (storyboard v1).
+ * Source of truth: the CV, word for word.
  */
 const EDUCATION = [
   { institution: 'ALX / ExploreAI Academy', years: 'Jun 2023 - Sep 2024', programmes: ['Data Science'] },
@@ -33,72 +31,49 @@ const CURRENTLY_LEARNING = [
   { topic: 'Local model serving', focus: 'Self-hosted LLMs and image models for cost-free, offline-tolerant inference' },
 ];
 
+const PLACE: Place = { wide: { x: 0.05, y: 0.06, w: 0.44 }, tall: { y: 0.09 } };
+const WIDE_PLACE: Place = { wide: { x: 0.05, y: 0.06, w: 0.52 }, tall: { y: 0.09 } };
+const STEPS = EDUCATION.length + 2;
+
 export default function Education() {
   return (
-    <section id="education" className="t-ink relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
-        <div className="lg:ml-auto lg:w-[min(42rem,52%)]">
-          <AnimatedSection animation="fade-in">
-            <Kicker n="08" name="Education" />
-            <RevealHeading
-              text="Education & learning"
-              className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
-            />
-            <p className="mt-6 font-sans text-lg leading-relaxed text-fg">
-              Formal study paired with a continuous habit of learning.
+    <Scene id="education" n="08" name="Education" stepVh={75} pool>
+      {EDUCATION.map((edu, i) => (
+        <Step key={edu.institution} place={PLACE}>
+          <StepLabel n="08" name="Education" i={i} of={STEPS} />
+          <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-accent">{edu.years}</div>
+          <h3 className="mt-2 font-display text-3xl font-medium leading-[1.06] tracking-[-0.02em] text-fg lg:text-4xl">
+            {edu.institution}
+          </h3>
+          {edu.programmes.map((p) => (
+            <p key={p} className="mt-2 font-sans text-base text-fg lg:text-lg">
+              {p}
             </p>
-          </AnimatedSection>
-
-          <div className="mt-12">
-            {EDUCATION.map((edu, index) => (
-              <AnimatedSection key={edu.institution} animation="fade-in" delay={index > 0}>
-                <article className="border-t border-fg/20 py-8">
-                  <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">{edu.years}</div>
-                  <h3 className="mt-3 font-display text-2xl font-medium text-fg lg:text-3xl">{edu.institution}</h3>
-                  <ul className="mt-2 space-y-1">
-                    {edu.programmes.map((p) => (
-                      <li key={p} className="font-sans text-base text-fg lg:text-lg">
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              </AnimatedSection>
-            ))}
-          </div>
-
-          <AnimatedSection animation="fade-in">
-            <div className="mt-10 border-t border-fg/20 pt-8">
-              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Certifications</div>
-              <ol className="mt-6 space-y-4">
-                {CERTIFICATIONS.map((c, i) => (
-                  <li key={c.title} className="grid grid-cols-[2.5rem_minmax(0,1fr)]">
-                    <span className="pt-1 font-mono text-[11px] text-accent">{String(i + 1).padStart(2, '0')}</span>
-                    <div>
-                      <div className="font-display text-lg font-medium leading-snug text-fg lg:text-xl">{c.title}</div>
-                      <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-fg/80">{c.issuer}</div>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection animation="fade-in">
-            <div className="mt-10 border-t border-fg/20 pt-8">
-              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Currently learning</div>
-              <div className="mt-6 space-y-6">
-                {CURRENTLY_LEARNING.map((item) => (
-                  <div key={item.topic}>
-                    <h4 className="font-display text-xl font-medium text-fg">{item.topic}</h4>
-                    <p className="mt-1 font-sans text-base leading-relaxed text-fg/90">{item.focus}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </div>
-    </section>
+          ))}
+        </Step>
+      ))}
+      <Step place={WIDE_PLACE}>
+        <StepLabel n="08" name="Certifications" i={EDUCATION.length} of={STEPS} />
+        <ul className="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+          {CERTIFICATIONS.map((c) => (
+            <li key={c.title}>
+              <div className="font-display text-lg font-medium leading-snug text-fg">{c.title}</div>
+              <div className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.16em] text-fg">{c.issuer}</div>
+            </li>
+          ))}
+        </ul>
+      </Step>
+      <Step place={WIDE_PLACE}>
+        <StepLabel n="08" name="Currently learning" i={EDUCATION.length + 1} of={STEPS} />
+        <ul className="mt-4 space-y-3">
+          {CURRENTLY_LEARNING.map((item) => (
+            <li key={item.topic}>
+              <span className="font-display text-xl font-medium text-fg">{item.topic}</span>
+              <span className="font-sans text-base text-fg"> · {item.focus}</span>
+            </li>
+          ))}
+        </ul>
+      </Step>
+    </Scene>
   );
 }

@@ -1,55 +1,35 @@
-import PopNumber from './PopNumber';
-import Kicker from './Kicker';
+import { Scene, Step, StepLabel } from './Scene';
+import type { Place } from '../lib/stage';
 
-/* Chapter 05, By the numbers: one of the film's big moments. The camera has
- * passed the gate of light into a data-centre aisle, bright down the middle
- * and near-black along both rack walls (measured), so the four figures are set
- * large on the two dark sides like title cards, and the aisle stays clear.
- * Every number is countable on the page or the CV: the seven projects shown,
- * the CV's three AI roles and six certifications, the two deployed demos.
+/* Chapter 05, By the numbers: one giant figure at a time, in the top right, clear of the film's
+ * warm glow (9.2-10.2 s, storyboard v1). Every number is countable on the page or the CV: the
+ * seven projects shown, the CV's three AI roles, the two deployed demos, and the certifications
+ * (6 on the CV; "6+" is Murci's word, 2026-10-09, see content-truth-map.md).
  */
-const LEFT = [
+const FIGURES = [
   { value: '7', label: 'Open-source projects', note: 'Public from the first commit' },
   { value: '3', label: 'AI roles', note: 'Nudle · Alignerr · Artintel' },
-];
-const RIGHT = [
   { value: '2', label: 'Live AI demos', note: 'Try them in the browser' },
-  { value: '6', label: 'Certifications', note: 'Azure · DataCamp · Udacity' },
+  { value: '6+', label: 'Certifications', note: 'Azure · DataCamp · Udacity' },
 ];
 
-function Figure({ value, label, note, align }: { value: string; label: string; note: string; align: 'left' | 'right' }) {
-  return (
-    <div className={align === 'right' ? 'lg:text-right' : ''}>
-      <div className="font-display text-[clamp(5rem,13vw,7.5rem)] font-medium leading-[0.85] tracking-[-0.04em] text-fg lg:text-[clamp(7.5rem,11vw,10.5rem)]">
-        {/* Pops as the data-centre racks come into view (M4, 6 s). */}
-        <PopNumber value={value} beat="m4:0.6" />
-      </div>
-      <div className="mt-4 font-sans text-lg font-medium text-fg">{label}</div>
-      <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-fg">{note}</div>
-    </div>
-  );
-}
+const PLACE: Place = { wide: { x: 0.93, y: 0.13, w: 0.26, align: 'right' }, tall: { y: 0.1 } };
 
 export default function Stats() {
   return (
-    <section id="stats" className="t-ink relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
-        <Kicker n="05" name="By the numbers" className="lg:justify-center" />
-        <div className="mt-12 grid grid-cols-2 gap-x-8 gap-y-14 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,1fr)]">
-          <div className="contents lg:block lg:space-y-16">
-            {LEFT.map((s) => (
-              <Figure key={s.label} {...s} align="left" />
-            ))}
+    <Scene id="stats" n="05" name="By the numbers" stepVh={70}>
+      {FIGURES.map((f, i) => (
+        <Step key={f.label} place={PLACE}>
+          <div className="lg:flex lg:flex-col lg:items-end lg:text-right">
+            <StepLabel n="05" name="By the numbers" i={i} of={FIGURES.length} />
+            <div className="mt-4 font-display text-[clamp(6rem,24vw,8rem)] font-medium leading-[0.85] tracking-[-0.04em] text-fg lg:text-[clamp(8rem,11vw,10.5rem)]">
+              {f.value}
+            </div>
+            <div className="mt-4 font-sans text-xl font-medium text-fg">{f.label}</div>
+            <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-fg">{f.note}</div>
           </div>
-          {/* The aisle: left empty on purpose, the film's subject. */}
-          <div aria-hidden="true" className="hidden lg:block" />
-          <div className="contents lg:block lg:space-y-16">
-            {RIGHT.map((s) => (
-              <Figure key={s.label} {...s} align="right" />
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+        </Step>
+      ))}
+    </Scene>
   );
 }

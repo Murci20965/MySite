@@ -127,8 +127,8 @@ export default function Contact() {
       <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <AnimatedSection animation="fade-in">
           <Kicker n="11" name="Contact" />
-          {/* Film cue: the arcs fan out across the globe (M6, 7.6 s). */}
-          <div data-beat="m6:0.76" className="mt-6">
+          {/* Film cue: the globe settles, the arcs fanned out (20.45 s). */}
+          <div data-beat="t:20.45" className="mt-6">
             <RevealHeading
               text="Let’s work together"
               className="max-w-5xl font-display text-[clamp(3.2rem,12vw,4.75rem)] font-medium leading-[0.98] tracking-[-0.03em] text-fg lg:text-[clamp(5rem,8vw,8rem)]"

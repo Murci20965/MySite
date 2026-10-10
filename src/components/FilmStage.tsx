@@ -1,25 +1,32 @@
 import { useEffect, useRef } from 'react';
-import { CLIPS, FILM_END, frameUrl, parseBeat, RENDITION_WIDTH } from '../lib/film';
+import { FRAME_COUNT, frameAt, frameUrl, nearestFrame, parseBeat, RENDITION_WIDTH } from '../lib/film';
 import type { Rendition } from '../lib/film';
 import { filmClock, FOCUS, KNOTS } from '../lib/filmJourney';
 import type { GradeSide, Look } from '../lib/filmJourney';
+import { FEATHER, shadeLayer } from '../lib/shade';
 
-/** Clip-to-clip dissolve, as a fraction of the incoming clip (0.06 = 0.6 s). */
-const CROSSFADE = 0.06;
-/** A beat that has fired stays until the film is this far before it again. */
-const BEAT_HYSTERESIS = 0.04;
-/** Decoded frames kept around the playhead (each side), plus every KEEP_EVERY-th frame. */
-const WINDOW = 12;
-const KEEP_EVERY = 8;
+/** A beat that has fired stays until the film is this many seconds before it again. */
+const BEAT_HYSTERESIS = 0.4;
+/**
+ * Decoded frames kept each side of the playhead. A decoded 1920 px frame is about 8 MB and a 540 px
+ * one about 2 MB, so the window is local: no spine of far frames (with one 315-frame film a spine
+ * of every 8th frame would hold ~40 decoded frames, several hundred MB on desktop).
+ */
+const WINDOW: Record<Rendition, number> = { wide: 8, tall: 12 };
+/** Encoded files are fetched up to this many frames ahead of and behind the playhead. */
+const HORIZON = 60;
+/** A jump larger than this (seconds) snaps instead of easing (a nav click, a restored position). */
+const SNAP = 3;
 const MAX_FETCHES = 4;
 const MAX_DECODES = 2;
-/** Before the first scroll, only this much of the opening clip is fetched (data on phones). */
+/** Before the first scroll, only the opening frames are fetched (data on phones). */
 const PRE_SCROLL_FRAMES = 24;
 
 type Beat = { el: Element; T: number; on: boolean };
 type Frame = ImageBitmap | HTMLImageElement;
-/** `fails` counts failed fetches and decodes; a frame gets MAX_TRIES, then it is skipped. */
-type Slot = { blob?: Blob; frame?: Frame; fetching?: boolean; decoding?: boolean; fails?: number };
+/** `fails` counts failed fetches and decodes; a frame gets MAX_TRIES, then it is skipped. `abort`
+ *  cancels a download the playhead has left behind (a jump), so it does not hold up the new ones. */
+type Slot = { blob?: Blob; frame?: Frame; fetching?: boolean; decoding?: boolean; fails?: number; abort?: AbortController };
 const MAX_TRIES = 2;
 
 /** What the film is doing, readable from the console (`__filmStatus`) when it does not show. */
@@ -83,7 +90,7 @@ function release(frame: Frame) {
  * The film as the site's background (and its front): one fixed full-screen
  * canvas behind every section. Scroll position maps to film time through
  * lib/filmJourney's knots; the drawn time eases toward it (so wheel notches
- * glide), the two nearest frames are blended, clips dissolve into each other,
+ * glide), the two nearest frames are blended,
  * and each section's lighting (a light veil plus a one-sided grade where its
  * text sits) is drawn over the frame.
  *
@@ -91,7 +98,7 @@ function release(frame: Frame) {
  * (createImageBitmap), only a window around the playhead stays decoded, and
  * section positions are measured when the layout changes, not every frame.
  *
- * Text cues: elements with data-beat="mN:fraction" get .is-beat while the film
+ * Text cues: elements with data-beat="t:seconds" get .is-beat while the film
  * is at or past that moment. Cues hide text only after the visitor's first
  * scroll (html[data-film="on"]), so crawlers and anyone who has not scrolled
  * see all text. Reduced motion or Save-Data: one still per knot, no cues.
@@ -111,7 +118,8 @@ export default function FilmStage() {
     const TAU = coarse ? 70 : 110; // ms: how quickly the drawn film catches the scroll
 
     let rendition: Rendition = window.innerWidth >= window.innerHeight ? 'wide' : 'tall';
-    let slots: Slot[][] = CLIPS.map((c) => Array.from({ length: c.count }, () => ({})));
+    const freshSlots = (): Slot[] => Array.from({ length: FRAME_COUNT }, () => ({}));
+    let slots = freshSlots();
     const bg = (getComputedStyle(root).getPropertyValue('--c-bg').trim() || '10 10 10').split(/\s+/).join(',');
     let disposed = false;
 
@@ -129,7 +137,9 @@ export default function FilmStage() {
           if (!el) y = prev;
           else {
             const top = el.getBoundingClientRect().top + window.scrollY;
-            y = top + (k.f ?? 0) * el.offsetHeight - FOCUS * window.innerHeight;
+            if (k.edge === 'top') y = top;
+            else if (k.edge === 'bottom') y = top + el.offsetHeight;
+            else y = top + (k.f ?? 0) * el.offsetHeight - FOCUS * window.innerHeight;
           }
         }
         y = Math.max(y, prev + 1); // keep the timeline strictly increasing
@@ -151,84 +161,57 @@ export default function FilmStage() {
       return { T: KNOTS[i].T + (KNOTS[i + 1].T - KNOTS[i].T) * t, a: look(i), b: look(i + 1), t };
     };
 
-    const split = (T: number) => {
-      const c = Math.min(FILM_END - 1, Math.floor(T));
-      return { c, f: Math.min(1, T - c) };
-    };
-    const indexAt = (T: number) => {
-      const { c, f } = split(T);
-      return { c, i: Math.round(f * (CLIPS[c].count - 1)) };
-    };
-
     // ---- Frames: fetch (network) and decode (off-thread), around the playhead ----
     let started = false; // full fetching waits for the page's load event
     let scrolled = false; // neighbours and the full opening clip wait for a first scroll
     let fetches = 0;
     let decodes = 0;
-    let focus = { c: 0, i: 0 };
+    let focus = 0;
 
-    /** Fetch order: the playhead outward, every 4th frame first, then the rest. */
-    const fetchOrder = (): Array<[number, number]> => {
-      const { c, i } = focus;
-      const out: Array<[number, number]> = [];
-      const clipOrder = (k: number, center: number, limit: number) => {
-        const n = CLIPS[k].count;
-        const idx = Array.from({ length: n }, (_, j) => j).filter((j) => j < limit);
-        const byDist = (a: number, b: number) => Math.abs(a - center) - Math.abs(b - center);
-        idx.filter((j) => j % 4 === 0).sort(byDist).forEach((j) => out.push([k, j]));
-        idx.filter((j) => j % 4 !== 0).sort(byDist).forEach((j) => out.push([k, j]));
-      };
-      if (still) return [[c, i]];
-      if (!started) return [[c, i]]; // the poster only
-      if (!scrolled) {
-        clipOrder(c, i, c === 0 ? PRE_SCROLL_FRAMES : CLIPS[c].count);
-        return out;
-      }
-      clipOrder(c, i, CLIPS[c].count);
-      if (c + 1 < CLIPS.length) clipOrder(c + 1, 0, CLIPS[c + 1].count);
-      if (c > 0) out.push([c - 1, CLIPS[c - 1].count - 1]); // the dissolve's source frame
-      return out;
+    /** Fetch order: the playhead and its neighbours (what a jump lands on), then outward within
+     *  HORIZON frames, every 4th frame first, then the rest. */
+    const fetchOrder = (): number[] => {
+      if (still || !started) return [focus]; // the still, or the poster before the page has loaded
+      const lo = scrolled ? Math.max(0, focus - HORIZON) : 0;
+      const hi = Math.min(FRAME_COUNT - 1, scrolled ? focus + HORIZON : PRE_SCROLL_FRAMES - 1);
+      const head = [focus, focus + 1, focus - 1].filter((j) => j >= lo && j <= hi);
+      const idx: number[] = [];
+      for (let j = lo; j <= hi; j++) if (!head.includes(j)) idx.push(j);
+      const byDist = (a: number, b: number) => Math.abs(a - focus) - Math.abs(b - focus);
+      return [...head, ...idx.filter((j) => j % 4 === 0).sort(byDist), ...idx.filter((j) => j % 4 !== 0).sort(byDist)];
     };
 
-    /** Which decoded frames to keep: a window around the playhead, a sparse spine, dissolve edges. */
-    const keep = (k: number, j: number) => {
-      const { c, i } = focus;
-      if (k === c) return Math.abs(j - i) <= WINDOW || j % KEEP_EVERY === 0;
-      if (k === c - 1) return j === CLIPS[k].count - 1;
-      if (k === c + 1) return j <= WINDOW;
-      return false;
-    };
+    /** Which decoded frames to keep: a window around the playhead. */
+    const keep = (j: number) => Math.abs(j - focus) <= WINDOW[rendition];
 
     const pump = () => {
       if (disposed) return;
-      // Evict decoded frames outside the window (the encoded file stays cached in memory).
-      slots.forEach((clip, k) =>
-        clip.forEach((s, j) => {
-          if (s.frame && !keep(k, j)) {
-            release(s.frame);
-            s.frame = undefined;
-          }
-        }),
-      );
+      // Evict decoded frames outside the window (the encoded file stays cached in memory). The frame
+      // on screen stays until a nearer one is drawn: after a jump the film holds its last picture
+      // instead of going black while the new frames arrive (measured: 1-2.5 s of black on a nav jump).
+      // Downloads the playhead has left behind are cancelled.
+      slots.forEach((s, j) => {
+        if (s.frame && !keep(j) && s.frame !== shown) {
+          release(s.frame);
+          s.frame = undefined;
+        }
+        if (s.fetching && Math.abs(j - focus) > HORIZON) s.abort?.abort();
+      });
       // Decode what the window needs and is already downloaded, nearest first.
-      const { c, i } = focus;
-      const want: Array<[number, number]> = [];
-      for (let d = 0; d <= WINDOW; d++) {
-        for (const j of d ? [i - d, i + d] : [i]) if (j >= 0 && j < CLIPS[c].count) want.push([c, j]);
+      const want: number[] = [];
+      for (let d = 0; d <= WINDOW[rendition]; d++) {
+        for (const j of d ? [focus - d, focus + d] : [focus]) if (j >= 0 && j < FRAME_COUNT) want.push(j);
       }
-      for (let j = 0; j < CLIPS[c].count; j += KEEP_EVERY) want.push([c, j]);
-      if (c > 0) want.push([c - 1, CLIPS[c - 1].count - 1]);
-      if (c + 1 < CLIPS.length) for (let j = 0; j <= 2; j++) want.push([c + 1, j]);
-      for (const [k, j] of want) {
+      for (const j of want) {
         if (decodes >= MAX_DECODES) break;
-        const s = slots[k][j];
+        const s = slots[j];
         if (!s.blob || s.frame || s.decoding) continue;
         s.decoding = true;
         decodes++;
         const forRendition = rendition;
         decode(s.blob)
           .then((frame) => {
-            if (disposed || forRendition !== rendition || !keep(k, j)) return release(frame);
+            if (disposed || forRendition !== rendition || !keep(j)) return release(frame);
             s.frame = frame;
             status.decoded++;
             dirty = true;
@@ -248,16 +231,17 @@ export default function FilmStage() {
           });
       }
       // Fetch the next files in priority order.
-      for (const [k, j] of fetchOrder()) {
+      for (const j of fetchOrder()) {
         if (fetches >= (started ? MAX_FETCHES : 1)) break;
-        const s = slots[k][j];
+        const s = slots[j];
         // A frame that failed MAX_TRIES times is skipped; the nearest decoded one is drawn.
         if (s.blob || s.fetching || (s.fails ?? 0) >= MAX_TRIES) continue;
         s.fetching = true;
+        s.abort = new AbortController();
         fetches++;
         const forRendition = rendition;
-        const url = frameUrl(CLIPS[k], rendition, j);
-        fetch(url)
+        const url = frameUrl(rendition, j);
+        fetch(url, { signal: s.abort.signal })
           .then((r) => (r.ok ? r.blob() : Promise.reject(new Error(`HTTP ${r.status}`))))
           .then((blob) => {
             if (disposed || forRendition !== rendition) return;
@@ -265,12 +249,14 @@ export default function FilmStage() {
             status.fetched++;
           })
           .catch((err) => {
+            if (err instanceof DOMException && err.name === 'AbortError') return; // left behind, not a failure
             s.fails = (s.fails ?? 0) + 1;
             status.failedFetches++;
             fail('fetch', `a frame could not be fetched: ${url} (${errorText(err)})`);
           })
           .finally(() => {
             s.fetching = false;
+            s.abort = undefined;
             fetches--;
             pump();
           });
@@ -280,13 +266,14 @@ export default function FilmStage() {
     // ---- Drawing ----
     let dirty = true;
     let lastKey = '';
-    const nearest = (k: number, i: number) => {
-      const list = slots[k];
-      for (let d = 0; d < list.length; d++) {
-        if (list[i - d]?.frame) return list[i - d].frame;
-        if (list[i + d]?.frame) return list[i + d].frame;
+    let shown: Frame | undefined; // the frame drawn last as the base, kept until a nearer one is drawn
+    /** The decoded frame nearest to i, and how far it is (frames). */
+    const nearest = (i: number): { frame?: Frame; d: number } => {
+      for (let d = 0; d < slots.length; d++) {
+        if (slots[i - d]?.frame) return { frame: slots[i - d].frame, d };
+        if (slots[i + d]?.frame) return { frame: slots[i + d].frame, d };
       }
-      return undefined;
+      return { d: Infinity };
     };
     const frameSize = (f: Frame) => ('naturalWidth' in f ? [f.naturalWidth, f.naturalHeight] : [f.width, f.height]);
     const cover = (img: Frame, alpha: number) => {
@@ -338,32 +325,82 @@ export default function FilmStage() {
       }
     };
 
+    // The shade under the text (lib/shade.ts): a solid box with a soft feather, the look of the CSS
+    // box-shadow it replaces. The feather is rendered once into a sprite and drawn in nine slices, so
+    // it keeps its width in pixels at any box size. The sprite's core must be wide (3x the blur):
+    // blurring a small square leaves even its middle at ~65%, and the fade then reads as an edge. The
+    // box is not filled solid on top: the blur is ~90% at its edge, and a solid fill made a visible
+    // step there (measured 29 -> 35 brightness on a phone).
+    // The blur comes from shadowBlur on a square drawn off the sprite (every canvas supports it).
+    const sprites = new Map<number, { img: HTMLCanvasElement; edge: number; core: number }>();
+    const shadeSprite = (spread: number, blur: number) => {
+      const edge = spread + blur; // how far the feather reaches beyond the box
+      const hit = sprites.get(edge);
+      if (hit) return hit;
+      const core = 3 * blur;
+      const img = document.createElement('canvas');
+      img.width = img.height = 2 * edge + core;
+      const g = img.getContext('2d');
+      if (g) {
+        const off = img.width + 4 * blur;
+        g.shadowColor = 'rgba(0,0,0,1)';
+        g.shadowBlur = blur;
+        g.shadowOffsetX = off;
+        g.fillStyle = '#000';
+        g.fillRect(edge - spread - off, edge - spread, core + 2 * spread, core + 2 * spread);
+      }
+      const sprite = { img, edge, core };
+      sprites.set(edge, sprite);
+      return sprite;
+    };
+    const paintShades = () => {
+      const kx = canvas.width / (canvas.clientWidth || window.innerWidth);
+      const ky = canvas.height / (canvas.clientHeight || window.innerHeight);
+      const f = window.innerWidth <= 640 ? FEATHER.phone : FEATHER.wide;
+      const { img, edge: e, core } = shadeSprite(f.spread, f.blur);
+      const src = [0, e, e + core, img.width];
+      shadeLayer.each((sh) => {
+        const dx = [sh.x - e, sh.x, sh.x + sh.w, sh.x + sh.w + e];
+        const dy = [sh.y - e, sh.y, sh.y + sh.h, sh.y + sh.h + e];
+        ctx.globalAlpha = sh.alpha;
+        for (let i = 0; i < 3; i++) {
+          for (let j = 0; j < 3; j++) {
+            ctx.drawImage(img, src[i], src[j], src[i + 1] - src[i], src[j + 1] - src[j],
+              dx[i] * kx, dy[j] * ky, (dx[i + 1] - dx[i]) * kx, (dy[j + 1] - dy[j]) * ky);
+          }
+        }
+      });
+    };
+
     const draw = (T: number, pose: Pose) => {
-      const { c, f } = split(T);
-      const x = f * (CLIPS[c].count - 1);
-      const i0 = Math.floor(x);
-      const a = still ? 0 : x - i0;
-      const base = nearest(c, i0);
-      if (!still && c > 0 && f < CROSSFADE) {
-        // Dissolve from the previous clip's last frame into this one.
-        const prev = nearest(c - 1, CLIPS[c - 1].count - 1);
-        if (prev) cover(prev, 1);
-        if (base) cover(base, prev ? f / CROSSFADE : 1);
-        if (!prev && !base) fillBg();
-      } else if (base) {
+      const { i, a } = frameAt(T);
+      const { frame: base, d } = nearest(i);
+      if (base) {
         cover(base, 1);
-        const next = slots[c][i0 + 1]?.frame;
-        if (a > 0.02 && next) cover(next, a);
+        shown = base;
+        // Blend toward the next kept frame (frames are spaced by equal motion, so this stays subtle).
+        const next = slots[i + 1]?.frame;
+        if (!still && a > 0.02 && next) cover(next, a);
+        // A frame held from far away (a jump, its frames still loading) is another scene: dip it
+        // toward dark, so the wait reads as a cut through black, not the wrong picture.
+        if (d > WINDOW[rendition]) {
+          ctx.globalAlpha = 0.7;
+          fillBgRect();
+        }
       } else fillBg();
       // Lighting: the two knots' looks cross-fade as the scroll moves between them.
       lightBy(pose.a, pose.a === pose.b ? 1 : 1 - pose.t);
       if (pose.a !== pose.b) lightBy(pose.b, pose.t);
+      paintShades();
       ctx.globalAlpha = 1;
+    };
+    const fillBgRect = () => {
+      ctx.fillStyle = `rgb(${bg})`;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
     const fillBg = () => {
       ctx.globalAlpha = 1;
-      ctx.fillStyle = `rgb(${bg})`;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      fillBgRect();
     };
 
     // ---- Text cues ----
@@ -388,8 +425,8 @@ export default function FilmStage() {
       const next: Rendition = window.innerWidth >= window.innerHeight ? 'wide' : 'tall';
       if (next !== rendition) {
         rendition = next;
-        slots.forEach((clip) => clip.forEach((s) => s.frame && release(s.frame)));
-        slots = CLIPS.map((c) => Array.from({ length: c.count }, () => ({})));
+        slots.forEach((s) => s.frame && release(s.frame));
+        slots = freshSlots();
       }
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       const cssW = canvas.clientWidth || window.innerWidth;
@@ -415,13 +452,13 @@ export default function FilmStage() {
       const target = pose.T;
       const dt = lastNow ? Math.min(64, now - lastNow) : 16;
       lastNow = now;
-      if (still || Number.isNaN(drawnT) || Math.abs(target - drawnT) > 0.5) drawnT = target; // jumps snap
+      if (still || Number.isNaN(drawnT) || Math.abs(target - drawnT) > SNAP) drawnT = target; // jumps snap
       else drawnT += (target - drawnT) * (1 - Math.exp(-dt / TAU));
       const settling = Math.abs(target - drawnT) > 1e-4;
       if (!settling) drawnT = target;
 
-      const nextFocus = indexAt(drawnT);
-      if (nextFocus.c !== focus.c || Math.abs(nextFocus.i - focus.i) >= 2) {
+      const nextFocus = nearestFrame(drawnT);
+      if (Math.abs(nextFocus - focus) >= 2) {
         focus = nextFocus;
         pump();
       }
@@ -468,7 +505,7 @@ export default function FilmStage() {
     collectBeats();
     if (!still) filmClock.on = true;
     if (window.scrollY > 0) onScroll(); // a deep link or restored position counts as scrolled
-    focus = indexAt(at(window.scrollY).T);
+    focus = nearestFrame(at(window.scrollY).T);
     pump();
     update(performance.now());
     if (document.readyState === 'complete') onLoad();
@@ -481,6 +518,11 @@ export default function FilmStage() {
       schedule();
     });
     ro.observe(document.body);
+    // A shade moved (a step, the hero name): repaint, even when the film itself did not.
+    const offShades = shadeLayer.subscribe(() => {
+      dirty = true;
+      schedule();
+    });
     document.fonts?.ready.then(() => !disposed && onResize());
     // If the browser's graphics process resets, the canvas comes back blank: redraw it.
     const onContextLost = () => {
@@ -501,13 +543,14 @@ export default function FilmStage() {
       filmClock.on = false;
       delete root.dataset.film;
       ro.disconnect();
+      offShades();
       canvas.removeEventListener('contextlost', onContextLost);
       canvas.removeEventListener('contextrestored', onContextRestored);
       window.removeEventListener('load', onLoad);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
       if (raf) window.cancelAnimationFrame(raf);
-      slots.forEach((clip) => clip.forEach((s) => s.frame && release(s.frame)));
+      slots.forEach((s) => s.frame && release(s.frame));
     };
   }, []);
 

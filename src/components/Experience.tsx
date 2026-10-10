@@ -1,6 +1,5 @@
-import AnimatedSection from './AnimatedSection';
-import RevealHeading from './RevealHeading';
-import Kicker from './Kicker';
+import { Scene, Step, StepLabel } from './Scene';
+import type { Place } from '../lib/stage';
 
 interface ExperienceData {
   id: string;
@@ -86,133 +85,115 @@ const experiences: ExperienceData[] = [
   },
 ];
 
+/** What I can build: the answer to "what would I hire him to do?". Principles covers HOW I work;
+ *  this covers WHAT you get. */
+const capabilities = [
+  {
+    title: 'Agentic AI systems',
+    text: 'LLMs that take actions reliably: tool use, structured outputs under strict schemas, and evaluation loops that catch drift.',
+    proof: 'Avatar-3D Pipeline',
+    href: 'https://github.com/Murci20965/avatar-pipeline',
+  },
+  {
+    title: 'RAG & knowledge systems',
+    text: 'Retrieval that grounds answers in your own data, with honest failure modes instead of confident invention.',
+    proof: 'Applied at Artintel (LLM training and RAG data)',
+    href: '',
+  },
+  {
+    title: 'XR & 3D pipelines',
+    text: 'Text or images into web-ready 3D: generation, headless normalisation and delivery into the browser via WebXR.',
+    proof: 'Orbit-3D Asset Pipeline',
+    href: 'https://github.com/Murci20965/orbit-3d-pipeline',
+  },
+  {
+    title: 'MLOps delivery',
+    text: 'Models that survive contact with production: containerised services, CI/CD, and metrics measured on unseen data.',
+    proof: 'Real Estate Predictor',
+    href: 'https://github.com/Murci20965/real_estate_price_predictor',
+  },
+];
+
+// Film 5.0-7.6 s, the light field: open on the right while threads stream in from the left
+// (storyboard v1). Phones: the slice's upper band.
+const ROLE_PLACES: Place[] = [
+  { wide: { x: 0.55, y: 0.24, w: 0.36 }, tall: { y: 0.13 } },
+  { wide: { x: 0.56, y: 0.3, w: 0.35 }, tall: { y: 0.15 } },
+  { wide: { x: 0.55, y: 0.27, w: 0.36 }, tall: { y: 0.13 } },
+];
+const CAPABILITY_PLACES: Place[] = [
+  { wide: { x: 0.57, y: 0.32, w: 0.32 }, tall: { y: 0.18 } },
+  { wide: { x: 0.58, y: 0.38, w: 0.31 }, tall: { y: 0.2 } },
+  { wide: { x: 0.57, y: 0.3, w: 0.32 }, tall: { y: 0.18 } },
+  { wide: { x: 0.58, y: 0.36, w: 0.31 }, tall: { y: 0.2 } },
+];
+
 export default function Experience() {
   return (
-    // Chapter 03. Behind it the light bursts into an agent network that fills
-    // the frame (the brightest stretch the text crosses), so everything reads
-    // from one left-hand column over the graded side, and the network keeps the
-    // right of the frame.
-    <section id="experience" className="t-ink relative pb-24 pt-16 lg:pb-32 lg:pt-24">
-      <div className="mx-auto max-w-[1760px] px-6 sm:px-10 lg:px-16 xl:px-24">
-        <div className="max-w-[44rem]">
-          <AnimatedSection animation="fade-in">
-            <Kicker n="03" name="Experience" />
-            {/* Film cue: the light bursts into the agent network (M2, 6 s). */}
-            <div data-beat="m2:0.6" className="mt-6">
-              <RevealHeading
-                text="Professional experience"
-                className="font-display text-5xl font-medium leading-[1.02] tracking-[-0.02em] text-fg lg:text-7xl"
-              />
-            </div>
-            <p className="mt-6 font-sans text-lg leading-relaxed text-fg lg:text-xl">
-              From ML foundations to production AI systems, and now the AI layer of XR education.
-            </p>
-          </AnimatedSection>
-
-          <div className="mt-14">
-            {experiences.map((exp, index) => (
-              <AnimatedSection key={exp.id} animation="fade-in" delay={index > 0}>
-                <article className="border-t border-fg/20 py-12">
-                  <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
-                    {`${exp.duration} · ${exp.type}`}
-                  </div>
-                  <h3 className="mt-4 font-display text-3xl font-medium text-fg lg:text-4xl">{exp.role}</h3>
-                  <div className="mt-2 font-sans text-base text-fg/90">
-                    {exp.company} <span className="text-fg/80">{`· ${exp.location}`}</span>
-                  </div>
-                  <p className="mt-5 font-sans text-base leading-relaxed text-fg lg:text-lg">{exp.description}</p>
-
-                  <div className="mt-7 flex flex-wrap gap-x-10 gap-y-4">
-                    {exp.metrics.map((metric, i) => (
-                      <div key={i}>
-                        <div className="font-display text-3xl text-fg">{metric.value}</div>
-                        <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.15em] text-fg/80">
-                          {metric.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <ul className="mt-7 space-y-2.5">
-                    {exp.achievements.map((achievement, i) => (
-                      <li key={i} className="flex gap-3 font-sans text-[15px] leading-relaxed text-fg/90">
-                        <span aria-hidden="true" className="mt-[0.7em] h-px w-3 shrink-0 bg-accent" />
-                        <span>{achievement}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <p className="mt-6 font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-fg">
-                    {exp.technologies.join(' · ')}
-                  </p>
-                </article>
-              </AnimatedSection>
+    // Chapter 03: one role at a time (Nudle, then Alignerr, then Artintel), then what I can build.
+    <Scene id="experience" n="03" name="Experience">
+      {experiences.map((exp, i) => (
+        <Step key={exp.id} place={ROLE_PLACES[i]}>
+          <StepLabel n="03" name="Experience" i={i} of={experiences.length} />
+          <div className="mt-5 font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+            {`${exp.duration} · ${exp.type}`}
+          </div>
+          <h3 className="mt-3 font-display text-4xl font-medium leading-[1.04] tracking-[-0.02em] text-fg lg:text-5xl">
+            {exp.role}
+          </h3>
+          <div className="mt-2 font-sans text-base text-fg">
+            {exp.company} <span className="text-fg/80">{`· ${exp.location}`}</span>
+          </div>
+          <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3">
+            {exp.metrics.map((metric) => (
+              <div key={metric.label}>
+                <div className="font-display text-2xl text-fg">{metric.value}</div>
+                <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.15em] text-fg">{metric.label}</div>
+              </div>
             ))}
           </div>
-
-          {/* What I can build: the answer to "what would I hire him to do?".
-              Principles covers HOW I work; this covers WHAT you get. */}
-          <AnimatedSection animation="fade-in">
-            <div className="mt-12 border-t border-fg/20 pt-12">
-              <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">What I can build</div>
-              <ol className="mt-8 space-y-9">
-                {[
-                  {
-                    step: '01',
-                    title: 'Agentic AI systems',
-                    text: 'LLMs that take actions reliably: tool use, structured outputs under strict schemas, and evaluation loops that catch drift.',
-                    proof: 'Avatar-3D Pipeline',
-                    href: 'https://github.com/Murci20965/avatar-pipeline',
-                  },
-                  {
-                    step: '02',
-                    title: 'RAG & knowledge systems',
-                    text: 'Retrieval that grounds answers in your own data, with honest failure modes instead of confident invention.',
-                    proof: 'Applied at Artintel (LLM training and RAG data)',
-                    href: '',
-                  },
-                  {
-                    step: '03',
-                    title: 'XR & 3D pipelines',
-                    text: 'Text or images into web-ready 3D: generation, headless normalisation and delivery into the browser via WebXR.',
-                    proof: 'Orbit-3D Asset Pipeline',
-                    href: 'https://github.com/Murci20965/orbit-3d-pipeline',
-                  },
-                  {
-                    step: '04',
-                    title: 'MLOps delivery',
-                    text: 'Models that survive contact with production: containerised services, CI/CD, and metrics measured on unseen data.',
-                    proof: 'Real Estate Predictor',
-                    href: 'https://github.com/Murci20965/real_estate_price_predictor',
-                  },
-                ].map((s) => (
-                  <li key={s.step} className="grid grid-cols-[2.5rem_minmax(0,1fr)]">
-                    <span className="pt-2 font-mono text-[11px] text-accent">{s.step}</span>
-                    <div>
-                      <h3 className="font-display text-2xl font-medium text-fg">{s.title}</h3>
-                      <p className="mt-2 font-sans text-base leading-relaxed text-fg/90">{s.text}</p>
-                      <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.15em] text-fg/80">
-                        {s.href ? (
-                          <a
-                            href={s.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="underline-offset-4 transition-colors hover:text-accent hover:underline"
-                          >
-                            Proof: {s.proof} ↗
-                          </a>
-                        ) : (
-                          <span>{s.proof}</span>
-                        )}
-                      </div>
-                    </div>
+          <details className="step-more mt-6">
+            <summary>Read more</summary>
+            <div className="step-more-body mt-4 space-y-4 pr-2">
+              <p className="font-sans text-base leading-relaxed text-fg">{exp.description}</p>
+              <ul className="space-y-2.5">
+                {exp.achievements.map((achievement) => (
+                  <li key={achievement} className="flex gap-3 font-sans text-[15px] leading-relaxed text-fg">
+                    <span aria-hidden="true" className="mt-[0.7em] h-px w-3 shrink-0 bg-accent" />
+                    <span>{achievement}</span>
                   </li>
                 ))}
-              </ol>
+              </ul>
+              <p className="font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-fg">
+                {exp.technologies.join(' · ')}
+              </p>
             </div>
-          </AnimatedSection>
-        </div>
-      </div>
-    </section>
+          </details>
+        </Step>
+      ))}
+      {capabilities.map((c, i) => (
+        <Step key={c.title} place={CAPABILITY_PLACES[i]}>
+          <StepLabel n="03" name="What I can build" i={i} of={capabilities.length} />
+          <h3 className="mt-5 font-display text-3xl font-medium leading-[1.08] tracking-[-0.02em] text-fg lg:text-4xl">
+            {c.title}
+          </h3>
+          <p className="mt-3 font-sans text-base leading-relaxed text-fg lg:text-lg">{c.text}</p>
+          <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.15em] text-fg">
+            {c.href ? (
+              <a
+                href={c.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline-offset-4 transition-colors hover:text-accent hover:underline"
+              >
+                Proof: {c.proof} ↗
+              </a>
+            ) : (
+              <span>{c.proof}</span>
+            )}
+          </div>
+        </Step>
+      ))}
+    </Scene>
   );
 }

@@ -16,6 +16,8 @@
  * scan. Text that must land ON a film event carries data-beat="mN:fraction".
  */
 
+import { FILM_SECONDS } from './film';
+
 /** Where the grade darkens the frame. 'sides' = left and right, 'ends' = top and bottom. */
 export type GradeSide = 'none' | 'left' | 'right' | 'top' | 'bottom' | 'sides' | 'ends';
 
@@ -34,9 +36,12 @@ export interface Look {
 export interface FilmKnot {
   /** a section id, or the page's start/end */
   at: string;
-  /** fraction of the section's height below its top (default 0) */
+  /** fraction of the section's height below its top (default 0), measured at the focus line */
   f?: number;
-  /** film time at this knot */
+  /** for a staged scene (Scene.tsx): pin T to the scroll position where the scene starts ('top',
+   *  its first step arriving) or ends ('bottom', its last step gone), instead of the focus line */
+  edge?: 'top' | 'bottom';
+  /** film time at this knot, in seconds */
   T: number;
   /** landscape screens (the full frame) */
   wide: Look;
@@ -50,43 +55,49 @@ const L = (dim: number, grade: GradeSide, strength: number, reach?: number): Loo
   reach === undefined ? { dim, grade, strength } : { dim, grade, strength, reach };
 
 export const KNOTS: FilmKnot[] = [
-  // M1 0 s: the night desk. Copy on the dark window side, the laptop in full light.
-  { at: 'start', T: 0.0, wide: L(0.04, 'left', 0.78), tall: L(0.26, 'ends', 0.62) },
-  // M1 5 s: glyphs start on the laptop screen. Left third measured darkest.
-  { at: 'about', T: 0.5, wide: L(0.1, 'left', 0.74), tall: L(0.38, 'ends', 0.55) },
-  // M2 5.6 s: the light, just before it bursts. The network fills the frame,
-  // so this is the brightest stretch the text crosses.
-  { at: 'experience', T: 1.56, wide: L(0.44, 'left', 0.88), tall: L(0.66, 'ends', 0.6) },
-  // A second knot near the top keeps the burst on the heading even where the
-  // section is tall (phones: 4,300 px); the network then grows over the roles.
-  { at: 'experience', f: 0.12, T: 1.7, wide: L(0.44, 'left', 0.88), tall: L(0.66, 'ends', 0.6) },
-  // Hold the reading light to the end of the roles, then ease into the next look.
-  { at: 'experience', f: 0.9, T: 1.97, wide: L(0.44, 'left', 0.88), tall: L(0.66, 'ends', 0.6) },
-  // M3 0 s: the network crystallises into cubes. Header top-left, cards below.
-  { at: 'opensource', T: 2.0, wide: L(0.3, 'top', 0.9), tall: L(0.34, 'top', 0.75) },
-  // M4 4 s: through the gate. Numbers flank the bright aisle. On phones the numbers and labels
-  // fill the width over the lit racks, so they take a reading veil.
-  { at: 'stats', T: 3.4, wide: L(0.06, 'sides', 0.58), tall: L(0.56, 'ends', 0.6) },
-  // M5 0 s: the bright aisle; the title sits on its own pool (ExpandMedia). Stats' last row is
-  // still leaving at the top of the screen, under the ceiling lights: a short top shade there,
-  // the doorway and the title stay fully lit.
-  { at: 'vision', T: 4.0, wide: L(0.1, 'top', 0.75, 0.35), tall: L(0.24, 'top', 1) },
-  // M5 8.5 s: the classroom, held to the end. The mission copy sits low.
-  { at: 'vision', f: 0.62, T: 4.85, wide: L(0.06, 'bottom', 0.6), tall: L(0.2, 'bottom', 0.62) },
-  // M6 0 s: a room at night. The right edge measured darkest: the stack goes there. The
-  // right-column sections' text starts near the middle, so their grade reaches 0.85 across.
-  { at: 'skills', T: 5.0, wide: L(0.28, 'right', 0.88, 0.85), tall: L(0.62, 'ends', 0.55) },
-  { at: 'skills', f: 0.85, T: 5.18, wide: L(0.28, 'right', 0.88, 0.85), tall: L(0.62, 'ends', 0.55) }, // hold
-  { at: 'education', T: 5.2, wide: L(0.18, 'right', 0.84, 0.85), tall: L(0.52, 'ends', 0.55) }, // M6 2 s: the skylight
-  // Principles is long, so its text scrolls through the whole height: a side grade, not a band.
-  { at: 'principles', T: 5.38, wide: L(0.26, 'right', 0.88, 0.85), tall: L(0.52, 'ends', 0.55) }, // M6 3.8 s: dusk
-  { at: 'faq', T: 5.55, wide: L(0.33, 'right', 0.9, 0.85), tall: L(0.66, 'ends', 0.55) }, // M6 5.5 s: city lights
-  { at: 'faq', f: 0.85, T: 5.69, wide: L(0.33, 'right', 0.9, 0.85), tall: L(0.66, 'ends', 0.55) }, // hold
-  // M6 7 s: rising into orbit. Heading in the space above, the form below. On phones Contact is
-  // a long reading section whose text crosses the arcs' bright hub mid-screen, so it takes a
-  // reading veil like Skills' (0.34 and 0.5 failed AA there in a 28 px-step scan).
-  { at: 'contact', T: 5.72, wide: L(0.46, 'ends', 0.84), tall: L(0.6, 'ends', 0.65) },
-  { at: 'end', T: 6.0, wide: L(0.46, 'ends', 0.84), tall: L(0.6, 'ends', 0.65) }, // M6 10 s: arcs over the globe
+  // Film v4, T in seconds (lib/film.ts). Each staged scene runs its film window from its first step
+  // arriving ('top') to its last step gone ('bottom'); windows are contiguous, so the film never
+  // jumps between scenes. Windows and placements: storyboard v1 (stage.md). Looks shade the side
+  // each scene's steps sit on; the contrast scan tunes them.
+  // 0-3 s: the desk; the name sits on the dark wall left of the lamp (shaded from the left), then
+  // the camera pushes in. Phones: the top band, deeper (the name sits over the monitor there).
+  { at: 'start', T: 0.0, wide: L(0.06, 'left', 0.45, 0.45), tall: L(0.2, 'top', 0.8, 0.5) },
+  // 3-5 s: the monitor fills the frame, through the screen. Steps on the editor's empty right side.
+  { at: 'about', edge: 'top', T: 3.0, wide: L(0.12, 'right', 0.55, 0.6), tall: L(0.35, 'bottom', 0.7) },
+  { at: 'about', edge: 'bottom', T: 5.0, wide: L(0.12, 'right', 0.55, 0.6), tall: L(0.35, 'bottom', 0.7) },
+  // 5-7.6 s: the light field, the darkest stretch. Steps on the right.
+  { at: 'experience', edge: 'top', T: 5.0, wide: L(0.12, 'right', 0.6, 0.6), tall: L(0.42, 'ends', 0.6) },
+  { at: 'experience', edge: 'bottom', T: 7.6, wide: L(0.12, 'right', 0.6, 0.6), tall: L(0.42, 'ends', 0.6) },
+  // 7.6-9.2 s: threads stream in from the left. Steps on the open right; phones, the bottom band.
+  { at: 'opensource', edge: 'top', T: 7.6, wide: L(0.12, 'right', 0.6, 0.6), tall: L(0.35, 'bottom', 0.8) },
+  { at: 'opensource', edge: 'bottom', T: 9.2, wide: L(0.12, 'right', 0.6, 0.6), tall: L(0.35, 'bottom', 0.8) },
+  // 9.2-10.2 s: the warm glow. Giant figures top right, clear of it.
+  { at: 'stats', edge: 'top', T: 9.2, wide: L(0.1, 'top', 0.5, 0.5), tall: L(0.3, 'top', 0.7) },
+  { at: 'stats', edge: 'bottom', T: 10.2, wide: L(0.1, 'top', 0.5, 0.5), tall: L(0.3, 'top', 0.7) },
+  // 10.2-11.2 s: through the glow, the city appears below an open sky. Centred in the sky.
+  { at: 'vision', edge: 'top', T: 10.2, wide: L(0.08, 'top', 0.55, 0.45), tall: L(0.25, 'top', 0.7) },
+  { at: 'vision', edge: 'bottom', T: 11.2, wide: L(0.08, 'top', 0.55, 0.45), tall: L(0.25, 'top', 0.7) },
+  // 11.2-13.6 s: over the city grid. The deck in the sky, top left.
+  { at: 'skills', edge: 'top', T: 11.2, wide: L(0.08, 'top', 0.55, 0.55), tall: L(0.3, 'top', 0.7) },
+  { at: 'skills', edge: 'bottom', T: 13.6, wide: L(0.08, 'top', 0.55, 0.55), tall: L(0.3, 'top', 0.7) },
+  // 13.6-16.2 s: the rise to orbit, the fastest stretch: a short, empty scroll (the breather).
+  { at: 'breather', edge: 'bottom', T: 16.2, wide: L(0.04, 'none', 0), tall: L(0.15, 'none', 0) },
+  // 16.2-20.4 s: the globe, the arcs fanning out. Steps above the Earth's edge, alternating sides.
+  { at: 'education', edge: 'top', T: 16.2, wide: L(0.06, 'top', 0.55, 0.35), tall: L(0.25, 'top', 0.7) },
+  { at: 'education', edge: 'bottom', T: 17.6, wide: L(0.06, 'top', 0.55, 0.35), tall: L(0.25, 'top', 0.7) },
+  { at: 'principles', edge: 'top', T: 17.6, wide: L(0.06, 'top', 0.55, 0.35), tall: L(0.25, 'top', 0.7) },
+  { at: 'principles', edge: 'bottom', T: 19.0, wide: L(0.06, 'top', 0.55, 0.35), tall: L(0.25, 'top', 0.7) },
+  { at: 'faq', edge: 'top', T: 19.0, wide: L(0.06, 'top', 0.55, 0.35), tall: L(0.25, 'top', 0.7) },
+  // During the last question the light turns to Contact's (top and bottom bands), so Contact's
+  // first lines rise into shade. FAQ is 6 x 75vh = 4.5 viewports tall at any size, so f 0.844 is
+  // 1.2 viewports before its end and f 0.956 is 0.7 before; T keeps the window's even pace.
+  { at: 'faq', f: 0.844, T: 20.03, wide: L(0.06, 'top', 0.55, 0.35), tall: L(0.25, 'top', 0.7) },
+  { at: 'faq', f: 0.956, T: 20.18, wide: L(0.46, 'ends', 0.84), tall: L(0.66, 'ends', 0.65) },
+  { at: 'faq', edge: 'bottom', T: 20.4, wide: L(0.46, 'ends', 0.84), tall: L(0.66, 'ends', 0.65) },
+  // 20.4-21 s: the globe settles; contact and footer as they were (normal flow).
+  // Halfway into contact, so its look cross-fades in over the section's top, not at one pixel.
+  { at: 'contact', f: 0.5, T: 20.7, wide: L(0.46, 'ends', 0.84), tall: L(0.66, 'ends', 0.65) },
+  { at: 'end', T: FILM_SECONDS, wide: L(0.46, 'ends', 0.84), tall: L(0.66, 'ends', 0.65) },
 ];
 
 type Listener = (T: number) => void;
