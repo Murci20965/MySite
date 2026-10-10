@@ -298,6 +298,51 @@ html[data-film='on'] .scene-step[data-on] .t-diagram-pulse {
   }
 }
 
+:root {
+  /* the menu sheet */
+  --menu-dur: 280ms;
+  --menu-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --menu-stagger: 30ms;
+}
+/* The menu sheet (Navigation.tsx) grows from the Menu pill's corner and its items rise in after it.
+   Transform and opacity only. Closing, visibility flips after the fade so closed links leave the
+   tab order only once they are gone from sight. */
+.t-menu-sheet {
+  transform-origin: top right;
+  opacity: 0;
+  transform: translateY(-4px) scale(0.96);
+  transition:
+    opacity var(--menu-dur) var(--menu-ease),
+    transform var(--menu-dur) var(--menu-ease),
+    visibility 0s linear var(--menu-dur);
+}
+.t-menu-sheet[data-open] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--menu-dur) var(--menu-ease),
+    transform var(--menu-dur) var(--menu-ease),
+    visibility 0s;
+}
+.t-menu-item {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 220ms ease,
+    transform var(--menu-dur) var(--menu-ease);
+}
+.t-menu-sheet[data-open] .t-menu-item {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(40ms + var(--i, 0) * var(--menu-stagger));
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-menu-sheet,
+  .t-menu-item {
+    transform: none !important;
+  }
+}
+
 /* Per-character heading reveal: chars rise out of a blur once the heading
    scrolls into view. Words are nowrap-wrapped so lines never break mid-word. */
 .t-chars .t-char {
