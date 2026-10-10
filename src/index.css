@@ -536,33 +536,37 @@ html[data-film='on'] {
    step (it arrives and leaves with it), so text reads clearly wherever it lands on the film (Murci,
    2026-10-10: "a bit darker where they appear"). Shading the whole frame instead would dim the film.
    It reads as shadow, not a shape: a 72 px feather read as a dark rectangle on the clouds, and a
-   glass panel as a UI box (A/B, 2026-10-09). Scenes over the brightest frames (data-pool: the globe
-   chapters, whose cloud tops are far brighter than the ~0.15 luminance small cream text needs) take
-   it deeper. The Stack deck has none: its cards are their own glass. The hero name takes the same
-   shade (.t-shade). */
-html[data-film='on'] .scene:not([data-mode='stack']) .scene-step,
+   glass panel as a UI box (A/B, 2026-10-09). No borders anywhere (Murci, 2026-10-10). Scenes over
+   the brightest frames (data-pool: the globe chapters, whose cloud tops are far brighter than the
+   ~0.15 luminance small cream text needs) take it deeper. In the Stack deck only the top card casts
+   it, or eight piled shades would make a black block. The hero name and the nav take the same shade
+   (.t-shade). */
+html[data-film='on'] .scene-step,
 .t-shade {
   isolation: isolate;
 }
-html[data-film='on'] .scene:not([data-mode='stack']) .scene-step::before,
+html[data-film='on'] .scene-step::before,
 .t-shade::before {
   content: '';
   position: absolute;
   inset: 0; /* full strength to the edges: a "Read more" on the edge sat in the fade (4.17) */
   z-index: -1;
   border-radius: 999px;
-  background: rgb(0 0 0 / var(--shade, 0.45));
-  box-shadow: 0 0 140px 90px rgb(0 0 0 / var(--shade, 0.45));
+  background: rgb(0 0 0 / var(--shade, 0.55));
+  box-shadow: 0 0 140px 90px rgb(0 0 0 / var(--shade, 0.55));
   pointer-events: none;
 }
 html[data-film='on'] .scene[data-pool] {
-  --shade: 0.58;
+  --shade: 0.65;
+}
+html[data-film='on'] .scene[data-mode='stack'] .scene-step::before {
+  opacity: max(0, calc(1 - var(--depth, 0)));
 }
 /* Phones: a shorter feather, so each step's layer is smaller to composite on the reference phone. */
 @media (max-width: 640px) {
-  html[data-film='on'] .scene:not([data-mode='stack']) .scene-step::before,
+  html[data-film='on'] .scene-step::before,
   .t-shade::before {
-    box-shadow: 0 0 96px 60px rgb(0 0 0 / var(--shade, 0.45));
+    box-shadow: 0 0 96px 60px rgb(0 0 0 / var(--shade, 0.55));
   }
 }
 /* Contact follows the last scene in normal flow. Staged, its content starts 90vh down, so it rises
