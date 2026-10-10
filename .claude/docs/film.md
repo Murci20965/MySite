@@ -186,6 +186,12 @@ progress hairline, clips text to its scroll containers, and treats blended text 
   go in a new folder (v4 lives in `film/v4/`), or visitors keep the old ones for up to a week.
 - Sizes (measured): wide 20.5 MB, tall 6.9 MB for all 315 frames. A full read of the page costs
   about 20 MB on desktop and 7 MB on a phone, fetched around the playhead, never up front.
+- Over the wire (production build, measured 2026-10-10): before any scroll, 1.6 MB on desktop
+  (178 KB of code and fonts, the rest the opening 24 frames) and 704 KB on a phone (525 KB of
+  frames); the first scroll adds 1.8 MB / 685 KB; a full read 19.8 MB / 6.8 MB. Code: 72.6 KB of
+  JavaScript and 8 KB of CSS gzipped (v3: 72.0 and 8.9). First paint at 4x CPU is level with v3 or
+  sooner (phone 0.9-1.1 s vs 1.2 s; desktop 1.2-1.5 s vs 1.9-2.6 s; noisy laptop, medians).
+- The film also paints the shade under the text (stage.md, "The film paints it").
 - Reduced motion or Save-Data: one still per knot, no scrubbing, no cues, all text visible.
 
 ## Error handling

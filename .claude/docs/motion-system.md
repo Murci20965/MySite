@@ -95,4 +95,9 @@ history (before `feat/v4-film` phase C).
    while other sessions run; the Vercel preview build of the pushed branch is the fallback,
    and headless Playwright (`scratchpad/v4/all_check.cjs`) covers motion that a hidden
    Browser pane cannot run.
-7. Add the effect to the inventory above.
+7. A large translucent effect over the film (a shade, a glow) belongs in the film canvas's own frame,
+   not in a CSS layer: each translucent layer is composited over the film every frame, and the
+   shade under the text cost the phone 5-8 fps that way (`lib/shade.ts` shows the pattern). Read
+   nothing that forces layout in a frame callback (`scrollHeight`, `getBoundingClientRect`) after
+   the stage has written styles; cache it and re-measure on resize.
+8. Add the effect to the inventory above.

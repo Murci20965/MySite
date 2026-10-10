@@ -41,16 +41,25 @@ pass in place while the film moves forward.
 
 **Scene** `stepVh` (default 85): scroll length of one step in % of the viewport height.
 `mode`: `sequence` (one step at a time) or `stack` (steps stay and pile up until the scene ends).
-**The shade under the text**: every step has a soft dark area behind it, part of the step, so it
-arrives and leaves with it (Murci, 2026-10-10: text "clearly visible", darker, and no borders
+**The shade under the text**: every step and the hero name have a soft dark area behind them that
+moves and fades with them (Murci, 2026-10-10: text "clearly visible", darker, and no borders
 anywhere; the one exception, by his call, is the Stack deck's lime outlines, which draw the stacked
-edges). It is 55% black with a 140 px feather (96 px on phones, a smaller layer per step), so it
-reads as shadow, not a shape: a 72 px feather read as a dark rectangle on the clouds and a glass
-panel as a UI box (A/B on the same frames, 2026-10-09). `pool` (`data-pool`) deepens it to 65% for
-scenes over the film's brightest frames (the globe chapters). In the Stack deck only the top card
-casts it (its opacity follows `--depth`), or eight piled shades would make a black block. The hero
-name and the desktop nav take the same shade (`.t-shade`). Shading the whole frame instead would
-dim the film everywhere. Contact and the footer keep their own look (Murci's call).
+edges). It is 55% black (65% for `pool` scenes, the globe chapters) with the feather of a CSS
+`box-shadow: 0 0 140px 90px` (96/60 px on phones), so it reads as shadow, not a shape: a 72 px
+feather read as a dark rectangle on the clouds and a glass panel as a UI box (A/B, 2026-10-09). In
+the Stack deck only the top card casts it, or eight piled shades would make a black block. Contact
+and the footer keep their own look (Murci's call); the desktop nav row has a small CSS shade.
+
+**The film paints it** (`lib/shade.ts`): StageDirector and the hero publish each box (viewport px,
+following the step's transform) and an alpha; FilmStage draws it in its own frame, from a sprite
+blurred once and drawn in nine slices so the feather keeps its width at any box size. As CSS it was
+one more translucent layer over the film per step, which cost the phone frames (measured at 4x CPU,
+2026-10-10: with the blurred box-shadow 41.0 fps and 50-56 frames over 50 ms against 49.6 fps and
+23-25 with no shade; a CSS gradient 44-45 fps); painted by the canvas, which redraws every frame
+anyway, it adds no layer, and interleaved with v3 it scrolls at parity (34.9 vs 32.5 fps, worst 1%
+of frames 117-184 ms vs 200-234 ms). The sprite's core must be wide (3x the blur): a small blurred
+square stays ~65% in the middle and its fade reads as an edge; and the box is not filled solid on
+top, or the step from 90% to 100% at its edge shows (29 -> 35 brightness, measured).
 
 **Step curve** (`stepLook`, t = the step's position in steps): arrives over t -0.2 → 0.12 (from a
 little depth: scale 0.965 → 1, 16 px below), holds, passes over t 0.8 → 1.0 (scale up 4%, 12 px up).
@@ -117,7 +126,11 @@ Contact's during the last question (film.md).
 
 ## Performance
 Only opacity and transform change per frame (compositor work), only for the active scene's steps
-(8 at most, the deck), and nothing reads layout during scroll (scene tops are cached). Measured
+(8 at most, the deck), and nothing reads layout during scroll (scene tops are cached). Nothing else
+may either: the reading-progress bar read `scrollHeight` each frame, which right after the stage's
+style writes forced a style and layout pass every frame (the top self-time in a 4x-CPU phone
+profile); it now measures the page only when the body resizes. The shade under the text is painted
+by the film, not composited as layers (above). Measured
 2026-10-09 on every scene, desktop 1280x800 and phone 360x702 (`scratchpad/v4/all_check.cjs`): at
 each step position exactly one step is on (`data-on`) and, in sequence scenes, the only one above
 half opacity; film time stays inside each scene's window (Experience 5.17 → 7.40 s, FAQ 19.10 →
